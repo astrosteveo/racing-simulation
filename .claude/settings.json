@@ -1,0 +1,40 @@
+{
+  "hooks": {
+    "Bash": [
+      {
+        "matcher": "npm run test:run",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '\n⚠️  REMINDER: Update .claude/TASKS.md with test results\n   Run: npm run verify-docs (to check documentation sync)'",
+            "blocking": false
+          }
+        ]
+      },
+      {
+        "matcher": "git commit.*-m",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '\n💡 TIP: After commits, run npm run verify-docs to ensure TASKS.md is synced'",
+            "blocking": false
+          }
+        ]
+      }
+    ]
+  },
+  "rules": [
+    {
+      "pattern": "**/*.ts",
+      "description": "TypeScript files must conform to interfaces in src/types.ts"
+    },
+    {
+      "pattern": ".claude/TASKS.md",
+      "description": "Living document - update continuously during work. Run 'npm run verify-docs' to check sync."
+    },
+    {
+      "pattern": "README.md",
+      "description": "Update after completing major phases or milestones"
+    }
+  ]
+}

@@ -14,7 +14,8 @@
     "test:coverage": "vitest --coverage",
     "lint": "eslint src --ext .ts",
     "lint:fix": "eslint src --ext .ts --fix",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "verify-docs": "bash scripts/verify-docs.sh"
   },
   "keywords": [
     "nascar",

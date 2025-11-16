@@ -83,11 +83,11 @@ None currently.
 
 ## Recent Changes (Last 5 Commits)
 
-1. `bf4fe14` - Establish continuous TASKS.md update workflow
-2. `d0aebfb` - Refactor CLAUDE.md and establish TASKS.md for session continuity
-3. `0e65fca` - Establish testing command principles (added `test:run`)
-4. `aa64822` - Phase 5.1: Calibrate physics to match EXAMPLES.md
-5. `eb14b8c` - Update documentation: Phase 4 Complete!
+1. `b7a7794` - Update TASKS.md with latest commit (demonstrating workflow)
+2. `bf4fe14` - Establish continuous TASKS.md update workflow
+3. `d0aebfb` - Refactor CLAUDE.md and establish TASKS.md for session continuity
+4. `0e65fca` - Establish testing command principles (added `test:run`)
+5. `aa64822` - Phase 5.1: Calibrate physics to match EXAMPLES.md
 
 ---
 
@@ -102,6 +102,11 @@ None currently.
 - ✅ Established TASKS.md update workflow in CLAUDE.md
 - ✅ Added continuous task tracking principles
 - ✅ Documented task completion workflow (complete → update → commit → next)
+- ✅ Created documentation verification system:
+  - scripts/verify-docs.sh - Automated checks for doc drift
+  - npm run verify-docs - Command to verify living docs
+  - Hooks in .claude/settings.json - Reminders after tests/commits
+  - Updated CLAUDE.md with verification workflow
 
 ---
 
@@ -120,6 +125,9 @@ None currently.
 # Test suite
 npm run test:run          # Run all tests once
 npm test                  # Watch mode (manual dev)
+
+# Documentation
+npm run verify-docs       # Check if living docs are in sync
 
 # Run demo
 npx tsx demo-race.ts      # Full interactive race

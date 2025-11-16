@@ -92,6 +92,20 @@ npm run test:coverage
 
 **Never use `npm test` in automated workflows** - it runs in watch mode and blocks indefinitely.
 
+### Documentation Verification
+
+```bash
+npm run verify-docs    # Check if living docs are in sync
+```
+
+**Run this periodically during work to catch documentation drift:**
+- Checks if TASKS.md Recent Changes includes latest commits
+- Verifies TASKS.md timestamp is current
+- Detects uncommitted changes to living documents
+- Validates Current Work section is properly maintained
+
+**Hooks will remind you**, but the verification script provides deterministic checks.
+
 ## Session Continuity
 
 ### Task Tracking Document
@@ -117,12 +131,14 @@ npm run test:coverage
 2. Run `npm run test:run` and update test status
 3. Update "Recent Changes" with latest commits
 4. Review "Next Up" priorities - reorder if needed
+5. Run `npm run verify-docs` to catch any drift
 
 **Before ending session (mandatory):**
 1. Clear "Current Work" section (move to completed or next up)
 2. Ensure "Next Up" is prioritized for easy resume
 3. Update timestamp at top of file
-4. Commit TASKS.md changes
+4. Run `npm run verify-docs` - must pass
+5. Commit TASKS.md changes
 
 **Why:** Keep context fresh. Eliminate "where was I?" when resuming. Track progress without losing momentum.
 
