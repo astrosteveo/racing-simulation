@@ -26,7 +26,7 @@ The simulation calculates outcomes based on:
 🎉 **Fully Playable Racing Game!** 🎉
 
 **Last Updated:** 2025-11-16
-**Test Pass Rate:** 255/269 tests passing (94.8%)
+**Test Pass Rate:** 250/269 tests passing (93.0%)
 
 This project is being built following a strict methodology to ensure sustainable development:
 
