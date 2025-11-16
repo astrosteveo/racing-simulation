@@ -305,6 +305,12 @@ export class RaceEngine implements RaceSimulation {
 
     const leaderPosition = this.positions.find((p) => p.position === 1);
 
+    // Convert lap progress Map to array for RaceState
+    const lapProgressArray = Array.from(this.lapProgress.entries()).map(([driverId, progress]) => ({
+      driverId,
+      progress,
+    }));
+
     return {
       currentLap: this.currentLap,
       totalLaps: this.totalLaps,
@@ -323,6 +329,7 @@ export class RaceEngine implements RaceSimulation {
       activeDecision: this.pendingDecision, // Check for active decision
       raceEvents: [], // Event system not yet implemented
       caution: false,
+      lapProgress: lapProgressArray, // Real-time lap progress for all drivers
     };
   }
 

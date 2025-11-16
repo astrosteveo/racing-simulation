@@ -5,7 +5,7 @@
 
 import type { RaceState } from '../../../types';
 import { formatPositionTable, formatCompactPositionTable } from './PositionTable';
-import { renderTitle, renderDivider, renderProgressBar, renderTrend } from '../formatters/progress-bar';
+import { renderTitle, renderDivider, renderProgressBar, renderTrend, renderLapProgressBar } from '../formatters/progress-bar';
 import { formatLapTime, formatPositionChange } from '../formatters/time-formatter';
 
 export interface LiveRaceDisplayOptions {
@@ -49,6 +49,16 @@ export function renderLiveRaceDisplay(
   sections.push(renderTitle(`Lap ${state.currentLap} / ${state.totalLaps}`, width));
   sections.push(renderDivider(width));
   sections.push('');
+
+  // ========== Real-time Lap Progress ==========
+  // Show player's current lap completion (Phase 7 real-time racing)
+  const playerLapProgress = state.lapProgress.find(lp => lp.driverId === state.playerDriver.id);
+  if (playerLapProgress && playerLapProgress.progress > 0 && playerLapProgress.progress < 1) {
+    const progressBar = renderLapProgressBar(playerLapProgress.progress, 40);
+    const percentage = (playerLapProgress.progress * 100).toFixed(1);
+    sections.push(`Current Lap Progress: ${progressBar} ${percentage}%`);
+    sections.push('');
+  }
 
   // ========== Leader Info ==========
   const leader = state.positions[0];

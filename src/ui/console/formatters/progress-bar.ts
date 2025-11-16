@@ -79,3 +79,48 @@ export function renderTitle(title: string, width: number = 60): string {
 
   return `${'═'.repeat(leftPad)} ${title} ${'═'.repeat(rightPad)}`;
 }
+
+/**
+ * Render a track-style lap progress bar (real-time lap completion)
+ * Shows a car position marker moving through the lap
+ * Examples:
+ *   renderLapProgressBar(0.25, 32) → "[=======>........................]"
+ *   renderLapProgressBar(0.75, 32) → "[=======================>........]"
+ *   renderLapProgressBar(1.0, 32)  → "[================================]"
+ */
+export function renderLapProgressBar(
+  progress: number,
+  width: number = 32
+): string {
+  const clampedProgress = Math.max(0, Math.min(1, progress));
+  const position = Math.floor(clampedProgress * width);
+
+  if (position === 0) {
+    // At start of lap
+    return `[>${'.'.repeat(width - 1)}]`;
+  } else if (position >= width) {
+    // Completed lap
+    return `[${'='.repeat(width)}]`;
+  } else {
+    // Mid-lap: show car position with arrow
+    // The '>' represents the car, so it takes one position
+    const completed = '='.repeat(position - 1);
+    const remaining = '.'.repeat(width - position);
+    return `[${completed}>${remaining}]`;
+  }
+}
+
+/**
+ * Render lap progress with percentage text
+ * Example:
+ *   renderLapProgressWithPercentage(0.653, 32)
+ *   → "[===================>............] 65.3%"
+ */
+export function renderLapProgressWithPercentage(
+  progress: number,
+  width: number = 32
+): string {
+  const bar = renderLapProgressBar(progress, width);
+  const percentage = (Math.max(0, Math.min(1, progress)) * 100).toFixed(1);
+  return `${bar} ${percentage}%`;
+}

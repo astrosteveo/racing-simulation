@@ -4,6 +4,8 @@ import {
   renderTrend,
   renderDivider,
   renderTitle,
+  renderLapProgressBar,
+  renderLapProgressWithPercentage,
 } from '../../../src/ui/console/formatters/progress-bar';
 
 describe('Progress Bar Formatter', () => {
@@ -104,6 +106,78 @@ describe('Progress Bar Formatter', () => {
 
       const title2 = renderTitle('EVEN', 20);
       expect(title2.length).toBe(20);
+    });
+  });
+
+  describe('renderLapProgressBar', () => {
+    it('should show car at start of lap (0% progress)', () => {
+      const bar = renderLapProgressBar(0, 32);
+      expect(bar).toBe('[>...............................]');
+      expect(bar.length).toBe(34); // 32 + 2 brackets
+    });
+
+    it('should show car at 25% progress', () => {
+      const bar = renderLapProgressBar(0.25, 32);
+      expect(bar).toBe('[=======>........................]');
+      expect(bar).toContain('>'); // Car position marker
+    });
+
+    it('should show car at 50% progress', () => {
+      const bar = renderLapProgressBar(0.5, 32);
+      expect(bar).toBe('[===============>................]');
+      expect(bar).toContain('>');
+    });
+
+    it('should show car at 75% progress', () => {
+      const bar = renderLapProgressBar(0.75, 32);
+      expect(bar).toBe('[=======================>........]');
+      expect(bar).toContain('>');
+    });
+
+    it('should show completed lap (100% progress)', () => {
+      const bar = renderLapProgressBar(1.0, 32);
+      expect(bar).toBe('[================================]');
+      expect(bar).not.toContain('>'); // No marker at finish
+    });
+
+    it('should clamp progress above 100%', () => {
+      const bar = renderLapProgressBar(1.5, 32);
+      expect(bar).toBe('[================================]');
+    });
+
+    it('should clamp progress below 0%', () => {
+      const bar = renderLapProgressBar(-0.1, 32);
+      expect(bar).toBe('[>...............................]');
+    });
+
+    it('should handle different widths', () => {
+      const bar = renderLapProgressBar(0.5, 20);
+      expect(bar.length).toBe(22); // 20 + 2 brackets
+      expect(bar).toContain('>');
+    });
+  });
+
+  describe('renderLapProgressWithPercentage', () => {
+    it('should show progress bar with percentage', () => {
+      const bar = renderLapProgressWithPercentage(0.653, 32);
+      expect(bar).toContain('[');
+      expect(bar).toContain(']');
+      expect(bar).toContain('65.3%');
+    });
+
+    it('should format percentage with one decimal place', () => {
+      const bar = renderLapProgressWithPercentage(0.5, 32);
+      expect(bar).toContain('50.0%');
+    });
+
+    it('should handle 0% progress', () => {
+      const bar = renderLapProgressWithPercentage(0, 32);
+      expect(bar).toContain('0.0%');
+    });
+
+    it('should handle 100% progress', () => {
+      const bar = renderLapProgressWithPercentage(1.0, 32);
+      expect(bar).toContain('100.0%');
     });
   });
 });

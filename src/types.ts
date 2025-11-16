@@ -196,6 +196,14 @@ export interface RaceEvent {
 }
 
 /**
+ * Lap progress for a single driver (0-1, where 1.0 = lap complete)
+ */
+export interface LapProgress {
+  driverId: string;         // Driver ID
+  progress: number;         // Lap completion (0.0 to 1.0)
+}
+
+/**
  * Current race state snapshot
  */
 export interface RaceState {
@@ -210,6 +218,7 @@ export interface RaceState {
   activeDecision: Decision | null; // Pending decision (if any)
   raceEvents: RaceEvent[];  // Recent race events
   caution: boolean;         // Caution flag status
+  lapProgress: LapProgress[]; // Real-time lap progress for all drivers (Phase 7)
 }
 
 /**

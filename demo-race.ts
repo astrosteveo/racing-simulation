@@ -60,20 +60,34 @@ async function main() {
   // Start race
   engine.start();
 
-  // Race loop
+  // Real-time racing configuration
+  const TICK_INTERVAL_MS = 100; // Update every 100ms (10 FPS)
+  const RENDER_INTERVAL = 5; // Render every 5 ticks (~500ms) for readability
+  let tickCount = 0;
+  let lastLapCount = 0;
+
+  console.log('\n🏁 Race Started! Real-time racing in progress...\n');
+
+  // Real-time race loop (Phase 7)
+  // Uses tick-based simulation where lap times match actual physics calculations
   while (!engine.isComplete()) {
-    // Simulate one lap
-    engine.simulateLap();
+    // Simulate time progression (100ms of race time)
+    engine.simulateTick(TICK_INTERVAL_MS);
 
     // Get current state
     const state = engine.getCurrentState();
 
-    // Render race state
-    renderer.render(state);
+    // Render at regular intervals (not every tick, for readability)
+    if (tickCount % RENDER_INTERVAL === 0) {
+      renderer.render(state);
+    }
 
     // Check for active decision
     if (state.activeDecision) {
       console.log('\n🏁 DECISION TIME! 🏁\n');
+
+      // Pause the race
+      engine.pause();
 
       // Prompt player for decision
       const choice = await renderer.promptDecision(state.activeDecision);
@@ -86,15 +100,21 @@ async function main() {
       console.log('\n📊 Decision Applied!\n');
       renderer.render(updatedState);
 
+      // Resume the race
+      engine.resume();
+
       // Brief pause to see the result
       await sleep(1500);
-    } else {
-      // Normal lap delay
-      await sleep(100); // 100ms per lap
     }
 
-    // Every 10 laps, wait for user input (for pacing)
-    if (state.currentLap % 10 === 0 && state.currentLap < state.totalLaps && !state.activeDecision) {
+    // Wait for next tick (real-time pacing)
+    await sleep(TICK_INTERVAL_MS);
+
+    // Every 10 laps, pause for user pacing
+    if (state.currentLap % 10 === 0 && state.currentLap !== lastLapCount && state.currentLap < state.totalLaps && !state.activeDecision) {
+      lastLapCount = state.currentLap;
+      engine.pause();
+
       const readlineModule = await import('readline');
       await new Promise<void>(resolve => {
         const rl2 = readlineModule.createInterface({
@@ -102,12 +122,16 @@ async function main() {
           output: process.stdout,
         });
 
-        rl2.question('\n[Paused - Press Enter to continue...]', () => {
+        rl2.question(`\n[Lap ${state.currentLap} - Press Enter to continue...]`, () => {
           rl2.close();
           resolve();
         });
       });
+
+      engine.resume();
     }
+
+    tickCount++;
   }
 
   // Show final results
