@@ -6,8 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "echo '\n⚠️  REMINDER: Update .claude/TASKS.md with test results\n   Run: npm run verify-docs (to check documentation sync)'",
-            "blocking": false
+            "command": "echo '\n💡 TIP: Update test status automatically:\n   npm run test:status (updates TASKS.md + README.md)\n   npm run verify-docs (checks all documentation sync)'"
           }
         ]
       },
@@ -16,25 +15,10 @@
         "hooks": [
           {
             "type": "command",
-            "command": "echo '\n💡 TIP: After commits, run npm run verify-docs to ensure TASKS.md is synced'",
-            "blocking": false
+            "command": "echo '\n💡 TIP: After commits, update TASKS.md Recent Changes and run:\n   npm run verify-docs (ensures documentation sync)'"
           }
         ]
       }
     ]
-  },
-  "rules": [
-    {
-      "pattern": "**/*.ts",
-      "description": "TypeScript files must conform to interfaces in src/types.ts"
-    },
-    {
-      "pattern": ".claude/TASKS.md",
-      "description": "Living document - update continuously during work. Run 'npm run verify-docs' to check sync."
-    },
-    {
-      "pattern": "README.md",
-      "description": "Update after completing major phases or milestones"
-    }
-  ]
+  }
 }
