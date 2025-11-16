@@ -406,5 +406,3 @@ The architecture supports these future additions without major refactoring:
 **Test before implementation = success**
 **Commit frequently = safety**
 **Refer to specs = stay on track**
-
-This project is about building something sustainable that won't require the 6th restart.

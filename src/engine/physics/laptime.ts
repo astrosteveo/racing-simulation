@@ -227,30 +227,32 @@ function calculateSectionTime(
   let baseSpeed: number;
 
   if (section.type === 'turn') {
-    // Turn: use corner speed formula with FRESH TIRE GRIP
-    // The tire wear will be applied again in calculateSectionSpeed,
-    // so we need to pass tireGrip=1.0 here to avoid double-counting
+    // Turn: use corner speed formula with CURRENT TIRE GRIP
+    // We apply tire grip HERE in corner speed, NOT in calculateSectionSpeed
     const banking = section.banking || track.banking.turns;
     const radius = section.radius || 1000; // Default radius if not specified
 
-    // Use FRESH TIRE GRIP (1.0) because calculateSectionSpeed will apply wear
-    baseSpeed = calculateCornerSpeed(banking, radius, 1.0, driverSkill);
+    // Get current tire grip for this corner speed calculation
+    const currentTireGrip = calculateTireGrip(lapsOnTires, track.type);
+
+    // Calculate corner speed with actual tire grip
+    baseSpeed = calculateCornerSpeed(banking, radius, currentTireGrip, driverSkill);
 
     // Apply track-type-specific calibration for realistic corner speeds
-    // Different track types have different speed reduction factors
+    // These calibration factors tune the physics formula to match real NASCAR lap times
     let calibrationFactor: number;
     switch (track.type) {
       case 'short':
-        calibrationFactor = 0.97; // Short tracks: minimal reduction (tight, low speed)
+        calibrationFactor = 0.90; // Short tracks: reduce corner speed for realistic lap times
         break;
       case 'intermediate':
-        calibrationFactor = 1.00; // Intermediate: no reduction needed
+        calibrationFactor = 0.93; // Intermediate: moderate reduction
         break;
       case 'superspeedway':
-        calibrationFactor = 0.98; // Superspeedway: slight reduction
+        calibrationFactor = 0.91; // Superspeedway: reduce for realistic speeds
         break;
       default:
-        calibrationFactor = 0.97;
+        calibrationFactor = 0.90;
     }
     baseSpeed *= calibrationFactor;
   } else {
@@ -329,23 +331,26 @@ function calculateSectionSpeedForBreakdown(
     const banking = section.banking || track.banking.turns;
     const radius = section.radius || 1000;
 
-    // Use FRESH TIRE GRIP (1.0) because calculateSectionSpeed will apply wear
-    baseSpeed = calculateCornerSpeed(banking, radius, 1.0, driverSkill);
+    // Get current tire grip for this corner speed calculation
+    const currentTireGrip = calculateTireGrip(lapsOnTires, track.type);
+
+    // Calculate corner speed with actual tire grip (same as calculateSectionTime)
+    baseSpeed = calculateCornerSpeed(banking, radius, currentTireGrip, driverSkill);
 
     // Apply track-type-specific calibration (same as calculateSectionTime)
     let calibrationFactor: number;
     switch (track.type) {
       case 'short':
-        calibrationFactor = 0.97;
+        calibrationFactor = 0.90;
         break;
       case 'intermediate':
-        calibrationFactor = 1.00;
+        calibrationFactor = 0.93;
         break;
       case 'superspeedway':
-        calibrationFactor = 0.98;
+        calibrationFactor = 0.91;
         break;
       default:
-        calibrationFactor = 0.97;
+        calibrationFactor = 0.90;
     }
     baseSpeed *= calibrationFactor;
   } else {
