@@ -137,11 +137,11 @@ None currently.
 
 ## Recent Changes (Last 5 Commits)
 
-1. `27d2ce4` - Complete documentation system optimization (MAJOR: cold start, README sync, actionable tasks)
-2. `ebb74ea` - Fix settings.json: remove unsupported properties (blocking, rules)
-3. `3bbc6e5` - Fix verify-docs chicken-and-egg problem with TASKS.md updates
-4. `b40948a` - Update TASKS.md Recent Changes (passes verify-docs)
-5. `6aecc2b` - Update TASKS.md with verification system completion
+1. `0bbf29c` - Reorganize feature design docs to .claude/design/ (Claude Code best practices)
+2. `1c31fa4` - Update TASKS.md with documentation optimization commit
+3. `27d2ce4` - Complete documentation system optimization (MAJOR: cold start, README sync, actionable tasks)
+4. `ebb74ea` - Fix settings.json: remove unsupported properties (blocking, rules)
+5. `3bbc6e5` - Fix verify-docs chicken-and-egg problem with TASKS.md updates
 
 ---
 
