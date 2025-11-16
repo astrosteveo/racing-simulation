@@ -9,6 +9,7 @@
     "build": "tsc",
     "start": "node dist/index.js",
     "play": "tsx demo-race.ts",
+    "career": "tsx demo-career.ts",
     "test": "vitest",
     "test:run": "vitest run",
     "test:ui": "vitest --ui",
