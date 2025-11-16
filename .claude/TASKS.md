@@ -17,19 +17,29 @@
   - 12 comprehensive tests, all passing
   - Infrastructure ready for real-time interruption
 
+- ✅ Phase 1.2: Real-time lap progression system (commit d61c7fb) **MAJOR MILESTONE!**
+  - Added simulateTick(elapsedMs) for tick-based simulation
+  - Added getCurrentLapProgress() - returns 0-1 lap completion
+  - Added getCalculatedLapTime(driverId) - get expected lap time
+  - Real-time position updates mid-lap
+  - Automatic lap advancement when all drivers complete
+  - 14 new comprehensive tests, all passing (26 total for RaceEngine)
+  - **Foundation complete for real-time racing!**
+
 **Currently Working On:**
-- 🔄 Phase 1.2: Real-time lap progression system
-  - Implementing simulateLapWithProgress(elapsedMs) for tick-based simulation
-  - Adding getCurrentLapProgress() to track lap completion fraction
-  - Updating types for real-time mode configuration
+- None - Phase 1 engine work complete!
+
+**Next Steps:**
+- Phase 4: UI components (lap progress bar, real-time rendering)
+- Phase 4: Update demo-race.ts with real-time loop
 
 ---
 
 ## Test Status
 
-**Overall:** 264/269 passing (98.1%)
+**Overall:** 291/295 passing (98.6%) **+26 new real-time tests!**
 
-### Failing Tests (5 total)
+### Failing Tests (4 total)
 
 **Physics Lap Time Tests (3 failures):**
 - Tire impact comparison: Bristol vs Daytona tire wear delta (edge case)
@@ -120,11 +130,11 @@ None currently.
 
 ## Recent Changes (Last 5 Commits)
 
-1. `0946927` - **Add pause/resume capability to RaceEngine** (Phase 1.1 - CLI real-time racing)
-2. `c6f8f61` - Update TASKS.md: Document custom agent infrastructure
-3. `bd706f2` - Update TASKS.md: Record lap time calibration completion
-4. `fb85546` - **Fix: Recalibrate lap time physics to match NASCAR targets** (14 tests fixed, 98.1% pass rate!)
-5. `c355516` - Update TASKS.md: Add latest commit to Recent Changes
+1. `d61c7fb` - **Add real-time lap progression system** (Phase 1.2 - +14 tests, all passing!)
+2. `9dbcdcc` - Update TASKS.md: Document CLI real-time racing progress
+3. `0946927` - **Add pause/resume capability to RaceEngine** (Phase 1.1 - CLI real-time racing)
+4. `c6f8f61` - Update TASKS.md: Document custom agent infrastructure
+5. `bd706f2` - Update TASKS.md: Record lap time calibration completion
 
 ---
 
