@@ -11,8 +11,8 @@
  *
  * This module is critical for accurate simulation - all lap times flow from here.
  *
- * Reference: docs/PHYSICS-REFERENCE.md (Section 8: Lap Time Integration)
- * Validation: docs/EXAMPLES.md (Examples 1, 2, 8)
+ * Reference: .claude/specs/physics/REFERENCE.md (Section 8: Lap Time Integration)
+ * Validation: .claude/specs/physics/EXAMPLES.md (Examples 1, 2, 8)
  */
 
 import type { Track, TrackSection, LapTimeBreakdown, DriverState, CarState } from '../../types';

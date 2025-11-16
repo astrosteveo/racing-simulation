@@ -2,14 +2,14 @@
  * Speed Calculation Physics Module
  *
  * Implements NASCAR speed calculations for straight-line and corner speeds.
- * Based on real NASCAR physics formulas from PHYSICS-REFERENCE.md.
+ * Based on real NASCAR physics formulas from specs/physics/REFERENCE.md.
  *
  * Key calculations:
  * - Base straight-line speed from horsepower, drag, weight
  * - Corner speed from banking, radius, tire grip, driver skill
  * - Section speed with all modifiers (tires, fuel, draft)
  *
- * Reference: docs/PHYSICS-REFERENCE.md (Sections 4 & 7)
+ * Reference: .claude/specs/physics/REFERENCE.md (Sections 4 & 7)
  */
 
 import type { TrackType } from '../../types';

@@ -51,10 +51,16 @@ racing-simulation/
 │       ├── decision-system.md   ← Decision system implementation details
 │       └── console-ui.md        ← Console UI implementation details
 ├── docs/
-│   ├── SPEC.md            ← Game design (11 sections, 634 lines)
+│   ├── SPEC.md            ← Game design (legacy - see specs/ for focused docs)
 │   ├── ARCHITECTURE.md    ← System design (7 sections, 563 lines)
-│   ├── EXAMPLES.md        ← Test scenarios (NASCAR reference data)
-│   └── PHYSICS-REFERENCE.md  ← NASCAR formulas
+│   └── EXAMPLES.md        ← Test scenarios (NASCAR reference data)
+├── specs/                  ← Spec-centric documentation (NEW!)
+│   ├── INDEX.md           ← Navigation hub for all specs
+│   ├── physics/           ← Physics spec (REFERENCE.md has NASCAR formulas)
+│   ├── character/         ← Character/RPG spec
+│   ├── decisions/         ← Decision system spec
+│   ├── ui/                ← UI spec
+│   └── game-modes/        ← Game modes spec
 ├── src/
 │   ├── types.ts           ← ALL interfaces (contract-first)
 │   ├── engine/            ← Physics calculations

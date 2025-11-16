@@ -2,7 +2,7 @@
 
 **Core Principle:** Build a real physics simulation with RPG progression, not a fake number generator.
 
-This project avoids the "restart trap" through disciplined development practices. See [SPEC.md](../docs/SPEC.md), [ARCHITECTURE.md](../docs/ARCHITECTURE.md), and [EXAMPLES.md](../docs/EXAMPLES.md) for complete design documentation.
+This project avoids the "restart trap" through disciplined development practices. See [specs/INDEX.md](specs/INDEX.md) for the spec-centric documentation architecture with focused specifications for each system. Legacy monolithic docs are available at [SPEC.md](../docs/SPEC.md), [ARCHITECTURE.md](../docs/ARCHITECTURE.md), and [EXAMPLES.md](../docs/EXAMPLES.md).
 
 ## Development Workflow
 

@@ -1,5 +1,7 @@
 # Decision System Architecture
 
+> **⚠️ DEPRECATED:** This document has been migrated to [.claude/specs/decisions/SPEC.md](../specs/decisions/SPEC.md) as part of the spec-centric documentation architecture. Please refer to the new location for up-to-date specifications.
+
 ## Overview
 
 The Decision System presents timed strategic choices to the player during races. Outcomes are calculated based on driver skills, mental state, and race context.

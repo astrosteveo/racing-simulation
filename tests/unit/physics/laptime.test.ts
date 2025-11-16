@@ -740,7 +740,7 @@ describe('Scenario Validation - EXAMPLES.md Benchmarks', () => {
 
     const lapTime = calculateLapTime(charlotte, driverState, carState);
 
-    // PHYSICS-REFERENCE.md: typical racing lap 30.5s
+    // specs/physics/REFERENCE.md: typical racing lap 30.5s
     expect(lapTime).toBeGreaterThan(28.0);
     expect(lapTime).toBeLessThan(33.0);
   });
@@ -752,7 +752,7 @@ describe('Scenario Validation - EXAMPLES.md Benchmarks', () => {
 
     const breakdown = calculateLapTimeBreakdown(bristol, driverState, carState);
 
-    // PHYSICS-REFERENCE.md: average speed ~127 mph
+    // specs/physics/REFERENCE.md: average speed ~127 mph
     expect(breakdown.averageSpeed).toBeGreaterThan(115);
     expect(breakdown.averageSpeed).toBeLessThan(135);
   });
@@ -764,7 +764,7 @@ describe('Scenario Validation - EXAMPLES.md Benchmarks', () => {
 
     const breakdown = calculateLapTimeBreakdown(charlotte, driverState, carState);
 
-    // PHYSICS-REFERENCE.md: average speed ~177 mph
+    // specs/physics/REFERENCE.md: average speed ~177 mph
     expect(breakdown.averageSpeed).toBeGreaterThan(165);
     expect(breakdown.averageSpeed).toBeLessThan(190);
   });

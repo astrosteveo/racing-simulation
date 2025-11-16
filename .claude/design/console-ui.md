@@ -1,5 +1,7 @@
 # Console UI Architecture
 
+> **⚠️ DEPRECATED:** This document has been migrated to [.claude/specs/ui/SPEC.md](../specs/ui/SPEC.md) as part of the spec-centric documentation architecture. Please refer to the new location for up-to-date specifications.
+
 ## Overview
 
 The console UI implements the `UIRenderer` interface from `types.ts` to provide a terminal-based racing display.

@@ -4,7 +4,7 @@
  * Implements NASCAR tire degradation and performance impact calculations.
  * Based on real NASCAR tire behavior and physics research.
  *
- * Reference: docs/PHYSICS-REFERENCE.md (Section 1: Tire Physics)
+ * Reference: .claude/specs/physics/REFERENCE.md (Section 1: Tire Physics)
  */
 
 import type { TrackType } from '../../types';

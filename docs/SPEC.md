@@ -1,5 +1,14 @@
 # Game Design Specification - NASCAR RPG Racing Simulation
 
+> **📚 LEGACY MONOLITHIC DOCUMENT:** This is the original complete game design specification. For up-to-date, focused specifications organized by system, see [.claude/specs/INDEX.md](../.claude/specs/INDEX.md) for the spec-centric documentation architecture.
+>
+> **New Structure:**
+> - Physics → [specs/physics/](../.claude/specs/physics/)
+> - Character/RPG → [specs/character/](../.claude/specs/character/)
+> - Decisions → [specs/decisions/](../.claude/specs/decisions/)
+> - UI → [specs/ui/](../.claude/specs/ui/)
+> - Game Modes → [specs/game-modes/](../.claude/specs/game-modes/)
+
 ## Core Concept
 
 An RPG-style NASCAR racing simulation where player skill is represented through character stats that evolve over time. Unlike traditional racing games that rely on expensive peripherals and manual dexterity, this game simulates the mental and strategic aspects of racing through:

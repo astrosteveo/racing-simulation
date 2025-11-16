@@ -54,14 +54,39 @@ This project is being built following a strict methodology to ensure sustainable
 
 **Next:** Polish, additional tracks, and career mode features!
 
-See [docs/SPEC.md](docs/SPEC.md) for complete game design and [.claude/CLAUDE.md](.claude/CLAUDE.md) for detailed progress tracking.
+See [.claude/specs/INDEX.md](.claude/specs/INDEX.md) for the spec-centric documentation architecture, or [docs/SPEC.md](docs/SPEC.md) for the legacy monolithic design document. For development workflow, see [.claude/CLAUDE.md](.claude/CLAUDE.md).
+
+## Quick Demo
+
+Want to race right now? Run an interactive 100-lap race at Bristol:
+
+```bash
+npm install
+npm run play
+```
+
+This demo lets you make strategic decisions during the race (pit strategy, passing attempts, tire management) and see how your choices affect the outcome!
 
 ## Documentation
 
-### For Players & Contributors
-- **[SPEC.md](docs/SPEC.md)** - Complete game design specification
-- **[ARCHITECTURE.md](docs/ARCHITECTURE.md)** - Technical architecture and system design
-- **[EXAMPLES.md](docs/EXAMPLES.md)** - Test scenarios and expected behaviors
+### Spec-Centric Documentation (Primary)
+
+The project uses a **spec-centric architecture** where each major system has its own focused specification:
+
+- **[specs/INDEX.md](.claude/specs/INDEX.md)** - Navigation hub for all specs
+- **[specs/physics/](.claude/specs/physics/)** - Physics engine (tire wear, fuel, lap times)
+- **[specs/character/](.claude/specs/character/)** - RPG system (skills, XP, mental state)
+- **[specs/decisions/](.claude/specs/decisions/)** - Decision system (pit strategy, passing)
+- **[specs/ui/](.claude/specs/ui/)** - User interface (console renderer, displays)
+- **[specs/game-modes/](.claude/specs/game-modes/)** - Game modes (single race, career)
+
+**Benefits:** ~70% token reduction for focused work, parallel development, clear boundaries.
+
+### Legacy Monolithic Documentation (Reference)
+
+- **[SPEC.md](docs/SPEC.md)** - Original complete game design (now distributed across specs)
+- **[ARCHITECTURE.md](docs/ARCHITECTURE.md)** - System-wide technical architecture
+- **[EXAMPLES.md](docs/EXAMPLES.md)** - Aggregate test scenarios and NASCAR reference data
 
 ### For Claude Code Users
 - **[QUICKSTART.md](.claude/QUICKSTART.md)** - Start here after /new sessions (cold start optimization)
