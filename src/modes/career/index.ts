@@ -5,3 +5,10 @@
  */
 
 export { calculateRacePoints, type PointsAwarded } from './ChampionshipPoints';
+export {
+  getDefaultSchedule,
+  getNextRace,
+  getRaceByNumber,
+  isSeasonComplete,
+  type SeasonRace,
+} from './SeasonSchedule';
