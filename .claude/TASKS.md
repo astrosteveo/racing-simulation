@@ -50,25 +50,14 @@ None currently.
 
 ## Next Up (Priority Order)
 
-### 1. Fix tire wear integration (HIGH PRIORITY)
+### 1. ~~Fix tire wear integration~~ ✅ **COMPLETED**
 
-**Problem:** `calculateSectionSpeed` not using tire grip calculation
-**Impact:** 7 failing tests
-**Files:**
-- `src/engine/physics/speed.ts` (lines ~65-95, `calculateSectionSpeed` function)
-- `tests/unit/physics/speed.test.ts` (tests expecting tire wear to affect speed)
-
-**Action:**
-1. In `calculateSectionSpeed`, ensure `tireGrip` parameter affects turn sections
-2. Multiply corner speed by grip factor (e.g., `baseSpeed * tireGrip`)
-3. Run: `npm test speed.test.ts` to verify fix
-4. Expected: 7 tests change from failing → passing
-
-**Success Criteria:** Tire wear reduces turn section speed appropriately
+**Status:** Fixed in commit 37d73be
+**Result:** 7 tests now passing, test pass rate improved to 95.9%
 
 ---
 
-### 2. Calibrate corner speed formula (HIGH PRIORITY)
+### 2. Calibrate corner speed formula (HIGH PRIORITY - NEXT)
 
 **Problem:** Banking coefficient producing unrealistic high speeds
 **Impact:** Bristol 143 mph (should be ~130), Daytona 271 mph (should be ~190)
@@ -134,11 +123,11 @@ None currently.
 
 ## Recent Changes (Last 5 Commits)
 
-1. `0bbf29c` - Reorganize feature design docs to .claude/design/ (Claude Code best practices)
-2. `1c31fa4` - Update TASKS.md with documentation optimization commit
-3. `27d2ce4` - Complete documentation system optimization (MAJOR: cold start, README sync, actionable tasks)
-4. `ebb74ea` - Fix settings.json: remove unsupported properties (blocking, rules)
-5. `3bbc6e5` - Fix verify-docs chicken-and-egg problem with TASKS.md updates
+1. `37d73be` - **Fix: Tire wear integration in calculateSectionSpeed** (7 tests fixed, 95.9% passing)
+2. `0bbf29c` - Reorganize feature design docs to .claude/design/ (Claude Code best practices)
+3. `1c31fa4` - Update TASKS.md with documentation optimization commit
+4. `27d2ce4` - Complete documentation system optimization (MAJOR: cold start, README sync, actionable tasks)
+5. `ebb74ea` - Fix settings.json: remove unsupported properties (blocking, rules)
 
 ---
 
