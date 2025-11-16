@@ -34,7 +34,10 @@ racing-simulation/
 │   ├── QUICKSTART.md      ← YOU ARE HERE (cold start optimization)
 │   ├── TASKS.md           ← Current work, test status, next steps
 │   ├── CLAUDE.md          ← Development principles (read once)
-│   └── settings.json      ← Hooks configuration
+│   ├── settings.json      ← Hooks configuration
+│   └── design/            ← Feature design docs (read when working on feature)
+│       ├── decision-system.md   ← Decision system implementation details
+│       └── console-ui.md        ← Console UI implementation details
 ├── docs/
 │   ├── SPEC.md            ← Game design (11 sections, 634 lines)
 │   ├── ARCHITECTURE.md    ← System design (7 sections, 563 lines)

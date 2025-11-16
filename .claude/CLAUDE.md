@@ -123,6 +123,11 @@ npm run verify-docs    # Check if living docs are in sync
 - `docs/ARCHITECTURE.md` (563 lines) - Only when changing structure
 - `docs/EXAMPLES.md` (401 lines) - Only when calibrating physics
 
+**Read for feature-specific context (planning artifacts):**
+- `.claude/design/decision-system.md` (210 lines) - Decision system implementation details
+- `.claude/design/console-ui.md` (227 lines) - Console UI implementation details
+- Read these when working on their specific features, not routinely
+
 **Token efficiency tip:** Use Grep/search instead of reading entire large files.
 
 ### Task Tracking Document
