@@ -12,3 +12,4 @@ export {
   isSeasonComplete,
   type SeasonRace,
 } from './SeasonSchedule';
+export { CareerManager } from './CareerManager';
