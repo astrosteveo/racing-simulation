@@ -10,7 +10,7 @@ import {
   createPassingDecision,
   createMentalStateDecision,
   createTireManagementDecision,
-  createTrafficDecision,
+  // createTrafficDecision, // Reserved for future traffic decision implementation
 } from './decision-library';
 
 /**

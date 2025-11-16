@@ -36,12 +36,12 @@ export function renderWarningBar(
   value: number,
   max: number,
   width: number = 16,
-  thresholds: { low: number; medium: number } = { low: 25, medium: 50 }
+  _thresholds: { low: number; medium: number } = { low: 25, medium: 50 }
 ): string {
-  const percentage = (value / max) * 100;
+  // Note: thresholds parameter reserved for future color implementation
   const bar = renderProgressBar(value, max, width, true);
 
-  // Could add ANSI color codes here in the future
+  // Could add ANSI color codes here in the future based on thresholds
   // For now, return the basic bar
   return bar;
 }

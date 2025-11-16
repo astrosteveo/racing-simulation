@@ -23,6 +23,7 @@ import type {
   CarState,
   Track,
   Decision,
+  DecisionEffects,
   XPGain,
   DraftStatus,
   DriverState,
@@ -44,6 +45,14 @@ interface DriverRaceState {
   totalTime: number; // Cumulative race time
   lapsLed: number;
   lapTimes: number[]; // History of lap times
+}
+
+/**
+ * Temporary position with effective time for sorting
+ * Used internally by updatePositionsRealTime for type-safe position calculations
+ */
+interface PositionWithTime extends Position {
+  effectiveTime: number;
 }
 
 /**
@@ -201,7 +210,7 @@ export class RaceEngine implements RaceSimulation {
   /**
    * Simulate a single lap for a driver
    */
-  private simulateDriverLap(driverId: string, state: DriverRaceState): void {
+  private simulateDriverLap(_driverId: string, state: DriverRaceState): void {
     if (!this.track) return;
 
     // Create driver state for physics engine
@@ -262,15 +271,15 @@ export class RaceEngine implements RaceSimulation {
     // Build position array
     this.positions = sorted.map(([driverId, state], index) => {
       const position = index + 1;
-      const leader = sorted[0][1];
-      const previous = index > 0 ? sorted[index - 1][1] : null;
+      const leader = sorted[0]?.[1];
+      const previous = index > 0 ? sorted[index - 1]?.[1] : null;
 
       return {
         position,
         driverId,
         driverName: state.driver.name,
         lapTime: state.currentLapTime,
-        gapToLeader: position === 1 ? 0 : state.totalTime - leader.totalTime,
+        gapToLeader: position === 1 ? 0 : state.totalTime - (leader?.totalTime ?? 0),
         gapToNext: previous ? state.totalTime - previous.totalTime : 0,
         lapsLed: state.lapsLed,
       };
@@ -284,8 +293,9 @@ export class RaceEngine implements RaceSimulation {
     if (this.positions.length === 0) return;
 
     const leader = this.positions[0];
-    const leaderState = this.driverStates.get(leader.driverId);
+    if (!leader) return;
 
+    const leaderState = this.driverStates.get(leader.driverId);
     if (leaderState) {
       leaderState.lapsLed++;
     }
@@ -380,7 +390,7 @@ export class RaceEngine implements RaceSimulation {
    * Apply decision effects to race state
    */
   private applyDecisionEffects(
-    effects: any,
+    effects: DecisionEffects,
     playerState: DriverRaceState
   ): void {
     // Apply position change
@@ -443,8 +453,8 @@ export class RaceEngine implements RaceSimulation {
   /**
    * Apply XP gain to driver skills
    */
-  private applyXPGain(xpGain: XPGain, driver: Driver): void {
-    Object.entries(xpGain).forEach(([skill, xp]) => {
+  private applyXPGain(xpGain: XPGain, _driver: Driver): void {
+    Object.entries(xpGain).forEach(([_skill, xp]) => {
       if (xp > 0) {
         // XP system is handled by the Driver class
         // For now, we just track that XP was earned
@@ -564,7 +574,7 @@ export class RaceEngine implements RaceSimulation {
     // Advance each driver's progress
     const completedDrivers: string[] = [];
 
-    for (const [driverId, driverState] of this.driverStates) {
+    for (const [driverId] of this.driverStates) {
       const currentProgress = this.lapProgress.get(driverId) || 0;
       const expectedLapTime = this.expectedLapTimes.get(driverId) || 1;
 
@@ -668,7 +678,7 @@ export class RaceEngine implements RaceSimulation {
    * Positions are based on cumulative time + current lap progress
    */
   private updatePositionsRealTime(): void {
-    const positionsArray: Position[] = [];
+    const positionsWithTime: PositionWithTime[] = [];
 
     for (const [driverId, state] of this.driverStates) {
       const progress = this.lapProgress.get(driverId) || 0;
@@ -678,38 +688,42 @@ export class RaceEngine implements RaceSimulation {
       // Effective time = total time + partial current lap
       const effectiveTime = state.totalTime + currentLapTime;
 
-      positionsArray.push({
+      positionsWithTime.push({
         position: 0, // Will be set after sorting
         driverId: driverId,
         driverName: state.driver.name,
         gap: 0, // Will be calculated after sorting
+        gapToLeader: 0, // Will be calculated after sorting
+        gapToNext: 0, // Not used in real-time mode
         lapTime: state.currentLapTime,
+        lapsLed: state.lapsLed,
         fastestLap: state.fastestLap,
+        effectiveTime: effectiveTime,
       });
-
-      // Store effective time temporarily for sorting
-      (positionsArray[positionsArray.length - 1] as any).effectiveTime = effectiveTime;
     }
 
     // Sort by effective time (lowest first = leader)
-    positionsArray.sort((a, b) => {
-      const timeA = (a as any).effectiveTime || 0;
-      const timeB = (b as any).effectiveTime || 0;
-      return timeA - timeB;
-    });
+    positionsWithTime.sort((a, b) => a.effectiveTime - b.effectiveTime);
 
     // Assign positions and calculate gaps
-    const leaderTime = (positionsArray[0] as any).effectiveTime || 0;
-    positionsArray.forEach((pos, index) => {
-      pos.position = index + 1;
-      const effectiveTime = (pos as any).effectiveTime || 0;
-      pos.gap = index === 0 ? 0 : effectiveTime - leaderTime;
+    const leaderTime = positionsWithTime[0]?.effectiveTime ?? 0;
+    const finalPositions: Position[] = positionsWithTime.map((pos, index) => {
+      const gap = index === 0 ? 0 : pos.effectiveTime - leaderTime;
 
-      // Clean up temporary field
-      delete (pos as any).effectiveTime;
+      return {
+        position: index + 1,
+        driverId: pos.driverId,
+        driverName: pos.driverName,
+        gap: gap, // Gap to leader (for real-time display)
+        gapToLeader: gap, // Standard field
+        gapToNext: 0, // Not calculated in real-time mode (could enhance later)
+        lapTime: pos.lapTime,
+        lapsLed: pos.lapsLed,
+        fastestLap: pos.fastestLap,
+      };
     });
 
-    this.positions = positionsArray;
+    this.positions = finalPositions;
   }
 
   /**
@@ -798,17 +812,4 @@ export class RaceEngine implements RaceSimulation {
     };
   }
 
-  /**
-   * Pause race simulation
-   */
-  pause(): void {
-    this.paused = true;
-  }
-
-  /**
-   * Resume race simulation
-   */
-  resume(): void {
-    this.paused = false;
-  }
 }

@@ -3,7 +3,7 @@
  * Predefined decision templates for different race situations
  */
 
-import type { Decision, DecisionOption, RaceContext, CONSTANTS } from '../types';
+import type { Decision, DecisionOption, RaceContext } from '../types';
 import { CONSTANTS as GameConstants } from '../types';
 
 /**

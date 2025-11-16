@@ -237,9 +237,10 @@ export function calculateFuelWeightPenalty(fuelGallons: number, trackType: Track
 export function calculateFuelConsumption(
   driver: Driver,
   track: Track,
-  carState: CarState,
+  _carState: CarState,
   draftStatus: DraftStatus
 ): number {
+  // Note: carState reserved for future car-specific fuel efficiency modifiers
   // 1. Get base consumption for track type
   let fuel = calculateBaseFuelConsumption(track.type);
 

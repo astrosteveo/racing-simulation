@@ -182,6 +182,8 @@ export interface Position {
   gapToLeader: number;      // Gap to leader in seconds
   gapToNext: number;        // Gap to car ahead in seconds
   lapsLed: number;          // Laps led this race
+  gap?: number;             // Optional: Gap to leader (alternate field for real-time mode)
+  fastestLap?: number;      // Optional: Fastest lap time (used in real-time mode)
 }
 
 /**

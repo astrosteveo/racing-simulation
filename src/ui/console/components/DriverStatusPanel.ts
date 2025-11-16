@@ -125,7 +125,8 @@ function renderSkillBar(name: string, value: number): string {
  * Render a mental state attribute with progress bar
  * @param isPositive - If true, higher is better; if false, lower is better
  */
-function renderMentalStateBar(name: string, value: number, isPositive: boolean): string {
+function renderMentalStateBar(name: string, value: number, _isPositive: boolean): string {
+  // Note: isPositive parameter reserved for future color coding implementation
   const bar = renderProgressBar(value, 100, 16);
 
   // Could add color indicators here later

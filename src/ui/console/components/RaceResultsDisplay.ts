@@ -87,12 +87,13 @@ export function renderRaceResults(
     sections.push('XP GAINED:');
 
     // Calculate total XP
-    const totalXP = Object.values(results.xpGained).reduce((sum, val) => sum + val, 0);
+    const xpValues = Object.values(results.xpGained) as Array<number | undefined>;
+    const totalXP = xpValues.reduce((sum: number, val) => sum + (val ?? 0), 0);
 
     // Show each skill that gained XP
-    const xpEntries = Object.entries(results.xpGained)
-      .filter(([_, xp]) => xp > 0)
-      .sort(([_, a], [__, b]) => b - a); // Sort by XP descending
+    const xpEntries = (Object.entries(results.xpGained) as Array<[string, number | undefined]>)
+      .filter((entry): entry is [string, number] => typeof entry[1] === 'number' && entry[1] > 0)
+      .sort(([, a], [, b]) => b - a); // Sort by XP descending
 
     xpEntries.forEach(([skill, xp]) => {
       const skillName = formatSkillName(skill);
@@ -141,7 +142,8 @@ function formatSkillName(skill: string): string {
 export function renderCompactResult(results: RaceResults): string {
   const finishStr = `P${results.finishPosition}`;
   const changeStr = formatPositionChange(results.positionsGained);
-  const totalXP = Object.values(results.xpGained).reduce((sum, val) => sum + val, 0);
+  const xpValues = Object.values(results.xpGained) as Array<number | undefined>;
+  const totalXP = xpValues.reduce((sum: number, val) => sum + (val ?? 0), 0);
 
   const parts = [
     `Finished ${finishStr} (${changeStr})`,
@@ -167,7 +169,8 @@ export function renderXPBreakdown(results: RaceResults): string {
     lines.push(`  ${skillName}: +${xp}`);
   });
 
-  const totalXP = Object.values(results.xpGained).reduce((sum, val) => sum + val, 0);
+  const xpValues = Object.values(results.xpGained) as Array<number | undefined>;
+  const totalXP = xpValues.reduce((sum: number, val) => sum + (val ?? 0), 0);
   lines.push(`  TOTAL: +${totalXP}`);
 
   return lines.join('\n');

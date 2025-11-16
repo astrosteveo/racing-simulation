@@ -11,6 +11,7 @@ import type {
   DecisionEffects,
   Driver,
   XPGain,
+  RaceContext,
 } from '../types';
 
 /**
@@ -102,8 +103,9 @@ function calculateEffects(
   decisionType: string,
   option: DecisionOption,
   outcome: DecisionOutcome,
-  context: any
+  _context: RaceContext
 ): DecisionEffects {
+  // Note: context parameter reserved for future context-aware effects
   const effects: DecisionEffects = {};
 
   switch (decisionType) {
@@ -363,7 +365,7 @@ function calculateXPGain(
  * Generate outcome message for player feedback
  */
 function generateOutcomeMessage(
-  decisionType: string,
+  _decisionType: string,
   option: DecisionOption,
   outcome: DecisionOutcome
 ): string {

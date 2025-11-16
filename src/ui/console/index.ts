@@ -6,7 +6,8 @@
 
 import type { UIRenderer, RaceState, RaceResults, MenuOption, Decision } from '../../types';
 import { renderLiveRaceDisplay } from './components/LiveRaceDisplay';
-import { renderRaceResults } from './components/RaceResultsDisplay';
+// renderRaceResults available in RaceResultsDisplay.ts for future advanced results rendering
+// import { renderRaceResults } from './components/RaceResultsDisplay';
 import { renderDriverStatusPanel } from './components/DriverStatusPanel';
 import { showMenu, clearScreen, pressEnterToContinue } from './input/MenuHandler';
 

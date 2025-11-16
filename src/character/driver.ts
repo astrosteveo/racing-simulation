@@ -23,7 +23,8 @@ import type {
   CareerStats,
   XPGain,
 } from '../types';
-import { CONSTANTS } from '../types';
+// CONSTANTS imported but not used - reserved for future skill validation
+// import { CONSTANTS } from '../types';
 
 /**
  * Clamp a value to the valid range [0, 100]
