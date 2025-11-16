@@ -240,6 +240,31 @@ These become tests AND documentation.
 - **tsx** - Run TypeScript directly without build step (development)
 - **ESLint** - Catch errors and enforce consistency
 
+### Testing Commands
+
+**CRITICAL PRINCIPLE FOR AUTOMATED TESTING:**
+
+When running tests programmatically (via Claude Code or CI/CD), ALWAYS use:
+
+```bash
+npm run test:run
+```
+
+**DO NOT use `npm test`** - it runs Vitest in watch mode, which:
+- Waits indefinitely for file changes
+- Blocks automation from proceeding
+- Prevents immediate action on test results
+- Cannot provide conclusive output
+
+**Command Guide:**
+
+- `npm run test:run` - Run all tests once and exit (use for automation)
+- `npm test` - Run tests in watch mode (use for manual development)
+- `npm run test:ui` - Interactive UI for exploring tests
+- `npm run test:coverage` - Generate coverage report
+
+**For Claude Code workflows:** Always use `npm run test:run` to get immediate, actionable results.
+
 ## Claude Code Hooks Configuration
 
 **IMPORTANT:** Hooks are configured in `.claude/settings.json`, NOT as separate hook files.
