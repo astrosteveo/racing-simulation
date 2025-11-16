@@ -113,11 +113,11 @@ None currently.
 
 ## Recent Changes (Last 5 Commits)
 
-1. `261fb5c` - **Fix: Calibrate corner speed formula to realistic NASCAR speeds** (3 tests fixed)
-2. `37d73be` - **Fix: Tire wear integration in calculateSectionSpeed** (7 tests fixed, 95.9% passing)
-3. `0bbf29c` - Reorganize feature design docs to .claude/design/ (Claude Code best practices)
-4. `1c31fa4` - Update TASKS.md with documentation optimization commit
-5. `27d2ce4` - Complete documentation system optimization (MAJOR: cold start, README sync, actionable tasks)
+1. `51105d6` - Update test status: 250/269 passing (93.0%)
+2. `fa21fff` - Update TASKS.md: Mark corner speed calibration as completed
+3. `261fb5c` - **Fix: Calibrate corner speed formula to realistic NASCAR speeds** (3 tests fixed)
+4. `37d73be` - **Fix: Tire wear integration in calculateSectionSpeed** (7 tests fixed)
+5. `0bbf29c` - Reorganize feature design docs to .claude/design/ (Claude Code best practices)
 
 ---
 
