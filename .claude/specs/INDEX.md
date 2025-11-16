@@ -2,7 +2,7 @@
 
 **Last Updated:** 2025-11-16
 **Total Specs:** 5
-**Status:** Phase 1 - Foundation (Structure Created)
+**Status:** Phase 5 Complete - UI Migration (4/5 specs migrated)
 
 ---
 
@@ -333,7 +333,23 @@ cat .claude/specs/INDEX.md
 - **Skill-based outcome** formulas fully specified
 - **Effect system** documented (position, mental state, car state, XP)
 
-**Phases 5-6:** UI, Game Modes (pending)
+**Phase 5: UI Migration** ✅ Complete (2025-11-16)
+- ✅ Migrated UI design from `.claude/design/console-ui.md` → specs/ui/SPEC.md
+- ✅ Extracted UI sections from docs/SPEC.md (race display, results, menus)
+- ✅ Documented all UI interfaces in specs/ui/CONTRACTS.md
+- ✅ Created comprehensive EXAMPLES.md with 15 display examples
+- ✅ Created REFERENCE.md with formatter and component quick reference
+- ✅ Created LAYOUTS.md with detailed screen mockups (UI-specific)
+- ✅ 5 complete files: SPEC, CONTRACTS, EXAMPLES, REFERENCE, LAYOUTS
+
+**Benefits Achieved:**
+- **~70% token reduction** for UI-only work
+- **Complete console UI** specification with layouts and examples
+- **All formatters documented** with signatures and test examples
+- **Screen layouts** with column-by-column specifications
+- **Responsive design** rules for different terminal sizes
+
+**Phase 6:** Game Modes (pending)
 
 **Phase 7:** Cleanup & consolidation (pending)
 
@@ -391,4 +407,4 @@ npm run test:spec:character
 ---
 
 **Last Reviewed:** 2025-11-16
-**Next Review:** After Phase 2 migration
+**Next Review:** After Phase 6 migration (Game Modes)
