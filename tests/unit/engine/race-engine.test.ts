@@ -210,3 +210,278 @@ describe('RaceEngine - Pause/Resume Functionality', () => {
     });
   });
 });
+
+describe('RaceEngine - Real-Time Lap Progression', () => {
+  let raceEngine: RaceEngine;
+  let basicConfig: RaceConfig;
+
+  beforeEach(() => {
+    raceEngine = new RaceEngine();
+
+    const player = createPlayerDriver('Test Driver', '1', 'midpack');
+    const aiField = createAIField(2); // Small field for faster tests
+
+    basicConfig = {
+      track: bristolTrack,
+      laps: 3, // Short race for testing
+      playerDriver: player,
+      aiDrivers: aiField,
+    };
+  });
+
+  describe('getCalculatedLapTime()', () => {
+    it('should return calculated lap time for a driver', () => {
+      raceEngine.initialize(basicConfig);
+      raceEngine.start();
+
+      const playerId = basicConfig.playerDriver.id;
+      const lapTime = raceEngine.getCalculatedLapTime(playerId);
+
+      // Bristol lap times should be around 15-18 seconds
+      expect(lapTime).toBeGreaterThan(14);
+      expect(lapTime).toBeLessThan(20);
+    });
+
+    it('should return 0 for invalid driver ID', () => {
+      raceEngine.initialize(basicConfig);
+      raceEngine.start();
+
+      const lapTime = raceEngine.getCalculatedLapTime('invalid-id');
+      expect(lapTime).toBe(0);
+    });
+  });
+
+  describe('getCurrentLapProgress()', () => {
+    it('should return 0 at start of lap', () => {
+      raceEngine.initialize(basicConfig);
+      raceEngine.start();
+
+      const progress = raceEngine.getCurrentLapProgress();
+      expect(progress).toBe(0);
+    });
+
+    it('should return progress between 0 and 1 during lap', () => {
+      raceEngine.initialize(basicConfig);
+      raceEngine.start();
+
+      // Simulate partial lap (500ms of a ~15s lap = ~3%)
+      raceEngine.simulateTick(500);
+
+      const progress = raceEngine.getCurrentLapProgress();
+      expect(progress).toBeGreaterThan(0);
+      expect(progress).toBeLessThan(1);
+    });
+
+    it('should reset to 0 after completing lap', () => {
+      raceEngine.initialize(basicConfig);
+      raceEngine.start();
+
+      const playerId = basicConfig.playerDriver.id;
+      const lapTime = raceEngine.getCalculatedLapTime(playerId);
+
+      // Simulate entire lap plus a bit more
+      raceEngine.simulateTick(lapTime * 1000 + 100);
+
+      const progress = raceEngine.getCurrentLapProgress();
+      expect(progress).toBe(0); // Reset for next lap
+    });
+  });
+
+  describe('simulateTick()', () => {
+    it('should advance lap progress based on elapsed time', () => {
+      raceEngine.initialize(basicConfig);
+      raceEngine.start();
+
+      // Get expected lap time
+      const playerId = basicConfig.playerDriver.id;
+      const expectedLapTime = raceEngine.getCalculatedLapTime(playerId);
+
+      // Simulate 50% of lap time
+      raceEngine.simulateTick((expectedLapTime * 1000) / 2);
+
+      const progress = raceEngine.getCurrentLapProgress();
+
+      // Should be approximately 50% complete (within 10% margin for rounding)
+      expect(progress).toBeGreaterThan(0.4);
+      expect(progress).toBeLessThan(0.6);
+    });
+
+    it('should advance currentLap when all drivers complete', () => {
+      raceEngine.initialize(basicConfig);
+      raceEngine.start();
+
+      expect(raceEngine.getCurrentState().currentLap).toBe(1);
+
+      // Get slowest driver's lap time (longest time needed)
+      const allDriverIds = [
+        basicConfig.playerDriver.id,
+        ...basicConfig.aiDrivers.map((d) => d.id),
+      ];
+      const maxLapTime = Math.max(
+        ...allDriverIds.map((id) => raceEngine.getCalculatedLapTime(id))
+      );
+
+      // Simulate entire lap for all drivers
+      raceEngine.simulateTick(maxLapTime * 1000 + 100);
+
+      const state = raceEngine.getCurrentState();
+      expect(state.currentLap).toBe(2); // Advanced to lap 2
+    });
+
+    it('should mark race as complete after final lap', () => {
+      const shortRace: RaceConfig = {
+        ...basicConfig,
+        laps: 1, // Single lap race
+      };
+
+      raceEngine.initialize(shortRace);
+      raceEngine.start();
+
+      expect(raceEngine.isComplete()).toBe(false);
+
+      // Get slowest driver's lap time
+      const allDriverIds = [
+        shortRace.playerDriver.id,
+        ...shortRace.aiDrivers.map((d) => d.id),
+      ];
+      const maxLapTime = Math.max(
+        ...allDriverIds.map((id) => raceEngine.getCalculatedLapTime(id))
+      );
+
+      // Complete the only lap
+      raceEngine.simulateTick(maxLapTime * 1000 + 100);
+
+      expect(raceEngine.isComplete()).toBe(true);
+    });
+
+    it('should not advance when paused', () => {
+      raceEngine.initialize(basicConfig);
+      raceEngine.start();
+
+      raceEngine.pause();
+      raceEngine.simulateTick(1000);
+
+      const progress = raceEngine.getCurrentLapProgress();
+      expect(progress).toBe(0); // No progress while paused
+    });
+
+    it('should update positions during lap based on progress', () => {
+      raceEngine.initialize(basicConfig);
+      raceEngine.start();
+
+      // Simulate partial lap
+      raceEngine.simulateTick(1000);
+
+      const state = raceEngine.getCurrentState();
+
+      // Should have positions assigned (even mid-lap)
+      expect(state.positions).toHaveLength(3); // player + 2 AI
+      expect(state.positions[0].position).toBe(1); // Leader
+      expect(state.positions[1].position).toBe(2);
+      expect(state.positions[2].position).toBe(3);
+    });
+
+    it('should degrade tires after lap completion', () => {
+      raceEngine.initialize(basicConfig);
+      raceEngine.start();
+
+      const stateBeforeLap = raceEngine.getCurrentState();
+      const tireWearBefore = stateBeforeLap.playerCar.tireWear;
+
+      // Complete entire lap
+      const playerId = basicConfig.playerDriver.id;
+      const lapTime = raceEngine.getCalculatedLapTime(playerId);
+      const allDriverIds = [
+        basicConfig.playerDriver.id,
+        ...basicConfig.aiDrivers.map((d) => d.id),
+      ];
+      const maxLapTime = Math.max(
+        ...allDriverIds.map((id) => raceEngine.getCalculatedLapTime(id))
+      );
+
+      raceEngine.simulateTick(maxLapTime * 1000 + 100);
+
+      const stateAfterLap = raceEngine.getCurrentState();
+      const tireWearAfter = stateAfterLap.playerCar.tireWear;
+
+      // Tires should have degraded
+      expect(tireWearAfter).toBeLessThan(tireWearBefore);
+    });
+
+    it('should consume fuel after lap completion', () => {
+      raceEngine.initialize(basicConfig);
+      raceEngine.start();
+
+      const stateBeforeLap = raceEngine.getCurrentState();
+      const fuelBefore = stateBeforeLap.playerCar.fuelLevel;
+
+      // Complete entire lap
+      const allDriverIds = [
+        basicConfig.playerDriver.id,
+        ...basicConfig.aiDrivers.map((d) => d.id),
+      ];
+      const maxLapTime = Math.max(
+        ...allDriverIds.map((id) => raceEngine.getCalculatedLapTime(id))
+      );
+
+      raceEngine.simulateTick(maxLapTime * 1000 + 100);
+
+      const stateAfterLap = raceEngine.getCurrentState();
+      const fuelAfter = stateAfterLap.playerCar.fuelLevel;
+
+      // Fuel should have been consumed
+      expect(fuelAfter).toBeLessThan(fuelBefore);
+    });
+  });
+
+  describe('Real-Time Integration', () => {
+    it('should simulate race in real-time with multiple ticks', () => {
+      raceEngine.initialize(basicConfig);
+      raceEngine.start();
+
+      const playerId = basicConfig.playerDriver.id;
+      const expectedLapTime = raceEngine.getCalculatedLapTime(playerId);
+      const tickInterval = 100; // 100ms ticks
+
+      let totalElapsed = 0;
+      const progressUpdates: number[] = [];
+
+      // Simulate lap with 100ms ticks
+      while (totalElapsed < expectedLapTime * 1000) {
+        raceEngine.simulateTick(tickInterval);
+        totalElapsed += tickInterval;
+
+        const progress = raceEngine.getCurrentLapProgress();
+        progressUpdates.push(progress);
+      }
+
+      // Should have multiple progress updates
+      expect(progressUpdates.length).toBeGreaterThan(10);
+
+      // Progress should increase over time (check first half vs second half)
+      const firstHalf = progressUpdates.slice(0, progressUpdates.length / 2);
+      const secondHalf = progressUpdates.slice(progressUpdates.length / 2);
+      const avgFirst = firstHalf.reduce((a, b) => a + b, 0) / firstHalf.length;
+      const avgSecond = secondHalf.reduce((a, b) => a + b, 0) / secondHalf.length;
+
+      expect(avgSecond).toBeGreaterThan(avgFirst);
+    });
+
+    it('should handle mixed tick sizes', () => {
+      raceEngine.initialize(basicConfig);
+      raceEngine.start();
+
+      // Mix of different tick sizes
+      raceEngine.simulateTick(50);
+      raceEngine.simulateTick(200);
+      raceEngine.simulateTick(100);
+      raceEngine.simulateTick(500);
+
+      const progress = raceEngine.getCurrentLapProgress();
+
+      // Total: 850ms of ~15s lap = ~5.7%
+      expect(progress).toBeGreaterThan(0);
+      expect(progress).toBeLessThan(0.2);
+    });
+  });
+});
