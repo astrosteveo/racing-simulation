@@ -83,11 +83,11 @@ None currently.
 
 ## Recent Changes (Last 5 Commits)
 
-1. `d0aebfb` - Refactor CLAUDE.md and establish TASKS.md for session continuity
-2. `0e65fca` - Establish testing command principles (added `test:run`)
-3. `aa64822` - Phase 5.1: Calibrate physics to match EXAMPLES.md
-4. `eb14b8c` - Update documentation: Phase 4 Complete!
-5. `09d258b` - Connect decision system to demo race
+1. `bf4fe14` - Establish continuous TASKS.md update workflow
+2. `d0aebfb` - Refactor CLAUDE.md and establish TASKS.md for session continuity
+3. `0e65fca` - Establish testing command principles (added `test:run`)
+4. `aa64822` - Phase 5.1: Calibrate physics to match EXAMPLES.md
+5. `eb14b8c` - Update documentation: Phase 4 Complete!
 
 ---
 
