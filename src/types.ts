@@ -652,44 +652,4 @@ export const CONSTANTS = {
   EMERGENCY_DECISION_TIME: 3, // Seconds
 } as const;
 
-/**
- * Export all types
- */
-export type {
-  // Re-export for convenience
-  DriverSkills,
-  MentalState,
-  CareerStats,
-  XPGain,
-  Driver,
-  TrackType,
-  SurfaceType,
-  TrackSection,
-  Track,
-  Car,
-  CarState,
-  Position,
-  RaceEvent,
-  RaceState,
-  RaceConfig,
-  RaceResults,
-  DecisionType,
-  RiskLevel,
-  DecisionOutcome,
-  DecisionOption,
-  RaceContext,
-  Decision,
-  DecisionEffects,
-  DecisionResult,
-  PhysicsParams,
-  DraftStatus,
-  LapTimeBreakdown,
-  AIPersonality,
-  AIDriver,
-  CareerSave,
-  MenuOption,
-  UIRenderer,
-  PhysicsEngine,
-  RaceSimulation,
-  DecisionManager,
-};
+// All types are already exported via 'export interface' and 'export type' declarations above
