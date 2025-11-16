@@ -71,11 +71,30 @@ async function main() {
     // Render race state
     renderer.render(state);
 
-    // Simulate delay between laps (can be skipped for faster demo)
-    await sleep(100); // 100ms per lap
+    // Check for active decision
+    if (state.activeDecision) {
+      console.log('\n🏁 DECISION TIME! 🏁\n');
 
-    // Every 10 laps, wait for user input
-    if (state.currentLap % 10 === 0 && state.currentLap < state.totalLaps) {
+      // Prompt player for decision
+      const choice = await renderer.promptDecision(state.activeDecision);
+
+      // Apply the decision
+      engine.applyDecision(state.activeDecision, choice);
+
+      // Show updated state after decision
+      const updatedState = engine.getCurrentState();
+      console.log('\n📊 Decision Applied!\n');
+      renderer.render(updatedState);
+
+      // Brief pause to see the result
+      await sleep(1500);
+    } else {
+      // Normal lap delay
+      await sleep(100); // 100ms per lap
+    }
+
+    // Every 10 laps, wait for user input (for pacing)
+    if (state.currentLap % 10 === 0 && state.currentLap < state.totalLaps && !state.activeDecision) {
       const readlineModule = await import('readline');
       await new Promise<void>(resolve => {
         const rl2 = readlineModule.createInterface({

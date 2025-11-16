@@ -44,9 +44,6 @@ export class ConsoleRenderer implements UIRenderer {
   /**
    * Prompt player for decision
    * Returns chosen option ID
-   *
-   * Note: Decision system not yet implemented (Phase 4)
-   * This is a placeholder implementation
    */
   async promptDecision(decision: Decision): Promise<string> {
     console.log('\n═══════════════════════════════════════════════════════════');
