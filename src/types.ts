@@ -155,6 +155,7 @@ export interface CarState {
   damage: number;           // Damage level 0-100%
   inPit: boolean;           // Currently in pit lane
   lapsSincePit: number;     // Laps since last pit stop
+  fuelConsumptionPerLap?: number; // Last lap fuel consumption in gallons (optional tracking)
 }
 
 // ============================================================================
@@ -470,12 +471,13 @@ export interface PhysicsEngine {
   ): number;
 
   /**
-   * Calculate fuel consumption
+   * Calculate fuel consumption per lap
    */
   calculateFuelConsumption(
-    laps: number,
-    inDraft: boolean,
-    trackLength: number
+    driver: Driver,
+    track: Track,
+    carState: CarState,
+    draftStatus: DraftStatus
   ): number;
 
   /**
@@ -617,6 +619,23 @@ export const CONSTANTS = {
 
   // Tire wear
   TIRE_WEAR_BASE_RATE: 1.0,   // % per lap baseline
+
+  // Fuel consumption (gallons per lap by track type)
+  FUEL_BASE_SUPERSPEEDWAY: 0.27,
+  FUEL_BASE_INTERMEDIATE: 0.20,
+  FUEL_BASE_SHORT: 0.11,
+  FUEL_BASE_ROAD: 0.18,
+
+  // Fuel weight penalty (seconds per gallon by track type)
+  FUEL_WEIGHT_PENALTY_SUPERSPEEDWAY: 0.025,
+  FUEL_WEIGHT_PENALTY_INTERMEDIATE: 0.045,
+  FUEL_WEIGHT_PENALTY_SHORT: 0.055,
+  FUEL_WEIGHT_PENALTY_ROAD: 0.040,
+
+  // Fuel efficiency modifiers
+  FUEL_SKILL_MAX_BONUS: 0.12,      // 12% max reduction from consistency
+  FUEL_CONFIDENCE_MAX_BONUS: 0.08, // 8% max reduction from confidence
+  FUEL_FRUSTRATION_MAX_PENALTY: 0.20, // 20% max increase from frustration
 
   // Decision timing
   ROUTINE_DECISION_TIME: 12,  // Seconds
