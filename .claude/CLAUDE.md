@@ -240,6 +240,62 @@ These become tests AND documentation.
 - **tsx** - Run TypeScript directly without build step (development)
 - **ESLint** - Catch errors and enforce consistency
 
+## Claude Code Hooks Configuration
+
+**IMPORTANT:** Hooks are configured in `.claude/settings.json`, NOT as separate hook files.
+
+According to the [official documentation](https://code.claude.com/docs/en/hooks), hooks should be defined in your settings file using JSON configuration. Legacy hook script files in `.claude/hooks/` should be migrated to the settings format.
+
+### Current Hook Setup
+
+This project has legacy hook scripts in `.claude/hooks/`:
+- `post-edit-hook` - Type checking and linting after edits
+- `post-write-hook` - Similar validations for new files
+- `pre-bash-hook` - Safety checks before bash commands
+
+### Migration to Settings.json (Recommended)
+
+To use the current hooks system, create `.claude/settings.json`:
+
+```json
+{
+  "hooks": {
+    "Edit": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "npm run type-check 2>&1 | head -10",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "Write": [
+      {
+        "matcher": "*.ts",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "npm run lint:fix $FILE_PATH",
+            "timeout": 15
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+**Benefits of settings.json approach:**
+- Centralized configuration
+- Supports regex matchers and wildcards
+- Better IDE integration
+- Can reference project scripts with `$CLAUDE_PROJECT_DIR`
+
+See [Claude Code Hooks Documentation](https://code.claude.com/docs/en/hooks) for complete configuration options.
+
 ## Working with Claude Code
 
 ### Best Practices
@@ -365,11 +421,76 @@ Would you like me to create this subagent?
 
 ## Project Status Reference
 
-Track where we are:
+**IMPORTANT: This section and README.md are living documents. Update both after each major milestone.**
 
-- [ ] Phase 1: Planning (docs written, types defined)
-- [ ] Phase 2: Setup (project initialized, structure created)
-- [ ] Phase 3: Core Engine (physics, character, race loop)
+### Current Status (Updated: 2025-11-16)
+
+**Overall Progress:** Phase 3 - Core Engine (In Progress)
+**Test Pass Rate:** 168/186 tests passing (90.3%)
+
+### Completed Systems ✅
+
+1. **Planning & Architecture** (Phase 1 ✅)
+   - Complete specifications (SPEC.md, ARCHITECTURE.md, EXAMPLES.md)
+   - TypeScript interfaces defined (src/types.ts)
+   - Development workflow documented
+
+2. **Project Setup** (Phase 2 ✅)
+   - TypeScript + Vitest configuration
+   - ESLint + Git hooks
+   - Project structure established
+
+3. **Physics Engine** (Phase 3 - Partial ✅)
+   - ✅ Tire physics (10/10 tests passing)
+   - ✅ Fuel consumption (30/30 tests passing)
+   - ✅ Speed calculation (27/34 tests passing - 79.4%)
+   - ✅ Lap time calculation (28/39 tests passing - 71.8%)
+   - ⏳ Aerodynamics/drafting (not started)
+
+4. **Character System** (Phase 3 - Complete ✅)
+   - ✅ Driver class with 10 skill categories (28/28 tests)
+   - ✅ Mental state system (27/27 tests)
+   - ✅ XP and progression mechanics (11/11 integration tests)
+   - ✅ Physics integration working
+
+### In Progress 🚧
+
+5. **Race Simulation Engine** (Phase 3 - Next)
+   - Race loop orchestration
+   - Lap-by-lap state management
+   - Position tracking
+   - Event generation
+
+### Not Started ⏳
+
+6. **Decision System** (Phase 4)
+   - Pit strategy decisions
+   - Passing opportunity decisions
+   - Mental state management
+
+7. **UI Layer** (Phase 5)
+   - Console race display
+   - Decision prompts
+   - Post-race results
+
+8. **Demo** (Phase 6)
+   - Complete playable race
+   - AI competitor field
+   - Multiple tracks
+
+### Known Issues & Deferred Items
+
+- Physics calibration at 79-90% (deferred until more context)
+  - Bristol lap times ~0.5s off target
+  - Tire wear penalty slightly high
+  - Charlotte speeds need adjustment
+- Aerodynamics/drafting module not yet implemented
+
+### Phase Checklist
+
+- [x] Phase 1: Planning (docs written, types defined)
+- [x] Phase 2: Setup (project initialized, structure created)
+- [ ] Phase 3: Core Engine (physics ✅, character ✅, race loop ⏳)
 - [ ] Phase 4: Events & Decisions (timed decision system)
 - [ ] Phase 5: UI (console interface)
 - [ ] Phase 6: Demo (runnable race scenario)
@@ -406,3 +527,24 @@ The architecture supports these future additions without major refactoring:
 **Test before implementation = success**
 **Commit frequently = safety**
 **Refer to specs = stay on track**
+**Keep documentation current = maintainability**
+
+### Living Documentation
+
+**CLAUDE.md and README.md are living documents**
+
+After each major milestone:
+1. Update "Project Status Reference" section in CLAUDE.md
+2. Update "Project Status" section in README.md
+3. Update "Roadmap" checkboxes in README.md
+4. Keep both files in sync
+
+Both documents should accurately reflect:
+- Current phase and progress
+- Completed systems with test pass rates
+- Known issues and deferred items
+- Next steps
+
+**Outdated documentation is worse than no documentation** - it misleads and wastes time.
+
+This project is about building something sustainable that won't require the 6th restart.

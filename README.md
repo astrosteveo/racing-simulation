@@ -23,16 +23,25 @@ The simulation calculates outcomes based on:
 
 ## Project Status
 
-🚧 **Currently in Planning Phase** 🚧
+🚧 **Currently in Phase 3: Core Engine Implementation** 🚧
+
+**Last Updated:** 2025-11-16
+**Test Pass Rate:** 168/186 tests passing (90.3%)
 
 This project is being built following a strict methodology to ensure sustainable development:
 
 1. ✅ **Planning Complete** - Specs, architecture, and examples documented
 2. ✅ **Project Setup Complete** - TypeScript, testing framework configured
-3. ⏳ **Implementation** - TDD approach, building incrementally
-4. ⏳ **Demo** - Playable race simulation
+3. ⏳ **Core Engine Implementation** (In Progress)
+   - ✅ Physics System (tire wear, fuel consumption, speed, lap times)
+   - ✅ Character System (skills, mental state, XP progression)
+   - ⏳ Race Simulation Engine (next up)
+4. ⏳ **Decision System** - Timed choices and pit strategy
+5. ⏳ **UI & Demo** - Console interface and playable race
 
-See [docs/SPEC.md](docs/SPEC.md) for complete game design.
+**Current Focus:** Building the Race Simulation Engine to orchestrate lap-by-lap racing with the completed physics and character systems.
+
+See [docs/SPEC.md](docs/SPEC.md) for complete game design and [.claude/CLAUDE.md](.claude/CLAUDE.md) for detailed progress tracking.
 
 ## Documentation
 
@@ -134,34 +143,58 @@ See [ARCHITECTURE.md](docs/ARCHITECTURE.md) for details.
 
 ## Roadmap
 
-### Phase 1: Core Engine ⏳
-- [ ] Physics calculations (tire wear, fuel, drafting, lap times)
-- [ ] Character system (skills, mental state, XP)
-- [ ] Race simulation loop
+### Phase 1: Planning & Setup ✅ Complete
+- [x] Comprehensive specifications (SPEC.md, ARCHITECTURE.md, EXAMPLES.md)
+- [x] TypeScript project setup
+- [x] Testing framework (Vitest)
+- [x] Development workflow and TDD principles
 
-### Phase 2: Decisions & Events
+### Phase 2: Core Engine ⏳ In Progress (70% Complete)
+
+**Physics System** ✅ Complete
+- [x] Tire wear physics (10/10 tests passing)
+- [x] Fuel consumption physics (30/30 tests passing)
+- [x] Speed calculation (27/34 tests passing - 79.4%)
+- [x] Lap time calculation (28/39 tests passing - 71.8%)
+- [ ] Aerodynamics/drafting (deferred)
+
+**Character System** ✅ Complete
+- [x] Driver class with 10 skill categories (28/28 tests)
+- [x] Mental state system (27/27 tests)
+- [x] XP and progression mechanics (11/11 integration tests)
+- [x] Physics integration working
+
+**Race Simulation** ⏳ Next
+- [ ] Race loop orchestration
+- [ ] Lap-by-lap state management
+- [ ] Position tracking
+- [ ] Event generation system
+
+### Phase 3: Decisions & Events
 - [ ] Decision system framework
 - [ ] Pit strategy decisions
 - [ ] Passing opportunity decisions
 - [ ] Mental state management decisions
 
-### Phase 3: UI
+### Phase 4: UI
 - [ ] Console race display
 - [ ] Decision prompts
 - [ ] Post-race results
 
-### Phase 4: Demo
+### Phase 5: Demo
 - [ ] Complete playable race
 - [ ] 2-3 NASCAR tracks (short, intermediate, superspeedway)
 - [ ] AI competitor field
 - [ ] Career progression
 
-### Future
+### Future Extensions
 - Web-based UI
 - Full NASCAR schedule (36+ races)
 - Career mode with seasons
 - 3D visualization / game client
 - Multiplayer
+
+**Known Issues:** Physics calibration at 79-90% (Bristol lap times ~0.5s off target, tire wear penalty slightly high). Deferred until race simulation provides more validation context.
 
 ## Contributing
 
