@@ -1,13 +1,27 @@
 # Current Tasks & Status
 
 **Last Updated:** 2025-11-16
-**Current Phase:** Phase 7 - Polish & Extensions
+**Current Phase:** Phase 7 - CLI Real-Time Racing Experience
 
 ---
 
 ## Current Work
 
-None - Lap time calibration completed successfully!
+### CLI Real-Time Racing Implementation (In Progress)
+
+**Goal:** Transform CLI from batch simulation to real-time racing where lap times match actual physics calculations
+
+**Completed:**
+- ✅ Phase 1.1: Pause/Resume capability (commit 0946927)
+  - Added pause(), resume(), isPaused() methods to RaceEngine
+  - 12 comprehensive tests, all passing
+  - Infrastructure ready for real-time interruption
+
+**Currently Working On:**
+- 🔄 Phase 1.2: Real-time lap progression system
+  - Implementing simulateLapWithProgress(elapsedMs) for tick-based simulation
+  - Adding getCurrentLapProgress() to track lap completion fraction
+  - Updating types for real-time mode configuration
 
 ---
 
@@ -106,11 +120,11 @@ None currently.
 
 ## Recent Changes (Last 5 Commits)
 
-1. `fb85546` - **Fix: Recalibrate lap time physics to match NASCAR targets** (14 tests fixed, 98.1% pass rate!)
-2. `c355516` - Update TASKS.md: Add latest commit to Recent Changes
-3. `51105d6` - Update test status: 250/269 passing (93.0%)
-4. `fa21fff` - Update TASKS.md: Mark corner speed calibration as completed
-5. `261fb5c` - **Fix: Calibrate corner speed formula to realistic NASCAR speeds** (3 tests fixed)
+1. `0946927` - **Add pause/resume capability to RaceEngine** (Phase 1.1 - CLI real-time racing)
+2. `c6f8f61` - Update TASKS.md: Document custom agent infrastructure
+3. `bd706f2` - Update TASKS.md: Record lap time calibration completion
+4. `fb85546` - **Fix: Recalibrate lap time physics to match NASCAR targets** (14 tests fixed, 98.1% pass rate!)
+5. `c355516` - Update TASKS.md: Add latest commit to Recent Changes
 
 ---
 
