@@ -1,0 +1,45 @@
+{
+  "id": "daytona",
+  "name": "Daytona International Speedway",
+  "nickname": null,
+  "length": 2.5,
+  "type": "superspeedway",
+  "banking": {
+    "turns": 31,
+    "straights": 3
+  },
+  "surface": "asphalt",
+  "surfaceGrip": 0.88,
+  "sections": [
+    {
+      "type": "turn",
+      "length": 1800,
+      "banking": 31,
+      "radius": 1000,
+      "idealLine": 180,
+      "surfaceGrip": 0.88
+    },
+    {
+      "type": "straight",
+      "length": 3800,
+      "idealLine": 200,
+      "surfaceGrip": 0.88
+    },
+    {
+      "type": "turn",
+      "length": 1800,
+      "banking": 31,
+      "radius": 1000,
+      "idealLine": 180,
+      "surfaceGrip": 0.88
+    },
+    {
+      "type": "straight",
+      "length": 3000,
+      "idealLine": 200,
+      "surfaceGrip": 0.88
+    }
+  ],
+  "difficulty": 5,
+  "raceLaps": 200
+}

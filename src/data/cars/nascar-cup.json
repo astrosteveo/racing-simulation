@@ -1,0 +1,8 @@
+{
+  "horsepower": 750,
+  "weight": 3400,
+  "dragCoefficient": 0.32,
+  "downforce": 1500,
+  "tireCompound": "Goodyear Eagle",
+  "fuelCapacity": 18
+}

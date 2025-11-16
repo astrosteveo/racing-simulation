@@ -1,0 +1,266 @@
+[
+  {
+    "id": "ai-veteran-1",
+    "name": "Chase Johnson",
+    "number": "4",
+    "isPlayer": false,
+    "skills": {
+      "racecraft": 85,
+      "consistency": 82,
+      "aggression": 75,
+      "focus": 88,
+      "stamina": 85,
+      "composure": 90,
+      "draftSense": 85,
+      "tireManagement": 80,
+      "fuelManagement": 85,
+      "pitStrategy": 88
+    },
+    "mentalState": {
+      "confidence": 75,
+      "frustration": 20,
+      "focus": 85,
+      "distraction": 15
+    },
+    "stats": {
+      "races": 150,
+      "wins": 25,
+      "top5": 70,
+      "top10": 95,
+      "poles": 18,
+      "lapsLed": 3500,
+      "avgFinish": 8.5
+    }
+  },
+  {
+    "id": "ai-veteran-2",
+    "name": "Kyle Larsen",
+    "number": "5",
+    "isPlayer": false,
+    "skills": {
+      "racecraft": 80,
+      "consistency": 78,
+      "aggression": 82,
+      "focus": 80,
+      "stamina": 82,
+      "composure": 75,
+      "draftSense": 80,
+      "tireManagement": 75,
+      "fuelManagement": 78,
+      "pitStrategy": 75
+    },
+    "mentalState": {
+      "confidence": 70,
+      "frustration": 25,
+      "focus": 80,
+      "distraction": 20
+    },
+    "stats": {
+      "races": 120,
+      "wins": 18,
+      "top5": 55,
+      "top10": 75,
+      "poles": 12,
+      "lapsLed": 2800,
+      "avgFinish": 10.2
+    }
+  },
+  {
+    "id": "ai-good-1",
+    "name": "Ryan Blaney",
+    "number": "12",
+    "isPlayer": false,
+    "skills": {
+      "racecraft": 70,
+      "consistency": 72,
+      "aggression": 68,
+      "focus": 70,
+      "stamina": 75,
+      "composure": 70,
+      "draftSense": 68,
+      "tireManagement": 70,
+      "fuelManagement": 72,
+      "pitStrategy": 68
+    },
+    "mentalState": {
+      "confidence": 65,
+      "frustration": 30,
+      "focus": 70,
+      "distraction": 25
+    },
+    "stats": {
+      "races": 80,
+      "wins": 5,
+      "top5": 25,
+      "top10": 45,
+      "poles": 3,
+      "lapsLed": 800,
+      "avgFinish": 14.5
+    }
+  },
+  {
+    "id": "ai-good-2",
+    "name": "Martin Truex",
+    "number": "19",
+    "isPlayer": false,
+    "skills": {
+      "racecraft": 65,
+      "consistency": 70,
+      "aggression": 60,
+      "focus": 68,
+      "stamina": 70,
+      "composure": 72,
+      "draftSense": 65,
+      "tireManagement": 75,
+      "fuelManagement": 70,
+      "pitStrategy": 70
+    },
+    "mentalState": {
+      "confidence": 60,
+      "frustration": 35,
+      "focus": 65,
+      "distraction": 30
+    },
+    "stats": {
+      "races": 65,
+      "wins": 3,
+      "top5": 18,
+      "top10": 35,
+      "poles": 2,
+      "lapsLed": 450,
+      "avgFinish": 16.8
+    }
+  },
+  {
+    "id": "ai-average-1",
+    "name": "Bubba Wallace",
+    "number": "23",
+    "isPlayer": false,
+    "skills": {
+      "racecraft": 55,
+      "consistency": 58,
+      "aggression": 62,
+      "focus": 55,
+      "stamina": 60,
+      "composure": 55,
+      "draftSense": 58,
+      "tireManagement": 55,
+      "fuelManagement": 58,
+      "pitStrategy": 55
+    },
+    "mentalState": {
+      "confidence": 50,
+      "frustration": 40,
+      "focus": 55,
+      "distraction": 35
+    },
+    "stats": {
+      "races": 45,
+      "wins": 0,
+      "top5": 5,
+      "top10": 15,
+      "poles": 0,
+      "lapsLed": 120,
+      "avgFinish": 20.5
+    }
+  },
+  {
+    "id": "ai-average-2",
+    "name": "Ricky Stenhouse",
+    "number": "47",
+    "isPlayer": false,
+    "skills": {
+      "racecraft": 52,
+      "consistency": 50,
+      "aggression": 70,
+      "focus": 52,
+      "stamina": 58,
+      "composure": 48,
+      "draftSense": 60,
+      "tireManagement": 50,
+      "fuelManagement": 52,
+      "pitStrategy": 50
+    },
+    "mentalState": {
+      "confidence": 48,
+      "frustration": 45,
+      "focus": 50,
+      "distraction": 40
+    },
+    "stats": {
+      "races": 50,
+      "wins": 0,
+      "top5": 3,
+      "top10": 10,
+      "poles": 1,
+      "lapsLed": 85,
+      "avgFinish": 22.8
+    }
+  },
+  {
+    "id": "ai-rookie-1",
+    "name": "Noah Gragson",
+    "number": "42",
+    "isPlayer": false,
+    "skills": {
+      "racecraft": 45,
+      "consistency": 42,
+      "aggression": 65,
+      "focus": 48,
+      "stamina": 50,
+      "composure": 40,
+      "draftSense": 45,
+      "tireManagement": 40,
+      "fuelManagement": 42,
+      "pitStrategy": 38
+    },
+    "mentalState": {
+      "confidence": 40,
+      "frustration": 50,
+      "focus": 45,
+      "distraction": 45
+    },
+    "stats": {
+      "races": 15,
+      "wins": 0,
+      "top5": 0,
+      "top10": 2,
+      "poles": 0,
+      "lapsLed": 5,
+      "avgFinish": 28.5
+    }
+  },
+  {
+    "id": "ai-backmarker-1",
+    "name": "Corey LaJoie",
+    "number": "7",
+    "isPlayer": false,
+    "skills": {
+      "racecraft": 38,
+      "consistency": 40,
+      "aggression": 55,
+      "focus": 40,
+      "stamina": 45,
+      "composure": 38,
+      "draftSense": 40,
+      "tireManagement": 35,
+      "fuelManagement": 38,
+      "pitStrategy": 35
+    },
+    "mentalState": {
+      "confidence": 35,
+      "frustration": 55,
+      "focus": 40,
+      "distraction": 50
+    },
+    "stats": {
+      "races": 30,
+      "wins": 0,
+      "top5": 0,
+      "top10": 1,
+      "poles": 0,
+      "lapsLed": 2,
+      "avgFinish": 32.5
+    }
+  }
+]

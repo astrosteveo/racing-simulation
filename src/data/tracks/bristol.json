@@ -1,0 +1,45 @@
+{
+  "id": "bristol",
+  "name": "Bristol Motor Speedway",
+  "nickname": "The Last Great Colosseum",
+  "length": 0.533,
+  "type": "short",
+  "banking": {
+    "turns": 26,
+    "straights": 0
+  },
+  "surface": "concrete",
+  "surfaceGrip": 0.95,
+  "sections": [
+    {
+      "type": "turn",
+      "length": 440,
+      "banking": 26,
+      "radius": 250,
+      "idealLine": 120,
+      "surfaceGrip": 0.95
+    },
+    {
+      "type": "straight",
+      "length": 700,
+      "idealLine": 140,
+      "surfaceGrip": 0.95
+    },
+    {
+      "type": "turn",
+      "length": 440,
+      "banking": 26,
+      "radius": 250,
+      "idealLine": 120,
+      "surfaceGrip": 0.95
+    },
+    {
+      "type": "straight",
+      "length": 700,
+      "idealLine": 140,
+      "surfaceGrip": 0.95
+    }
+  ],
+  "difficulty": 8,
+  "raceLaps": 500
+}
