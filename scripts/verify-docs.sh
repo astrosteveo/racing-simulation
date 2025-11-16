@@ -12,7 +12,12 @@ ISSUES_FOUND=0
 # Check 1: TASKS.md Recent Changes vs git log
 echo "📋 Checking TASKS.md Recent Changes..."
 LATEST_COMMIT=$(git log -1 --format="%h")
-if ! grep -q "$LATEST_COMMIT" .claude/TASKS.md; then
+LATEST_FILES=$(git diff --name-only HEAD~1 HEAD 2>/dev/null || echo "")
+
+# Skip check if latest commit ONLY modified TASKS.md (prevents chicken-egg problem)
+if [ "$LATEST_FILES" = ".claude/TASKS.md" ]; then
+  echo "   ✅ Latest commit is TASKS.md update (skipping self-reference check)"
+elif ! grep -q "$LATEST_COMMIT" .claude/TASKS.md; then
   echo "   ❌ TASKS.md Recent Changes missing latest commit: $LATEST_COMMIT"
   echo "      Latest: $(git log -1 --oneline)"
   ISSUES_FOUND=$((ISSUES_FOUND + 1))
