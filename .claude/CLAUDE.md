@@ -98,23 +98,41 @@ npm run test:coverage
 
 **TASKS.md is a living document** for session-to-session continuity.
 
-Update `.claude/TASKS.md` after every work session:
+**Update TASKS.md continuously as work progresses:**
 
-1. **Current Work** - What you're actively doing right now
-2. **Blocked Items** - What's waiting on decisions/research
-3. **Next Up** - Prioritized upcoming tasks
-4. **Recent Changes** - Last 3-5 commits for context
-5. **Test Status** - Current pass rate and known failures
+**When starting work:**
+1. Read TASKS.md first to understand current state
+2. Move appropriate task from "Next Up" to "Current Work"
+3. Note any blockers or context needed
 
-**Why:** Makes it trivial to resume work across sessions without re-exploring the entire codebase.
+**During work (update immediately):**
+- ✅ Mark tasks complete in "Current Work" when finished
+- ➡️ Move incomplete tasks back to "Next Up" with notes
+- 🚫 Add new blockers to "Blocked Items" as discovered
+- 📝 Add new tasks to "Next Up" as they emerge
+- 🧪 Update "Test Status" after running test suite
+
+**After completing any task:**
+1. Update "Completed This Session" section
+2. Run `npm run test:run` and update test status
+3. Update "Recent Changes" with latest commits
+4. Review "Next Up" priorities - reorder if needed
+
+**Before ending session (mandatory):**
+1. Clear "Current Work" section (move to completed or next up)
+2. Ensure "Next Up" is prioritized for easy resume
+3. Update timestamp at top of file
+4. Commit TASKS.md changes
+
+**Why:** Keep context fresh. Eliminate "where was I?" when resuming. Track progress without losing momentum.
 
 See [TASKS.md](TASKS.md) for current status.
 
 ### Living Documentation
 
-Update these after major milestones:
-- `.claude/TASKS.md` - After EVERY session
-- `README.md` - Project status, roadmap checkboxes
+**Update frequency:**
+- `.claude/TASKS.md` - Continuously during work, mandatory before session end
+- `README.md` - After completing major phases or milestones
 - This file (CLAUDE.md) - Only when principles change
 
 **Outdated documentation is worse than no documentation.**
@@ -136,9 +154,15 @@ Update these after major milestones:
 - Scope creep (check SPEC.md)
 - Tightly coupled code
 
-**Remember:**
+**Development Rhythm:**
 - Code before plan = failure
 - Test before implementation = success
 - Commit frequently = safety
 - Refer to specs = stay on track
-- Update TASKS.md = easy resumption
+- **Update TASKS.md continuously = easy resumption**
+
+**Task Completion Workflow:**
+1. Complete task
+2. Update TASKS.md (mark complete, update test status)
+3. Commit changes
+4. Move to next task
