@@ -108,6 +108,23 @@ npm run verify-docs    # Check if living docs are in sync
 
 ## Session Continuity
 
+### Documentation Hierarchy (Token Efficiency)
+
+**ALWAYS read first (high value, low tokens):**
+- `.claude/TASKS.md` (149 lines) - Current state, next steps, test status
+- `.claude/QUICKSTART.md` (new sessions only) - Cold start optimization
+
+**Read once per project/session:**
+- `.claude/CLAUDE.md` (this file, 184 lines) - Development principles
+- `README.md` (250 lines) - Public overview, features
+
+**Read only when needed (large, specific use):**
+- `docs/SPEC.md` (634 lines) - Only when adding features
+- `docs/ARCHITECTURE.md` (563 lines) - Only when changing structure
+- `docs/EXAMPLES.md` (401 lines) - Only when calibrating physics
+
+**Token efficiency tip:** Use Grep/search instead of reading entire large files.
+
 ### Task Tracking Document
 
 **TASKS.md is a living document** for session-to-session continuity.
@@ -117,7 +134,7 @@ npm run verify-docs    # Check if living docs are in sync
 **When starting work:**
 1. Read TASKS.md first to understand current state
 2. Move appropriate task from "Next Up" to "Current Work"
-3. Note any blockers or context needed
+3. Tasks are now actionable with specific files/lines/steps
 
 **During work (update immediately):**
 - ✅ Mark tasks complete in "Current Work" when finished
@@ -128,7 +145,7 @@ npm run verify-docs    # Check if living docs are in sync
 
 **After completing any task:**
 1. Update "Completed This Session" section
-2. Run `npm run test:run` and update test status
+2. Run `npm run test:status` (auto-updates TASKS.md + README.md)
 3. Update "Recent Changes" with latest commits
 4. Review "Next Up" priorities - reorder if needed
 5. Run `npm run verify-docs` to catch any drift
@@ -144,12 +161,25 @@ npm run verify-docs    # Check if living docs are in sync
 
 See [TASKS.md](TASKS.md) for current status.
 
-### Living Documentation
+### Living Documentation Sync
 
-**Update frequency:**
-- `.claude/TASKS.md` - Continuously during work, mandatory before session end
-- `README.md` - After completing major phases or milestones
-- This file (CLAUDE.md) - Only when principles change
+**Update immediately (automated):**
+- Test pass rates: `npm run test:status` (updates TASKS.md + README.md)
+
+**Update after milestones (semi-automated):**
+- `README.md`: `npm run sync-readme` (syncs dates, test status, prompts for manual checks)
+
+**Update continuously:**
+- `.claude/TASKS.md` - During work, mandatory before session end
+- `.claude/QUICKSTART.md` - After major phase completions
+
+**Update rarely:**
+- `.claude/CLAUDE.md` - Only when principles change
+- `docs/SPEC.md` - Only when requirements change
+- `docs/ARCHITECTURE.md` - Only when system design changes
+
+**Verification:**
+- `npm run verify-docs` - Automated checks for drift
 
 **Outdated documentation is worse than no documentation.**
 

@@ -26,7 +26,7 @@ The simulation calculates outcomes based on:
 🎉 **Fully Playable Racing Game!** 🎉
 
 **Last Updated:** 2025-11-16
-**Test Pass Rate:** 230/248 tests passing (92.7%)
+**Test Pass Rate:** 255/269 tests passing (94.8%)
 
 This project is being built following a strict methodology to ensure sustainable development:
 
@@ -58,9 +58,14 @@ See [docs/SPEC.md](docs/SPEC.md) for complete game design and [.claude/CLAUDE.md
 
 ## Documentation
 
+### For Players & Contributors
 - **[SPEC.md](docs/SPEC.md)** - Complete game design specification
 - **[ARCHITECTURE.md](docs/ARCHITECTURE.md)** - Technical architecture and system design
 - **[EXAMPLES.md](docs/EXAMPLES.md)** - Test scenarios and expected behaviors
+
+### For Claude Code Users
+- **[QUICKSTART.md](.claude/QUICKSTART.md)** - Start here after /new sessions (cold start optimization)
+- **[TASKS.md](.claude/TASKS.md)** - Current work, test status, next steps (living document)
 - **[CLAUDE.md](.claude/CLAUDE.md)** - Development workflow and principles
 
 ## Prerequisites

@@ -15,7 +15,10 @@
     "lint": "eslint src --ext .ts",
     "lint:fix": "eslint src --ext .ts --fix",
     "type-check": "tsc --noEmit",
-    "verify-docs": "bash scripts/verify-docs.sh"
+    "verify-docs": "bash scripts/verify-docs.sh",
+    "validate-tasks": "bash scripts/validate-tasks.sh",
+    "test:status": "bash scripts/update-test-status.sh",
+    "sync-readme": "bash scripts/sync-readme.sh"
   },
   "keywords": [
     "nascar",

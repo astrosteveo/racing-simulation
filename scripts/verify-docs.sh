@@ -75,6 +75,42 @@ else
 fi
 echo ""
 
+# Check 6: README.md sync with TASKS.md
+echo "📄 Checking README.md sync with TASKS.md..."
+TASKS_TEST_COUNTS=$(grep "^\*\*Overall:\*\*" .claude/TASKS.md | grep -oE "[0-9]+/[0-9]+" || echo "NOT_FOUND")
+README_TEST_COUNTS=$(grep "^\*\*Test Pass Rate:\*\*" README.md | grep -oE "[0-9]+/[0-9]+" || echo "NOT_FOUND")
+
+if [ "$TASKS_TEST_COUNTS" = "NOT_FOUND" ] || [ "$README_TEST_COUNTS" = "NOT_FOUND" ]; then
+  echo "   ⚠️  Could not parse test status from documentation"
+elif [ "$TASKS_TEST_COUNTS" != "$README_TEST_COUNTS" ]; then
+  echo "   ❌ Test status mismatch between TASKS.md and README.md"
+  echo "      TASKS.md: $TASKS_TEST_COUNTS"
+  echo "      README.md: $README_TEST_COUNTS"
+  echo "      Run: npm run sync-readme"
+  ISSUES_FOUND=$((ISSUES_FOUND + 1))
+else
+  echo "   ✅ Test status synchronized between TASKS.md and README.md ($TASKS_TEST_COUNTS)"
+fi
+echo ""
+
+# Check 7: README.md Last Updated date
+echo "📅 Checking README.md freshness..."
+README_DATE=$(grep "^\*\*Last Updated:\*\*" README.md | grep -oE "[0-9]{4}-[0-9]{2}-[0-9]{2}" || echo "1970-01-01")
+TASKS_DATE=$(grep "^\*\*Last Updated:\*\*" .claude/TASKS.md | grep -oE "[0-9]{4}-[0-9]{2}-[0-9]{2}" || echo "1970-01-01")
+
+# README should be updated within 7 days of TASKS.md if in active development
+TASKS_EPOCH=$(date -d "$TASKS_DATE" +%s 2>/dev/null || echo "0")
+README_EPOCH=$(date -d "$README_DATE" +%s 2>/dev/null || echo "0")
+DAYS_DIFF=$(( (TASKS_EPOCH - README_EPOCH) / 86400 ))
+
+if [ $DAYS_DIFF -gt 7 ]; then
+  echo "   ⚠️  README.md is $DAYS_DIFF days behind TASKS.md"
+  echo "      Consider running: npm run sync-readme"
+else
+  echo "   ✅ README.md is reasonably current"
+fi
+echo ""
+
 # Summary
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 if [ $ISSUES_FOUND -eq 0 ]; then
@@ -85,7 +121,8 @@ else
   echo ""
   echo "💡 Quick fixes:"
   echo "   - Update .claude/TASKS.md Recent Changes"
-  echo "   - Run: npm run test:run (then update test status)"
+  echo "   - Run: npm run test:status (update test status)"
+  echo "   - Run: npm run sync-readme (sync README.md)"
   echo "   - Commit documentation changes"
   exit 1
 fi
