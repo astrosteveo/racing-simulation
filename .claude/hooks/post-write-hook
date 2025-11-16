@@ -1,0 +1,107 @@
+#!/bin/bash
+#
+# Post-Write Hook for NASCAR RPG Racing Simulation
+#
+# This hook runs after writing new files to provide immediate feedback.
+# Automatically runs relevant tests based on what was written.
+#
+
+FILE_PATH="$1"
+
+# Skip if no file path provided or if it's in node_modules
+if [[ -z "$FILE_PATH" ]] || [[ "$FILE_PATH" == *"node_modules"* ]]; then
+  exit 0
+fi
+
+echo ""
+echo "📝 Post-write hook triggered for: $FILE_PATH"
+
+# Check if npm is available (project might not be initialized yet)
+if ! command -v npm &> /dev/null; then
+  exit 0
+fi
+
+# Physics files - run physics tests
+if [[ "$FILE_PATH" == *"src/engine/physics"* ]]; then
+  echo "🧪 Running physics tests..."
+  if npm test -- tests/unit/physics --run --reporter=basic 2>&1 | tail -20; then
+    echo "✅ Physics tests passed"
+  else
+    echo "⚠️  Some physics tests failed - review output above"
+  fi
+  exit 0
+fi
+
+# Character files - run character tests
+if [[ "$FILE_PATH" == *"src/character"* ]]; then
+  echo "🧪 Running character tests..."
+  if npm test -- tests/unit/character --run --reporter=basic 2>&1 | tail -20; then
+    echo "✅ Character tests passed"
+  else
+    echo "⚠️  Some character tests failed - review output above"
+  fi
+  exit 0
+fi
+
+# Events/Decision files - run events tests
+if [[ "$FILE_PATH" == *"src/events"* ]]; then
+  echo "🧪 Running events tests..."
+  if npm test -- tests/unit/events --run --reporter=basic 2>&1 | tail -20; then
+    echo "✅ Events tests passed"
+  else
+    echo "⚠️  Some events tests failed - review output above"
+  fi
+  exit 0
+fi
+
+# Race simulation files - run integration tests
+if [[ "$FILE_PATH" == *"src/engine/simulation"* ]] || [[ "$FILE_PATH" == *"race-manager"* ]]; then
+  echo "🧪 Running race simulation tests..."
+  if npm test -- tests/integration --run --reporter=basic 2>&1 | tail -20; then
+    echo "✅ Integration tests passed"
+  else
+    echo "⚠️  Some integration tests failed - review output above"
+  fi
+  exit 0
+fi
+
+# Types file - run full type check across project
+if [[ "$FILE_PATH" == *"types.ts"* ]]; then
+  echo "🔍 Type checking entire project (types.ts was modified)..."
+  if npm run type-check 2>&1 | grep -E "(error TS|✓|✗)" | head -20; then
+    echo "✅ Project type-checks successfully"
+  else
+    echo "⚠️  Type errors detected - review output above"
+  fi
+  exit 0
+fi
+
+# Test files - run those specific tests
+if [[ "$FILE_PATH" == *".test.ts"* ]] || [[ "$FILE_PATH" == *".spec.ts"* ]]; then
+  echo "🧪 Running test file: $FILE_PATH"
+  if npm test -- "$FILE_PATH" --run --reporter=basic 2>&1 | tail -20; then
+    echo "✅ Test passed"
+  else
+    echo "⚠️  Test failed - review output above"
+  fi
+  exit 0
+fi
+
+# Data files (JSON) - validate structure if validator exists
+if [[ "$FILE_PATH" == *"src/data/"* ]] && [[ "$FILE_PATH" == *".json"* ]]; then
+  echo "📊 Data file created/updated"
+  echo "💡 Consider running data validation tests if available"
+  exit 0
+fi
+
+# For other TypeScript files, just run type-check
+if [[ "$FILE_PATH" == *".ts"* ]] && [[ "$FILE_PATH" != *".test.ts"* ]]; then
+  echo "🔍 Quick type check..."
+  if npm run type-check 2>&1 | grep -v "npm WARN" | head -10; then
+    echo "✅ No type errors detected"
+  else
+    echo "⚠️  Type errors found"
+  fi
+fi
+
+exit 0

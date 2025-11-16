@@ -257,6 +257,112 @@ These become tests AND documentation.
 4. Refer to ARCHITECTURE.md - did we violate a boundary?
 5. Check EXAMPLES.md - what should this actually do?
 
+## Working with Claude Code Subagents
+
+### Built-in Subagents
+
+This project leverages Claude Code's built-in subagents for specialized tasks:
+
+**@explore** - Research and discovery
+- NASCAR physics research (drag coefficients, drafting formulas)
+- Algorithm investigation (how other sims handle tire wear)
+- Data source discovery (finding official track specifications)
+- Use when: Need domain knowledge or external research
+
+**@plan** - Architecture and design decisions
+- Feature planning that respects existing architecture
+- Refactoring strategies that maintain contracts
+- Integration point identification
+- Use when: Making structural decisions or adding major features
+
+**@general-purpose** - Complex multi-step implementation
+- TDD feature implementation (test → code → verify)
+- Bug investigation and fixing
+- Multi-file refactoring
+- Use when: Task requires multiple coordinated steps
+
+### When to Recommend Custom Subagents
+
+**Claude should proactively suggest creating a custom subagent when:**
+
+1. **Repetitive Validation Pattern Detected**
+   - Example: Repeatedly validating NASCAR data against specs
+   - Suggest: `@nascar-data-validator` subagent
+   - Trigger: 3+ instances of manual data validation
+
+2. **Complex Domain-Specific Workflow**
+   - Example: Always following TDD cycle but sometimes forgetting steps
+   - Suggest: `@tdd-assistant` subagent that enforces workflow
+   - Trigger: TDD violations or "write test later" patterns
+
+3. **Frequent Cross-Reference Checking**
+   - Example: Constantly comparing simulation output to EXAMPLES.md
+   - Suggest: `@physics-tester` subagent that automates validation
+   - Trigger: 5+ manual example validations
+
+4. **Specialized Quality Checks**
+   - Example: Checking if types.ts changes break implementations
+   - Suggest: `@contract-guardian` subagent
+   - Trigger: Breaking changes detected multiple times
+
+5. **Research-Heavy Tasks**
+   - Example: Repeatedly searching for NASCAR technical specifications
+   - Suggest: `@nascar-researcher` subagent with curated sources
+   - Trigger: Multiple @explore calls for similar NASCAR data
+
+### Custom Subagent Template
+
+When recommending a custom subagent, suggest this structure:
+
+```yaml
+# .claude/subagents/[name].yml
+name: subagent-name
+description: What this subagent does and when to use it
+tools: [Read, Write, Bash, WebSearch, etc.]
+prompt: |
+  Clear instructions for the subagent's task
+
+  Steps:
+  1. Specific step
+  2. Another step
+  3. Success criteria
+
+  Focus on: What matters most
+```
+
+### Subagent Recommendations Log
+
+**Format for suggesting new subagent:**
+
+```
+💡 SUBAGENT OPPORTUNITY DETECTED
+
+Pattern: [Describe what's being repeated]
+Occurrences: [How many times seen]
+Suggested Subagent: @subagent-name
+Purpose: [What it would automate]
+Value: [Time saved / errors prevented]
+
+Would you like me to create this subagent?
+```
+
+### Example Subagent Opportunities
+
+**Pattern:** Manual validation of lap times against EXAMPLES.md
+- **Suggested:** `@example-validator`
+- **Purpose:** Automatically run simulation and compare to documented examples
+- **Value:** Catches simulation drift from spec immediately
+
+**Pattern:** Searching for and formatting NASCAR data from multiple sources
+- **Suggested:** `@nascar-data-collector`
+- **Purpose:** Gather track/car specs from reliable sources, format as JSON
+- **Value:** Ensures data accuracy and saves research time
+
+**Pattern:** Reviewing code changes for contract violations
+- **Suggested:** `@contract-reviewer`
+- **Purpose:** Check if implementation changes break interface contracts
+- **Value:** Prevents architectural violations before commit
+
 ## Project Status Reference
 
 Track where we are:
