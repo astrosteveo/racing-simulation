@@ -234,16 +234,19 @@ npm run verify-specs           # Validate spec structure
 
 **When work spans multiple specs:**
 
-1. Read `.claude/TASKS.md` (cross-spec coordination)
+1. Read `.claude/STATUS.md` (cross-spec coordination section)
 2. Identify all affected specs
-3. Update each spec's TASKS.md
-4. Update dependency graph if needed
-5. Run integration tests
+3. Create tasks in each spec's TASKS.md
+4. Document in STATUS.md "Cross-Spec Coordination" section
+5. Work through tasks spec by spec
+6. Update dependency graph if needed
+7. Run integration tests
 
 **Example:** Adding tire temperature affects:
-- `physics/` - New temperature calculation
-- `decisions/` - Tire management decisions need temp awareness
-- `ui/` - Display tire temperature
+- `physics/` - New temperature calculation (task in physics/TASKS.md)
+- `decisions/` - Tire management decisions need temp awareness (task in decisions/TASKS.md)
+- `ui/` - Display tire temperature (task in ui/TASKS.md)
+- `STATUS.md` - Document cross-spec coordination
 
 ---
 
@@ -272,13 +275,15 @@ cat .claude/specs/INDEX.md
 
 | Spec | Tests | Tasks | Status |
 |------|-------|-------|--------|
-| Physics | 95/100 (95%) | 2 remaining | 🟢 Healthy |
-| Character | 18/18 (100%) | 0 remaining | 🟢 Healthy |
-| Decisions | 12/20 (60%) | 5 remaining | 🟡 In Progress |
-| UI | 45/45 (100%) | 3 enhancements | 🟢 Healthy |
-| Game Modes | 0/0 (N/A) | Not started | 🔴 Planned |
+| Physics | 95/100 (95%) | 5 optional edge cases | 🟢 Stable |
+| Character | 66/66 (100%) | 0 (complete) | 🟢 Complete |
+| Decisions | 15/15 (100%) | 0 (complete) | 🟢 Complete |
+| UI | 47/47 (100%) | 0 (complete) | 🟢 Complete |
+| Game Modes | 151/151 (100%) | 4 (Career MVP) | 🟡 In Progress |
 
-**Overall:** 170/183 tests passing (93%)
+**Overall:** 374/379 tests passing (98.7%)
+
+**See `.claude/STATUS.md` for current project status**
 
 *(Auto-updated by `scripts/spec-status.sh`)*
 
@@ -364,7 +369,24 @@ cat .claude/specs/INDEX.md
 - **State machine** documented (race states, transitions)
 - **All game modes** specified (single race, career, time trial)
 
-**Phase 7:** Cleanup & consolidation (pending)
+**Phase 7: Task Migration** ✅ Complete (2025-11-16)
+- ✅ Created STATUS.md (project health, cross-spec coordination)
+- ✅ Migrated tasks from centralized TASKS.md → spec-specific TASKS.md files
+- ✅ Created TASKS.md for all 5 specs (physics, character, decisions, ui, game-modes)
+- ✅ Created PLANS.md for all specs (roadmap and milestones)
+- ✅ Updated CLAUDE.md with Process Gate workflow
+- ✅ Updated QUICKSTART.md to reference new structure
+- ✅ Updated hooks in settings.json (Process Gate reminders)
+- ✅ Archived old TASKS.md to .claude/archive/
+
+**Benefits Achieved:**
+- **True spec independence** - Each spec is self-contained work unit
+- **Parallel development enabled** - Multiple specs can be worked on without conflicts
+- **Process Gate enforced** - No coding without approved tasks
+- **70% token reduction** maintained with even better organization
+- **Clear ownership** - Each spec owns its tasks, plans, and documentation
+
+**Phase 8:** Automation script updates (in progress)
 
 ---
 
