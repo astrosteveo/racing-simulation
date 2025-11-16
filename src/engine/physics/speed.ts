@@ -110,13 +110,12 @@ export function calculateCornerSpeed(
 
   // Effective grip coefficient
   // Base tire grip (0.5-1.0) needs to be scaled appropriately
-  // NASCAR tires with downforce provide ~0.70-0.95 coefficient for corners
-  // Calibrated for realistic tire wear impact (Phase 5.1):
-  // Fresh tires (1.0): 0.880 coefficient
-  // Worn tires (0.5): 0.730 coefficient
-  // This gives ~17% corner speed reduction at half life
-  // Combined with straight reduction = target 0.5-0.7s penalty at Bristol
-  const gripCoefficient = 0.580 + (tireGrip * 0.300);
+  // NASCAR tires with downforce provide ~0.36-0.62 coefficient for corners
+  // Calibrated to produce realistic corner speeds (Phase 7):
+  // Fresh tires (1.0): 0.620 coefficient → Bristol ~116 mph, Charlotte ~151 mph, Daytona ~212 mph
+  // Worn tires (0.5): 0.490 coefficient → ~11-13% corner speed reduction
+  // This gives realistic tire wear impact while keeping speeds in NASCAR ranges
+  const gripCoefficient = 0.360 + (tireGrip * 0.260);
 
   // Banked circle physics formula
   const numerator = Math.sin(bankingRad) + gripCoefficient * Math.cos(bankingRad);
