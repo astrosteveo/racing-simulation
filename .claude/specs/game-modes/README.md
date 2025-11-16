@@ -1,16 +1,14 @@
 # Game Modes & Flow Specification
 
-**Status:** Phase 1 - Structure Created (Templates Pending)
-**Phase 2 Migration:** Extract from `docs/SPEC.md` and existing implementation
+**Status:** ✅ Phase 6 Complete - Migration Complete (2025-11-16)
+**Migration:** Completed from `docs/SPEC.md`, `docs/ARCHITECTURE.md`, and `src/types.ts`
 
-## Files to Create in Phase 2
+## Files Created in Phase 6 ✅
 
-- `SPEC.md` - Game modes specification (career, single race, time trial)
-- `CONTRACTS.md` - RaceManager, RaceState, GameState interfaces
-- `PLANS.md` - Game mode roadmap (multiplayer, historical seasons)
-- `DECISIONS.md` - ADRs for game flow, save/load system
-- `TASKS.md` - Game mode tasks
-- `EXAMPLES.md` - Game flow scenarios, mode transitions
+- ✅ `SPEC.md` - Complete game modes specification (single race, career mode, time trial, orchestration)
+- ✅ `CONTRACTS.md` - All game mode interfaces (RaceConfig, RaceState, CareerSave, championship points)
+- ✅ `EXAMPLES.md` - 11 comprehensive game flow scenarios (career progression, race loop, decisions, saves)
+- ✅ `REFERENCE.md` - Quick reference (championship points table, unlocks, AI field generation)
 
 ## Migration Sources
 
