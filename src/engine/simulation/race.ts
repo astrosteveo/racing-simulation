@@ -444,6 +444,28 @@ export class RaceEngine implements RaceSimulation {
   }
 
   /**
+   * Pause the race simulation
+   * Race will not progress until resume() is called
+   */
+  pause(): void {
+    this.paused = true;
+  }
+
+  /**
+   * Resume the race simulation after pause
+   */
+  resume(): void {
+    this.paused = false;
+  }
+
+  /**
+   * Check if race is currently paused
+   */
+  isPaused(): boolean {
+    return this.paused;
+  }
+
+  /**
    * Get final race results
    */
   getResults(): RaceResults {
