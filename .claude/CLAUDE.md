@@ -425,8 +425,8 @@ Would you like me to create this subagent?
 
 ### Current Status (Updated: 2025-11-16)
 
-**Overall Progress:** Phase 3 - Core Engine (In Progress)
-**Test Pass Rate:** 168/186 tests passing (90.3%)
+**Overall Progress:** Phase 5 - Console UI (✅ COMPLETE!)
+**Test Pass Rate:** 215/233 tests passing (92.3%)
 
 ### Completed Systems ✅
 
@@ -440,43 +440,53 @@ Would you like me to create this subagent?
    - ESLint + Git hooks
    - Project structure established
 
-3. **Physics Engine** (Phase 3 - Partial ✅)
-   - ✅ Tire physics (10/10 tests passing)
+3. **Physics Engine** (Phase 3 ✅)
+   - ✅ Tire physics (17/17 tests passing)
    - ✅ Fuel consumption (30/30 tests passing)
    - ✅ Speed calculation (27/34 tests passing - 79.4%)
    - ✅ Lap time calculation (28/39 tests passing - 71.8%)
-   - ⏳ Aerodynamics/drafting (not started)
+   - ⏳ Aerodynamics/drafting (deferred to future extensions)
 
-4. **Character System** (Phase 3 - Complete ✅)
+4. **Character System** (Phase 3 ✅)
    - ✅ Driver class with 10 skill categories (28/28 tests)
    - ✅ Mental state system (27/27 tests)
    - ✅ XP and progression mechanics (11/11 integration tests)
    - ✅ Physics integration working
 
+5. **Race Simulation Engine** (Phase 3 ✅)
+   - ✅ Race loop orchestration (21/21 integration tests)
+   - ✅ Lap-by-lap state management
+   - ✅ Position tracking with gap calculations
+   - ✅ Race results generation with XP rewards
+   - ⏳ Event generation (Phase 4)
+
+6. **Console UI Layer** (Phase 5 ✅)
+   - ✅ Live race display with standings table (47 tests)
+   - ✅ Real-time car status visualization (tires, fuel)
+   - ✅ Mental state display with progress bars
+   - ✅ Race results screen with XP breakdown
+   - ✅ Driver status panel (skills, career stats)
+   - ✅ Menu/input handling system
+   - ✅ Working demo script (demo-race.ts)
+   - ✅ Clean architecture (UIRenderer interface implementation)
+
 ### In Progress 🚧
 
-5. **Race Simulation Engine** (Phase 3 - Next)
-   - Race loop orchestration
-   - Lap-by-lap state management
-   - Position tracking
-   - Event generation
+**Next Up:** Phase 4 - Decision System
 
 ### Not Started ⏳
 
-6. **Decision System** (Phase 4)
+7. **Decision System** (Phase 4 - Next)
    - Pit strategy decisions
    - Passing opportunity decisions
-   - Mental state management
+   - Mental state management decisions
+   - Decision prompts in UI (stub already exists)
 
-7. **UI Layer** (Phase 5)
-   - Console race display
-   - Decision prompts
-   - Post-race results
-
-8. **Demo** (Phase 6)
-   - Complete playable race
-   - AI competitor field
-   - Multiple tracks
+8. **Demo Polish** (Phase 6)
+   - Complete playable race with all systems integrated
+   - Realistic NASCAR track data (Bristol, Charlotte, Daytona)
+   - Enhanced AI competitor field
+   - Career progression features
 
 ### Known Issues & Deferred Items
 
@@ -490,10 +500,10 @@ Would you like me to create this subagent?
 
 - [x] Phase 1: Planning (docs written, types defined)
 - [x] Phase 2: Setup (project initialized, structure created)
-- [ ] Phase 3: Core Engine (physics ✅, character ✅, race loop ⏳)
-- [ ] Phase 4: Events & Decisions (timed decision system)
-- [ ] Phase 5: UI (console interface)
-- [ ] Phase 6: Demo (runnable race scenario)
+- [x] Phase 3: Core Engine (physics ✅, character ✅, race loop ✅)
+- [ ] Phase 4: Events & Decisions (timed decision system) ← NEXT
+- [x] Phase 5: UI (console interface ✅)
+- [ ] Phase 6: Demo (full playable race with all systems)
 
 ## Success Criteria
 

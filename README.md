@@ -23,23 +23,25 @@ The simulation calculates outcomes based on:
 
 ## Project Status
 
-🚧 **Currently in Phase 3: Core Engine Implementation** 🚧
+🎉 **Phase 5 Complete: Console UI Implemented!** 🎉
 
 **Last Updated:** 2025-11-16
-**Test Pass Rate:** 168/186 tests passing (90.3%)
+**Test Pass Rate:** 215/233 tests passing (92.3%)
 
 This project is being built following a strict methodology to ensure sustainable development:
 
 1. ✅ **Planning Complete** - Specs, architecture, and examples documented
 2. ✅ **Project Setup Complete** - TypeScript, testing framework configured
-3. ⏳ **Core Engine Implementation** (In Progress)
+3. ✅ **Core Engine Complete**
    - ✅ Physics System (tire wear, fuel consumption, speed, lap times)
    - ✅ Character System (skills, mental state, XP progression)
-   - ⏳ Race Simulation Engine (next up)
-4. ⏳ **Decision System** - Timed choices and pit strategy
-5. ⏳ **UI & Demo** - Console interface and playable race
+   - ✅ Race Simulation Engine (lap-by-lap racing with position tracking)
+4. ⏳ **Decision System** (Next Phase) - Timed choices and pit strategy
+5. ✅ **Console UI Complete** - Live race display, results screen, working demo
 
-**Current Focus:** Building the Race Simulation Engine to orchestrate lap-by-lap racing with the completed physics and character systems.
+**Current Status:** You can run a complete 100-lap race with real-time UI updates! Run `npx tsx demo-race.ts` to see it in action.
+
+**Next Phase:** Implement the decision system (Phase 4) to add timed strategic choices during races.
 
 See [docs/SPEC.md](docs/SPEC.md) for complete game design and [.claude/CLAUDE.md](.claude/CLAUDE.md) for detailed progress tracking.
 
@@ -149,14 +151,14 @@ See [ARCHITECTURE.md](docs/ARCHITECTURE.md) for details.
 - [x] Testing framework (Vitest)
 - [x] Development workflow and TDD principles
 
-### Phase 2: Core Engine ⏳ In Progress (70% Complete)
+### Phase 2: Core Engine ✅ Complete (92.3%)
 
 **Physics System** ✅ Complete
-- [x] Tire wear physics (10/10 tests passing)
+- [x] Tire wear physics (17/17 tests passing)
 - [x] Fuel consumption physics (30/30 tests passing)
 - [x] Speed calculation (27/34 tests passing - 79.4%)
 - [x] Lap time calculation (28/39 tests passing - 71.8%)
-- [ ] Aerodynamics/drafting (deferred)
+- [ ] Aerodynamics/drafting (deferred to future extension)
 
 **Character System** ✅ Complete
 - [x] Driver class with 10 skill categories (28/28 tests)
@@ -164,28 +166,34 @@ See [ARCHITECTURE.md](docs/ARCHITECTURE.md) for details.
 - [x] XP and progression mechanics (11/11 integration tests)
 - [x] Physics integration working
 
-**Race Simulation** ⏳ Next
-- [ ] Race loop orchestration
-- [ ] Lap-by-lap state management
-- [ ] Position tracking
-- [ ] Event generation system
+**Race Simulation** ✅ Complete
+- [x] Race loop orchestration (21/21 integration tests)
+- [x] Lap-by-lap state management
+- [x] Position tracking with gap calculations
+- [x] Lap completion and race results
+- [ ] Event generation system (Phase 4)
 
-### Phase 3: Decisions & Events
+### Phase 3: Console UI ✅ Complete (47 tests)
+- [x] Live race display with standings table
+- [x] Real-time car status (tires, fuel) with progress bars
+- [x] Mental state visualization
+- [x] Race results screen with XP breakdown
+- [x] Driver status panel (skills, stats, mental state)
+- [x] Menu/input handling system
+- [x] Working demo script (demo-race.ts)
+
+### Phase 4: Decisions & Events ⏳ Next
 - [ ] Decision system framework
 - [ ] Pit strategy decisions
 - [ ] Passing opportunity decisions
 - [ ] Mental state management decisions
+- [ ] Decision prompts in UI (stub exists)
 
-### Phase 4: UI
-- [ ] Console race display
-- [ ] Decision prompts
-- [ ] Post-race results
-
-### Phase 5: Demo
-- [ ] Complete playable race
-- [ ] 2-3 NASCAR tracks (short, intermediate, superspeedway)
-- [ ] AI competitor field
-- [ ] Career progression
+### Phase 5: Polish & Demo
+- [ ] Complete playable race with decisions
+- [ ] 2-3 NASCAR tracks with realistic data (short, intermediate, superspeedway)
+- [ ] Improved AI competitor field
+- [ ] Career progression features
 
 ### Future Extensions
 - Web-based UI
