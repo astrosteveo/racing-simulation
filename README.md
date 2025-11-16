@@ -23,10 +23,10 @@ The simulation calculates outcomes based on:
 
 ## Project Status
 
-🎉 **Phase 5 Complete: Console UI Implemented!** 🎉
+🎉 **Fully Playable Racing Game!** 🎉
 
 **Last Updated:** 2025-11-16
-**Test Pass Rate:** 215/233 tests passing (92.3%)
+**Test Pass Rate:** 230/248 tests passing (92.7%)
 
 This project is being built following a strict methodology to ensure sustainable development:
 
@@ -36,12 +36,23 @@ This project is being built following a strict methodology to ensure sustainable
    - ✅ Physics System (tire wear, fuel consumption, speed, lap times)
    - ✅ Character System (skills, mental state, XP progression)
    - ✅ Race Simulation Engine (lap-by-lap racing with position tracking)
-4. ⏳ **Decision System** (Next Phase) - Timed choices and pit strategy
-5. ✅ **Console UI Complete** - Live race display, results screen, working demo
+4. ✅ **Decision System Complete** - Strategic choices during races
+   - ✅ 5 decision types (pit strategy, passing, mental state, tire management, traffic)
+   - ✅ Skill-based outcomes (not random!)
+   - ✅ Effects applied to race state (position, mental state, car condition)
+   - ✅ XP rewards for good decisions
+5. ✅ **Console UI Complete** - Live race display, decision prompts, results screen
 
-**Current Status:** You can run a complete 100-lap race with real-time UI updates! Run `npx tsx demo-race.ts` to see it in action.
+**Current Status:** Fully playable! Run `npx tsx demo-race.ts` to race 100 laps at Bristol with interactive strategic decisions.
 
-**Next Phase:** Implement the decision system (Phase 4) to add timed strategic choices during races.
+**Features:**
+- ⚡ Real physics simulation (not predetermined outcomes)
+- 🧠 Skill-based decision system (driver stats affect success)
+- 📊 Mental state affects performance and decisions
+- 🏆 XP progression from race results and decisions
+- 🎮 Interactive console UI with live updates
+
+**Next:** Polish, additional tracks, and career mode features!
 
 See [docs/SPEC.md](docs/SPEC.md) for complete game design and [.claude/CLAUDE.md](.claude/CLAUDE.md) for detailed progress tracking.
 
@@ -182,18 +193,26 @@ See [ARCHITECTURE.md](docs/ARCHITECTURE.md) for details.
 - [x] Menu/input handling system
 - [x] Working demo script (demo-race.ts)
 
-### Phase 4: Decisions & Events ⏳ Next
-- [ ] Decision system framework
-- [ ] Pit strategy decisions
-- [ ] Passing opportunity decisions
-- [ ] Mental state management decisions
-- [ ] Decision prompts in UI (stub exists)
+### Phase 4: Decisions & Events ✅ Complete (15 tests)
+- [x] Decision system framework (DecisionManager)
+- [x] Pit strategy decisions (full service vs fuel-only vs stay out)
+- [x] Passing opportunity decisions (aggressive vs patient vs draft)
+- [x] Mental state management decisions (calm down vs push through)
+- [x] Tire management decisions (conserve vs manage vs push)
+- [x] Traffic management decisions (aggressive vs patient vs alternate line)
+- [x] Skill-based outcome calculation (not random!)
+- [x] Decision effects applied to race state
+- [x] XP rewards for decisions
+- [x] Interactive decision prompts in UI
+- [x] Integrated with race simulation
 
-### Phase 5: Polish & Demo
-- [ ] Complete playable race with decisions
-- [ ] 2-3 NASCAR tracks with realistic data (short, intermediate, superspeedway)
-- [ ] Improved AI competitor field
-- [ ] Career progression features
+### Phase 5: Polish & Extensions ⏳ Next
+- [x] Complete playable race with decisions ✅
+- [ ] Additional NASCAR tracks (Charlotte, Daytona with realistic data)
+- [ ] Enhanced AI competitor behavior
+- [ ] Career mode (season progression, championship points)
+- [ ] Save/load system
+- [ ] Additional decision types (caution flag strategy, setup changes)
 
 ### Future Extensions
 - Web-based UI

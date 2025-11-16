@@ -425,8 +425,8 @@ Would you like me to create this subagent?
 
 ### Current Status (Updated: 2025-11-16)
 
-**Overall Progress:** Phase 5 - Console UI (✅ COMPLETE!)
-**Test Pass Rate:** 215/233 tests passing (92.3%)
+**Overall Progress:** Phase 4 - Decision System (✅ COMPLETE!) + Phase 5 (✅ COMPLETE!)
+**Test Pass Rate:** 230/248 tests passing (92.7%)
 
 ### Completed Systems ✅
 
@@ -470,23 +470,28 @@ Would you like me to create this subagent?
    - ✅ Working demo script (demo-race.ts)
    - ✅ Clean architecture (UIRenderer interface implementation)
 
+7. **Decision System** (Phase 4 ✅)
+   - ✅ Decision library with 5 decision types (15 tests)
+   - ✅ Skill-based outcome evaluation (not random!)
+   - ✅ DecisionManager with context-aware triggering
+   - ✅ Integration with RaceEngine
+   - ✅ Effect application (mental state, car, position)
+   - ✅ XP rewards for decisions
+   - ✅ Interactive prompts via UI
+   - ✅ Demo supports full decision flow
+
 ### In Progress 🚧
 
-**Next Up:** Phase 4 - Decision System
+**Next Up:** Phase 5 - Polish & Extensions
 
 ### Not Started ⏳
 
-7. **Decision System** (Phase 4 - Next)
-   - Pit strategy decisions
-   - Passing opportunity decisions
-   - Mental state management decisions
-   - Decision prompts in UI (stub already exists)
-
-8. **Demo Polish** (Phase 6)
-   - Complete playable race with all systems integrated
-   - Realistic NASCAR track data (Bristol, Charlotte, Daytona)
-   - Enhanced AI competitor field
-   - Career progression features
+8. **Polish & Extensions** (Phase 5+)
+   - ✅ Complete playable race (DONE!)
+   - Enhanced AI competitor behavior
+   - Additional NASCAR tracks (Charlotte, Daytona)
+   - Career mode (season, championship points)
+   - Save/load system
 
 ### Known Issues & Deferred Items
 
@@ -501,9 +506,10 @@ Would you like me to create this subagent?
 - [x] Phase 1: Planning (docs written, types defined)
 - [x] Phase 2: Setup (project initialized, structure created)
 - [x] Phase 3: Core Engine (physics ✅, character ✅, race loop ✅)
-- [ ] Phase 4: Events & Decisions (timed decision system) ← NEXT
+- [x] Phase 4: Events & Decisions (skill-based decision system ✅)
 - [x] Phase 5: UI (console interface ✅)
-- [ ] Phase 6: Demo (full playable race with all systems)
+- [x] Phase 6: Playable Demo (fully functional racing game ✅)
+- [ ] Phase 7: Polish & Extensions (additional content) ← NEXT
 
 ## Success Criteria
 
