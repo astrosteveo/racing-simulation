@@ -84,6 +84,15 @@ export interface Driver {
   stats: CareerStats;       // Career statistics
 }
 
+/**
+ * Driver state for physics calculations
+ * Subset of Driver interface containing only what physics engine needs
+ */
+export interface DriverState {
+  skills: DriverSkills;     // Driver skill levels
+  mentalState: MentalState; // Current mental state
+}
+
 // ============================================================================
 // TRACK SYSTEM
 // ============================================================================
