@@ -83,11 +83,11 @@ None currently.
 
 ## Recent Changes (Last 5 Commits)
 
-1. `b7a7794` - Update TASKS.md with latest commit (demonstrating workflow)
-2. `bf4fe14` - Establish continuous TASKS.md update workflow
-3. `d0aebfb` - Refactor CLAUDE.md and establish TASKS.md for session continuity
-4. `0e65fca` - Establish testing command principles (added `test:run`)
-5. `aa64822` - Phase 5.1: Calibrate physics to match EXAMPLES.md
+1. `f677660` - Add documentation verification system with hooks and automation
+2. `b7a7794` - Update TASKS.md with latest commit (demonstrating workflow)
+3. `bf4fe14` - Establish continuous TASKS.md update workflow
+4. `d0aebfb` - Refactor CLAUDE.md and establish TASKS.md for session continuity
+5. `0e65fca` - Establish testing command principles (added `test:run`)
 
 ---
 
