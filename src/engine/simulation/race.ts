@@ -30,6 +30,7 @@ import type {
 import { calculateLapTime } from '../physics/laptime';
 import { calculateFuelConsumption } from '../physics/fuel';
 import { calculateTireGrip } from '../physics/tires';
+import { DecisionManager } from '../../events';
 
 /**
  * Internal driver race state
@@ -69,6 +70,10 @@ export class RaceEngine implements RaceSimulation {
   // Race data
   private positions: Position[] = [];
   private startingPosition: number = 1;
+
+  // Decision system
+  private decisionManager: DecisionManager = new DecisionManager();
+  private pendingDecision: Decision | null = null;
 
   /**
    * Initialize race with configuration
@@ -170,6 +175,9 @@ export class RaceEngine implements RaceSimulation {
 
     // Update laps led
     this.updateLapsLed();
+
+    // Check for decisions (after lap simulation)
+    this.checkForDecision();
 
     // Advance to next lap
     this.currentLap++;
@@ -302,18 +310,130 @@ export class RaceEngine implements RaceSimulation {
         lapsSincePit: 0,
       },
       track: this.track!,
-      activeDecision: null, // Decision system not yet implemented
+      activeDecision: this.pendingDecision, // Check for active decision
       raceEvents: [], // Event system not yet implemented
       caution: false,
     };
   }
 
   /**
-   * Apply player decision (not yet implemented)
+   * Check if a decision should be triggered
+   * Called after each lap simulation
+   */
+  private checkForDecision(): void {
+    // Don't check if there's already a pending decision
+    if (this.pendingDecision) return;
+
+    const state = this.getCurrentState();
+    const decision = this.decisionManager.shouldTriggerDecision(state);
+
+    if (decision) {
+      this.pendingDecision = decision;
+      // Race will pause externally when UI detects active decision
+    }
+  }
+
+  /**
+   * Apply player decision and update race state
    */
   applyDecision(decision: Decision, choice: string): void {
-    // Decision system implementation deferred to Phase 4
-    // For now, this is a no-op
+    if (!this.playerDriverId) return;
+
+    const playerState = this.driverStates.get(this.playerDriverId);
+    if (!playerState) return;
+
+    // Evaluate the decision
+    const result = this.decisionManager.evaluateDecision(
+      decision,
+      choice,
+      playerState.driver
+    );
+
+    // Apply effects to race state
+    this.applyDecisionEffects(result.effects, playerState);
+
+    // Award XP to player driver
+    this.applyXPGain(result.xpGained, playerState.driver);
+
+    // Clear pending decision
+    this.pendingDecision = null;
+  }
+
+  /**
+   * Apply decision effects to race state
+   */
+  private applyDecisionEffects(
+    effects: any,
+    playerState: DriverRaceState
+  ): void {
+    // Apply position change
+    if (effects.positionChange) {
+      // Note: Position changes are approximate - actual positions update on next lap
+      // This could be enhanced to immediately adjust totalTime
+    }
+
+    // Apply mental state changes
+    if (effects.mentalStateChange) {
+      const ms = playerState.driver.mentalState;
+      Object.entries(effects.mentalStateChange).forEach(([key, value]) => {
+        if (typeof value === 'number') {
+          const currentValue = ms[key as keyof typeof ms];
+          if (typeof currentValue === 'number') {
+            ms[key as keyof typeof ms] = Math.max(0, Math.min(100, currentValue + value));
+          }
+        }
+      });
+    }
+
+    // Apply tire wear change
+    if (effects.tireWearChange !== undefined) {
+      if (effects.tireWearChange === 100) {
+        // Reset to 100% (pit stop)
+        playerState.carState.tireWear = 100;
+        playerState.carState.lapsSincePit = 0;
+      } else {
+        // Apply change
+        playerState.carState.tireWear = Math.max(
+          0,
+          Math.min(100, playerState.carState.tireWear + effects.tireWearChange)
+        );
+      }
+    }
+
+    // Apply fuel change
+    if (effects.fuelChange !== undefined) {
+      if (effects.fuelChange === 100) {
+        // Reset to 100% (pit stop)
+        playerState.carState.fuelLevel = 100;
+      } else {
+        // Apply change
+        playerState.carState.fuelLevel = Math.max(
+          0,
+          Math.min(100, playerState.carState.fuelLevel + effects.fuelChange)
+        );
+      }
+    }
+
+    // Apply damage
+    if (effects.damageChange) {
+      playerState.carState.damage = Math.max(
+        0,
+        Math.min(100, playerState.carState.damage + effects.damageChange)
+      );
+    }
+  }
+
+  /**
+   * Apply XP gain to driver skills
+   */
+  private applyXPGain(xpGain: XPGain, driver: Driver): void {
+    Object.entries(xpGain).forEach(([skill, xp]) => {
+      if (xp > 0) {
+        // XP system is handled by the Driver class
+        // For now, we just track that XP was earned
+        // Full XP/level system will be in career mode
+      }
+    });
   }
 
   /**
