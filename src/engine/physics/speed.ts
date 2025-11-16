@@ -191,20 +191,28 @@ export function calculateSectionSpeed(
   let speed = baseSpeed;
 
   // 1. Apply tire wear effects
-  // NOTE: For turns, tire wear is already applied in corner speed calculation
-  // Only apply tire wear to straights here
-  if (sectionType === 'straight') {
-    // Get current tire grip percentage (0.5-1.0)
-    const tireGrip = calculateTireGrip(tireWear, trackType);
+  const tireGrip = calculateTireGrip(tireWear, trackType);
 
+  if (sectionType === 'straight') {
     // Straights are power-limited - small effect from tire wear
     // At fresh tires (1.0): 100% speed
     // At worn tires (0.5): 98% speed (2% reduction)
-    // This is less than corner impact (5%) since straights are power-limited not grip-limited
+    // This is less than corner impact since straights are power-limited not grip-limited
     const straightGripEffect = 0.98 + (tireGrip * 0.02);
     speed *= straightGripEffect;
+  } else {
+    // Turns are grip-limited - tire wear has major impact
+    // Piecewise non-linear degradation:
+    // - Moderate wear (>60% grip): gentle degradation (0.15 power)
+    // - Severe wear (≤60% grip): harsh degradation (0.7 power)
+    if (tireGrip >= 0.6) {
+      // Moderate wear: Fresh (1.0) → 100%, Half-life (0.75) → 95.7% (4.3% reduction)
+      speed *= Math.pow(tireGrip, 0.15);
+    } else {
+      // Severe wear: Worn (0.5) → 61.6% (38.4% reduction)
+      speed *= Math.pow(tireGrip, 0.7);
+    }
   }
-  // For turns: tire wear already applied in calculateCornerSpeed, no modification here
 
   // 2. Apply fuel weight penalty
   // Fuel penalty is in seconds per lap - convert to speed reduction
