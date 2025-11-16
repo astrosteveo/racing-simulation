@@ -240,20 +240,20 @@ function calculateSectionTime(
 
     // Apply track-type-specific calibration for realistic corner speeds
     // These calibration factors tune the physics formula to match real NASCAR lap times
-    // Adjusted in Phase 5.1 to match EXAMPLES.md targets
+    // Recalibrated in Phase 7 after tire wear and corner speed fixes
     let calibrationFactor: number;
     switch (track.type) {
       case 'short':
-        calibrationFactor = 0.830; // Short tracks: tuned for Bristol 15.4-15.6s lap times
+        calibrationFactor = 0.970; // Short tracks: calibrated for Bristol 15.4-15.6s lap times
         break;
       case 'intermediate':
-        calibrationFactor = 0.925; // Intermediate: tuned for Charlotte ~28.5s lap times
+        calibrationFactor = 1.117; // Intermediate: calibrated for Charlotte ~28.5s lap times
         break;
       case 'superspeedway':
-        calibrationFactor = 0.717; // Superspeedway: tuned for Daytona ~48-50s lap times
+        calibrationFactor = 0.891; // Superspeedway: calibrated for Daytona ~48-50s lap times
         break;
       default:
-        calibrationFactor = 0.830;
+        calibrationFactor = 0.970;
     }
     baseSpeed *= calibrationFactor;
   } else {
@@ -266,20 +266,20 @@ function calculateSectionTime(
 
     // Apply track-type-specific calibration for realistic straight speeds
     // Racing speeds vary by track type due to different configurations
-    // Adjusted in Phase 5.1 to match EXAMPLES.md targets
+    // Recalibrated in Phase 7 after tire wear and corner speed fixes
     let calibrationFactor: number;
     switch (track.type) {
       case 'short':
-        calibrationFactor = 0.757; // Short tracks: tuned for Bristol 15.4-15.6s lap times
+        calibrationFactor = 0.885; // Short tracks: calibrated for Bristol 15.4-15.6s lap times
         break;
       case 'intermediate':
-        calibrationFactor = 0.975; // Intermediate: tuned for Charlotte ~28.5s lap times
+        calibrationFactor = 1.178; // Intermediate: calibrated for Charlotte ~28.5s lap times
         break;
       case 'superspeedway':
-        calibrationFactor = 0.791; // Superspeedway: tuned for Daytona ~48-50s lap times
+        calibrationFactor = 0.982; // Superspeedway: calibrated for Daytona ~48-50s lap times
         break;
       default:
-        calibrationFactor = 0.791;
+        calibrationFactor = 0.885;
     }
     baseSpeed *= calibrationFactor;
   }
@@ -343,16 +343,16 @@ function calculateSectionSpeedForBreakdown(
     let calibrationFactor: number;
     switch (track.type) {
       case 'short':
-        calibrationFactor = 0.840;
+        calibrationFactor = 0.970;
         break;
       case 'intermediate':
-        calibrationFactor = 0.925;
+        calibrationFactor = 1.117;
         break;
       case 'superspeedway':
-        calibrationFactor = 0.717;
+        calibrationFactor = 0.891;
         break;
       default:
-        calibrationFactor = 0.830;
+        calibrationFactor = 0.970;
     }
     baseSpeed *= calibrationFactor;
   } else {
@@ -366,16 +366,16 @@ function calculateSectionSpeedForBreakdown(
     let calibrationFactor: number;
     switch (track.type) {
       case 'short':
-        calibrationFactor = 0.766;
+        calibrationFactor = 0.885;
         break;
       case 'intermediate':
-        calibrationFactor = 0.975;
+        calibrationFactor = 1.178;
         break;
       case 'superspeedway':
-        calibrationFactor = 0.791;
+        calibrationFactor = 0.982;
         break;
       default:
-        calibrationFactor = 0.791;
+        calibrationFactor = 0.885;
     }
     baseSpeed *= calibrationFactor;
   }
