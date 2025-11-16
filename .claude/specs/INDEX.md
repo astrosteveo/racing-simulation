@@ -319,9 +319,19 @@ cat .claude/specs/INDEX.md
 - **Mental state mechanics** fully specified
 - **XP progression** tables and pacing validation
 
-**Phase 4: Decisions Migration** 🔄 Next
-- Extract decision/event content from docs/SPEC.md
-- Migrate to specs/decisions/ directory
+**Phase 4: Decisions Migration** ✅ Complete (2025-11-16)
+- ✅ Migrated decision system from `.claude/design/decision-system.md` → specs/decisions/SPEC.md
+- ✅ Extracted decision types from docs/SPEC.md (6 types fully documented)
+- ✅ Migrated decision examples from docs/EXAMPLES.md → specs/decisions/EXAMPLES.md
+- ✅ Documented all decision interfaces in specs/decisions/CONTRACTS.md
+- ✅ Created REFERENCE.md with decision type table and formulas
+- ✅ 4 complete files: SPEC, EXAMPLES, CONTRACTS, REFERENCE
+
+**Benefits Achieved:**
+- **~65% token reduction** for decisions-only work
+- **All 6 decision types** documented (pit, passing, traffic, incident, tire, mental)
+- **Skill-based outcome** formulas fully specified
+- **Effect system** documented (position, mental state, car state, XP)
 
 **Phases 5-6:** UI, Game Modes (pending)
 
