@@ -83,11 +83,11 @@ None currently.
 
 ## Recent Changes (Last 5 Commits)
 
-1. `6aecc2b` - Update TASKS.md with verification system completion
-2. `f677660` - Add documentation verification system with hooks and automation
-3. `b7a7794` - Update TASKS.md with latest commit (demonstrating workflow)
-4. `bf4fe14` - Establish continuous TASKS.md update workflow
-5. `d0aebfb` - Refactor CLAUDE.md and establish TASKS.md for session continuity
+1. `3bbc6e5` - Fix verify-docs chicken-and-egg problem with TASKS.md updates
+2. `b40948a` - Update TASKS.md Recent Changes (passes verify-docs)
+3. `6aecc2b` - Update TASKS.md with verification system completion
+4. `f677660` - Add documentation verification system with hooks and automation
+5. `b7a7794` - Update TASKS.md with latest commit (demonstrating workflow)
 
 ---
 
