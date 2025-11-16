@@ -20,6 +20,11 @@ npm run verify-docs               # Check documentation sync
 npm run type-check                # TypeScript validation
 npm run lint:fix                  # Auto-fix code style
 
+# Spec Tools (NEW - Phase 1)
+npm run verify-specs              # Validate spec structure
+npm run sync-contracts            # Check CONTRACTS.md vs types.ts
+npm run spec-status               # Dashboard of all spec health
+
 # Test modes (manual dev)
 npm test                          # Watch mode
 npm run test:ui                   # Interactive UI
@@ -35,7 +40,14 @@ racing-simulation/
 │   ├── TASKS.md           ← Current work, test status, next steps
 │   ├── CLAUDE.md          ← Development principles (read once)
 │   ├── settings.json      ← Hooks configuration
-│   └── design/            ← Feature design docs (read when working on feature)
+│   ├── specs/             ← ✨ NEW: Spec-centric architecture (Phase 1)
+│   │   ├── INDEX.md       ← Spec overview and dependency graph
+│   │   ├── physics/       ← Physics engine spec
+│   │   ├── character/     ← Character/RPG spec
+│   │   ├── decisions/     ← Decision system spec
+│   │   ├── ui/            ← UI spec
+│   │   └── game-modes/    ← Game modes spec
+│   └── design/            ← Feature design docs (migrating to specs/)
 │       ├── decision-system.md   ← Decision system implementation details
 │       └── console-ui.md        ← Console UI implementation details
 ├── docs/

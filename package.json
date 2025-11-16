@@ -18,7 +18,10 @@
     "verify-docs": "bash scripts/verify-docs.sh",
     "validate-tasks": "bash scripts/validate-tasks.sh",
     "test:status": "bash scripts/update-test-status.sh",
-    "sync-readme": "bash scripts/sync-readme.sh"
+    "sync-readme": "bash scripts/sync-readme.sh",
+    "verify-specs": "bash scripts/verify-specs.sh",
+    "sync-contracts": "bash scripts/sync-contracts.sh",
+    "spec-status": "bash scripts/spec-status.sh"
   },
   "keywords": [
     "nascar",
