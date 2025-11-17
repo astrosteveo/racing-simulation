@@ -59,16 +59,8 @@ export interface CareerStats {
  * XP gain structure for skill progression
  */
 export interface XPGain {
-  racecraft?: number;
-  consistency?: number;
-  aggression?: number;
-  focus?: number;
-  stamina?: number;
-  composure?: number;
-  draftSense?: number;
-  tireManagement?: number;
-  fuelManagement?: number;
-  pitStrategy?: number;
+  skill: string;    // Skill name (e.g., 'racecraft', 'consistency')
+  amount: number;   // XP amount (100 XP = 1 skill point)
 }
 
 /**
