@@ -46,8 +46,16 @@ export class GeometryGenerator {
 
   /**
    * Generate centerline points from track sections
+   *
+   * For Bristol: Creates a simple oval with two straights and two semicircular turns
    */
   private generateCenterline(track: Track): TrackPoint[] {
+    // For Bristol, use simplified oval geometry
+    if (track.id === 'bristol') {
+      return this.generateBristolOval(track);
+    }
+
+    // Generic algorithm for other tracks
     const points: TrackPoint[] = [];
     const totalLength = this.calculateTotalLength(track.sections);
 
@@ -79,6 +87,154 @@ export class GeometryGenerator {
       }
 
       currentDistance += section.length;
+    }
+
+    return points;
+  }
+
+  /**
+   * Generate simple oval for Bristol Motor Speedway
+   * Two equal straightaways connected by two identical semicircular turns
+   *
+   * Layout:
+   *    Turn 1 (left side)
+   *        |
+   *  Str 2 | Str 1 (right side)
+   *        |
+   *    Turn 2 (left side)
+   */
+  private generateBristolOval(track: Track): TrackPoint[] {
+    const points: TrackPoint[] = [];
+    const totalLength = this.calculateTotalLength(track.sections);
+
+    // Extract section data
+    const turn1 = track.sections[0];
+    const straight1 = track.sections[1];
+    const turn2 = track.sections[2];
+    const straight2 = track.sections[3];
+
+    // Calculate turn radius for semicircular turns (180° each)
+    // arc_length = radius * angle, so radius = arc_length / π
+    const turnRadius = turn1.length / Math.PI;
+    const straightLength = straight1.length;
+    const banking = turn1.banking || 0;
+
+    const numPointsPerSection = this.options.pointsPerSection;
+    let currentDistance = 0;
+
+    // Turn 1: Left semicircle connecting bottom to top
+    // Center at (0, 0, turnRadius), sweep from angle=-π/2 to angle=π/2
+    for (let i = 0; i < numPointsPerSection; i++) {
+      const t = i / numPointsPerSection;
+      const angle = -Math.PI / 2 + Math.PI * t; // -90° to +90°
+
+      const position: Vector3 = {
+        x: turnRadius * Math.cos(angle),
+        y: 0,
+        z: turnRadius + turnRadius * Math.sin(angle),
+      };
+
+      const tangent: Vector3 = {
+        x: -Math.sin(angle),
+        y: 0,
+        z: Math.cos(angle),
+      };
+
+      const bankingRad = (banking * Math.PI) / 180;
+      const normal: Vector3 = {
+        x: Math.cos(angle) * Math.sin(bankingRad),
+        y: Math.cos(bankingRad),
+        z: Math.sin(angle) * Math.sin(bankingRad),
+      };
+
+      points.push({
+        position,
+        normal,
+        tangent,
+        banking,
+        lapProgress: (currentDistance + t * turn1.length) / totalLength,
+      });
+    }
+    currentDistance += turn1.length;
+
+    // Straight 1: Right side, from top to bottom along +Z axis
+    for (let i = 0; i < numPointsPerSection; i++) {
+      const t = i / numPointsPerSection;
+
+      const position: Vector3 = {
+        x: straightLength,
+        y: 0,
+        z: 2 * turnRadius - t * (2 * turnRadius),
+      };
+
+      const tangent: Vector3 = { x: 0, y: 0, z: -1 };
+      const normal: Vector3 = { x: 0, y: 1, z: 0 };
+
+      points.push({
+        position,
+        normal,
+        tangent,
+        banking: 0,
+        lapProgress: (currentDistance + t * straight1.length) / totalLength,
+      });
+    }
+    currentDistance += straight1.length;
+
+    // Turn 2: Right semicircle connecting bottom to top
+    // Center at (straightLength, 0, turnRadius), sweep from angle=π/2 to angle=3π/2
+    for (let i = 0; i < numPointsPerSection; i++) {
+      const t = i / numPointsPerSection;
+      const angle = Math.PI / 2 + Math.PI * t; // 90° to 270°
+
+      const position: Vector3 = {
+        x: straightLength + turnRadius * Math.cos(angle),
+        y: 0,
+        z: turnRadius + turnRadius * Math.sin(angle),
+      };
+
+      const tangent: Vector3 = {
+        x: -Math.sin(angle),
+        y: 0,
+        z: Math.cos(angle),
+      };
+
+      const bankingRad = (banking * Math.PI) / 180;
+      const normal: Vector3 = {
+        x: Math.cos(angle) * Math.sin(bankingRad),
+        y: Math.cos(bankingRad),
+        z: Math.sin(angle) * Math.sin(bankingRad),
+      };
+
+      points.push({
+        position,
+        normal,
+        tangent,
+        banking,
+        lapProgress: (currentDistance + t * turn2.length) / totalLength,
+      });
+    }
+    currentDistance += turn2.length;
+
+    // Straight 2: Left side, from bottom to top along -Z axis
+    for (let i = 0; i < numPointsPerSection; i++) {
+      const t = i / numPointsPerSection;
+
+      const position: Vector3 = {
+        x: 0,
+        y: 0,
+        z: t * (2 * turnRadius),
+      };
+
+      const tangent: Vector3 = { x: 0, y: 0, z: 1 };
+      const normal: Vector3 = { x: 0, y: 1, z: 0 };
+
+      points.push({
+        position,
+        normal,
+        tangent,
+        banking: 0,
+        lapProgress: (currentDistance + t * straight2.length) / totalLength,
+      });
     }
 
     return points;
