@@ -3,6 +3,7 @@
  * Converts track section data into 3D centerline points
  */
 
+import * as THREE from 'three';
 import type { Track, TrackSection } from '../../../src/types';
 import type { TrackGeometry, TrackPoint, Vector3, GeometryGeneratorOptions } from './types';
 
@@ -130,9 +131,10 @@ export class GeometryGenerator {
       const arcAngle = section.length / radius;
       const bankingRad = (section.banking * Math.PI) / 180;
 
-      // Center of turn (perpendicular to current direction)
-      const centerX = startPos.x + Math.cos(startAngle) * radius;
-      const centerZ = startPos.z - Math.sin(startAngle) * radius;
+      // Center of turn (perpendicular LEFT of current heading direction)
+      // For a right turn, center is to the left; for left turn, to the right
+      const centerX = startPos.x - Math.sin(startAngle) * radius;
+      const centerZ = startPos.z + Math.cos(startAngle) * radius;
 
       for (let i = 0; i < numPoints; i++) {
         const t = i / numPoints;
@@ -175,6 +177,7 @@ export class GeometryGenerator {
 
   /**
    * Generate inner and outer track edges from centerline
+   * Applies proper banking by rotating the perpendicular vector around the tangent
    */
   private generateEdges(
     centerline: TrackPoint[],
@@ -185,24 +188,32 @@ export class GeometryGenerator {
     const outerEdge: Vector3[] = [];
 
     for (const point of centerline) {
-      // Calculate perpendicular vector (right side of tangent)
-      const perpX = -point.tangent.z;
-      const perpZ = point.tangent.x;
+      // Create perpendicular vector (points to the right of tangent)
+      const perpVec = new THREE.Vector3(-point.tangent.z, 0, point.tangent.x);
 
-      // Apply banking tilt
+      // Create tangent vector
+      const tangentVec = new THREE.Vector3(point.tangent.x, point.tangent.y, point.tangent.z);
+
+      // Apply banking by rotating perpendicular around tangent
       const bankingRad = (point.banking * Math.PI) / 180;
-      const verticalOffset = Math.sin(bankingRad) * halfWidth * this.options.verticalScale;
+      if (point.banking !== 0) {
+        perpVec.applyAxisAngle(tangentVec, -bankingRad);
+      }
 
+      // Calculate inner edge (left side when facing forward)
+      const innerPos = perpVec.clone().multiplyScalar(-halfWidth);
       innerEdge.push({
-        x: point.position.x - perpX * halfWidth,
-        y: point.position.y + verticalOffset,
-        z: point.position.z - perpZ * halfWidth,
+        x: point.position.x + innerPos.x,
+        y: point.position.y + innerPos.y,
+        z: point.position.z + innerPos.z,
       });
 
+      // Calculate outer edge (right side when facing forward)
+      const outerPos = perpVec.clone().multiplyScalar(halfWidth);
       outerEdge.push({
-        x: point.position.x + perpX * halfWidth,
-        y: point.position.y + verticalOffset,
-        z: point.position.z + perpZ * halfWidth,
+        x: point.position.x + outerPos.x,
+        y: point.position.y + outerPos.y,
+        z: point.position.z + outerPos.z,
       });
     }
 

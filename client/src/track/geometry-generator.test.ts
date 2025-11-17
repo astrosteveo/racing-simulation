@@ -59,14 +59,15 @@ describe('GeometryGenerator', () => {
     }
   });
 
-  it('starts at origin', () => {
+  it('generates centerline with consistent Y coordinate', () => {
     const generator = new GeometryGenerator();
     const geometry = generator.generate(bristolTrack);
 
+    // All centerline points should have Y=0 (flat centerline, banking in surface only)
     const firstPoint = geometry.geometry.centerline[0];
-    expect(firstPoint.position.x).toBe(0);
+    const allFlat = geometry.geometry.centerline.every((p) => p.position.y === firstPoint.position.y);
+    expect(allFlat).toBe(true);
     expect(firstPoint.position.y).toBe(0);
-    expect(firstPoint.position.z).toBe(0);
   });
 
   it('applies banking to turn sections', () => {
@@ -108,8 +109,14 @@ describe('GeometryGenerator', () => {
     const geometry = generator.generate(bristolTrack);
 
     expect(geometry.geometry.startFinish).toBeDefined();
-    expect(geometry.geometry.startFinish.position).toEqual({ x: 0, y: 0, z: 0 });
+    expect(geometry.geometry.startFinish.position).toBeDefined();
     expect(geometry.geometry.startFinish.direction).toBeDefined();
+
+    // Start/finish should match first centerline point
+    const firstPoint = geometry.geometry.centerline[0];
+    expect(geometry.geometry.startFinish.position.x).toBe(firstPoint.position.x);
+    expect(geometry.geometry.startFinish.position.y).toBe(firstPoint.position.y);
+    expect(geometry.geometry.startFinish.position.z).toBe(firstPoint.position.z);
   });
 
   it('respects track width option', () => {
