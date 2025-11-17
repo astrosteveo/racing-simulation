@@ -1,0 +1,103 @@
+{
+  "id": "watkins-glen",
+  "name": "Watkins Glen International",
+  "nickname": "The Glen",
+  "length": 2.45,
+  "type": "road",
+  "banking": {
+    "turns": 6,
+    "straights": 0
+  },
+  "surface": "asphalt",
+  "surfaceGrip": 0.93,
+  "sections": [
+    {
+      "type": "straight",
+      "length": 3200,
+      "idealLine": 190,
+      "surfaceGrip": 0.93
+    },
+    {
+      "type": "turn",
+      "length": 450,
+      "banking": 2,
+      "radius": 180,
+      "idealLine": 90,
+      "surfaceGrip": 0.93
+    },
+    {
+      "type": "turn",
+      "length": 350,
+      "banking": 4,
+      "radius": 200,
+      "idealLine": 95,
+      "surfaceGrip": 0.93
+    },
+    {
+      "type": "straight",
+      "length": 1800,
+      "idealLine": 165,
+      "surfaceGrip": 0.93
+    },
+    {
+      "type": "turn",
+      "length": 520,
+      "banking": 8,
+      "radius": 380,
+      "idealLine": 125,
+      "surfaceGrip": 0.93
+    },
+    {
+      "type": "straight",
+      "length": 2100,
+      "idealLine": 175,
+      "surfaceGrip": 0.93
+    },
+    {
+      "type": "turn",
+      "length": 380,
+      "banking": 3,
+      "radius": 160,
+      "idealLine": 85,
+      "surfaceGrip": 0.93
+    },
+    {
+      "type": "turn",
+      "length": 400,
+      "banking": 5,
+      "radius": 220,
+      "idealLine": 100,
+      "surfaceGrip": 0.93
+    },
+    {
+      "type": "straight",
+      "length": 1600,
+      "idealLine": 155,
+      "surfaceGrip": 0.93
+    },
+    {
+      "type": "turn",
+      "length": 420,
+      "banking": 6,
+      "radius": 250,
+      "idealLine": 110,
+      "surfaceGrip": 0.93
+    },
+    {
+      "type": "straight",
+      "length": 1700,
+      "idealLine": 170,
+      "surfaceGrip": 0.93
+    },
+    {
+      "type": "turn",
+      "length": 500,
+      "banking": 10,
+      "radius": 420,
+      "idealLine": 135,
+      "surfaceGrip": 0.93
+    }
+  ],
+  "difficulty": 10,
+  "raceLaps": 90
+}

@@ -1,0 +1,45 @@
+{
+  "id": "martinsville",
+  "name": "Martinsville Speedway",
+  "nickname": "The Paperclip",
+  "length": 0.526,
+  "type": "short",
+  "banking": {
+    "turns": 12,
+    "straights": 0
+  },
+  "surface": "asphalt",
+  "surfaceGrip": 0.92,
+  "sections": [
+    {
+      "type": "turn",
+      "length": 420,
+      "banking": 12,
+      "radius": 230,
+      "idealLine": 110,
+      "surfaceGrip": 0.92
+    },
+    {
+      "type": "straight",
+      "length": 800,
+      "idealLine": 135,
+      "surfaceGrip": 0.92
+    },
+    {
+      "type": "turn",
+      "length": 420,
+      "banking": 12,
+      "radius": 230,
+      "idealLine": 110,
+      "surfaceGrip": 0.92
+    },
+    {
+      "type": "straight",
+      "length": 1137,
+      "idealLine": 135,
+      "surfaceGrip": 0.92
+    }
+  ],
+  "difficulty": 8,
+  "raceLaps": 500
+}

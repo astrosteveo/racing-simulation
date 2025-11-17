@@ -1,0 +1,45 @@
+{
+  "id": "richmond",
+  "name": "Richmond Raceway",
+  "nickname": "America's Premier Short Track",
+  "length": 0.75,
+  "type": "short",
+  "banking": {
+    "turns": 14,
+    "straights": 8
+  },
+  "surface": "asphalt",
+  "surfaceGrip": 0.90,
+  "sections": [
+    {
+      "type": "turn",
+      "length": 550,
+      "banking": 14,
+      "radius": 350,
+      "idealLine": 130,
+      "surfaceGrip": 0.90
+    },
+    {
+      "type": "straight",
+      "length": 900,
+      "idealLine": 155,
+      "surfaceGrip": 0.90
+    },
+    {
+      "type": "turn",
+      "length": 550,
+      "banking": 14,
+      "radius": 350,
+      "idealLine": 130,
+      "surfaceGrip": 0.90
+    },
+    {
+      "type": "straight",
+      "length": 960,
+      "idealLine": 155,
+      "surfaceGrip": 0.90
+    }
+  ],
+  "difficulty": 7,
+  "raceLaps": 400
+}

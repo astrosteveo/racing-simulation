@@ -219,16 +219,39 @@ async function runNextRace(manager: CareerManager, saveId: string): Promise<void
     console.log('');
   }
 
+  // Track unlocked tracks before completing race
+  const beforeUnlocked = state.unlockedTracks;
+
   // Complete the race in career manager
   manager.completeRace(results, mostLapsLed);
+
+  // Check for newly unlocked tracks
+  const updatedState = manager.getCurrentState();
+  const afterUnlocked = updatedState.unlockedTracks;
+  const newlyUnlocked = afterUnlocked.filter(track => !beforeUnlocked.includes(track));
 
   // Save progress
   manager.save(saveId);
   console.log('   💾 Progress saved!');
   console.log('');
 
+  // Display unlock notifications
+  if (newlyUnlocked.length > 0) {
+    console.log('   🔓 NEW TRACKS UNLOCKED!');
+    newlyUnlocked.forEach((trackId) => {
+      const trackNames: Record<string, string> = {
+        'richmond': 'Richmond Raceway',
+        'atlanta': 'Atlanta Motor Speedway',
+        'martinsville': 'Martinsville Speedway',
+        'texas': 'Texas Motor Speedway',
+        'watkins-glen': 'Watkins Glen International (ROAD COURSE!)',
+      };
+      console.log(`   ✨ ${trackNames[trackId] || trackId.toUpperCase()}`);
+    });
+    console.log('');
+  }
+
   // Check for milestones
-  const updatedState = manager.getCurrentState();
   if (results.finishPosition === 1) {
     if (updatedState.driver.stats.wins === 1) {
       console.log('   🏆 MILESTONE: FIRST WIN! Incredible performance!');
@@ -441,16 +464,34 @@ function displaySeasonSchedule(manager: CareerManager): void {
   console.log(`Season ${state.season} - 10 Race Schedule\n`);
   console.log('─'.repeat(60));
 
+  // Track unlock requirements
+  const unlockRequirements: Record<string, string> = {
+    'richmond': 'Top 10 finish',
+    'atlanta': 'Top 10 finish',
+    'martinsville': 'Top 5 finish',
+    'texas': 'Top 5 finish',
+    'watkins-glen': 'Win a race',
+  };
+
   schedule.forEach((race, idx) => {
     const raceNum = idx + 1;
-    const status = raceNum < state.race ? '✅' : raceNum === state.race ? '▶' : '⏸';
+    const raceStatus = raceNum < state.race ? '✅' : raceNum === state.race ? '▶' : '⏸';
     const trackName = race.trackId.charAt(0).toUpperCase() + race.trackId.slice(1);
+    const isUnlocked = state.unlockedTracks.includes(race.trackId);
+    const lockStatus = isUnlocked ? '' : '🔒';
+    const unlockHint = !isUnlocked ? ` (Unlock: ${unlockRequirements[race.trackId] || 'Unknown'})` : '';
 
-    console.log(`  ${status} Race ${raceNum}: ${trackName.padEnd(15)} (${race.laps} laps)`);
+    console.log(`  ${raceStatus}${lockStatus} Race ${raceNum}: ${trackName.padEnd(15)} (${race.laps} laps)${unlockHint}`);
   });
 
   console.log('─'.repeat(60));
   console.log('');
+
+  // Show unlock legend
+  const lockedCount = schedule.filter(race => !state.unlockedTracks.includes(race.trackId)).length;
+  if (lockedCount > 0) {
+    console.log(`🔒 ${lockedCount} track(s) locked - Improve your race results to unlock!`);
+    console.log('');
 }
 
 /**

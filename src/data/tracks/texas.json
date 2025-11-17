@@ -1,0 +1,45 @@
+{
+  "id": "texas",
+  "name": "Texas Motor Speedway",
+  "nickname": "The Great American Speedway",
+  "length": 1.5,
+  "type": "intermediate",
+  "banking": {
+    "turns": 24,
+    "straights": 5
+  },
+  "surface": "asphalt",
+  "surfaceGrip": 0.88,
+  "sections": [
+    {
+      "type": "turn",
+      "length": 1320,
+      "banking": 24,
+      "radius": 750,
+      "idealLine": 165,
+      "surfaceGrip": 0.88
+    },
+    {
+      "type": "straight",
+      "length": 1980,
+      "idealLine": 195,
+      "surfaceGrip": 0.88
+    },
+    {
+      "type": "turn",
+      "length": 1320,
+      "banking": 24,
+      "radius": 750,
+      "idealLine": 165,
+      "surfaceGrip": 0.88
+    },
+    {
+      "type": "straight",
+      "length": 2300,
+      "idealLine": 195,
+      "surfaceGrip": 0.88
+    }
+  ],
+  "difficulty": 6,
+  "raceLaps": 334
+}

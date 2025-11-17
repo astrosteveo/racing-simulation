@@ -1,0 +1,45 @@
+{
+  "id": "atlanta",
+  "name": "Atlanta Motor Speedway",
+  "nickname": "The Track Too Tough To Tame",
+  "length": 1.54,
+  "type": "intermediate",
+  "banking": {
+    "turns": 28,
+    "straights": 5
+  },
+  "surface": "asphalt",
+  "surfaceGrip": 0.85,
+  "sections": [
+    {
+      "type": "turn",
+      "length": 1450,
+      "banking": 28,
+      "radius": 700,
+      "idealLine": 170,
+      "surfaceGrip": 0.85
+    },
+    {
+      "type": "straight",
+      "length": 2100,
+      "idealLine": 200,
+      "surfaceGrip": 0.85
+    },
+    {
+      "type": "turn",
+      "length": 1450,
+      "banking": 28,
+      "radius": 700,
+      "idealLine": 170,
+      "surfaceGrip": 0.85
+    },
+    {
+      "type": "straight",
+      "length": 3128,
+      "idealLine": 200,
+      "surfaceGrip": 0.85
+    }
+  ],
+  "difficulty": 9,
+  "raceLaps": 325
+}
