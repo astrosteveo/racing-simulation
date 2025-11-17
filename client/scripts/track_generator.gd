@@ -53,6 +53,8 @@ static func generate_bristol_centerline(track_data: Dictionary) -> Array[TrackPo
 
 		if section.type == "turn":
 			generate_turn_section(points, section, banking_config, skip_first)
+		elif section.type == "transition":
+			generate_transition_section(points, section, banking_config, skip_first)
 		elif section.type == "straight":
 			# For straights, we need better logic than the default
 			# Bristol straights connect turns tangentially
@@ -102,6 +104,8 @@ static func generate_martinsville_centerline(track_data: Dictionary) -> Array[Tr
 
 		if section.type == "turn":
 			generate_turn_section(points, section, banking_config, skip_first)
+		elif section.type == "transition":
+			generate_transition_section(points, section, banking_config, skip_first)
 		elif section.type == "straight":
 			if points.is_empty():
 				push_error("Cannot start with a straight section")
@@ -158,6 +162,50 @@ static func generate_turn_section(points: Array[TrackPoint], section: Dictionary
 		)
 		point.banking = banking
 		point.section_type = "turn"
+		points.append(point)
+
+
+static func generate_transition_section(points: Array[TrackPoint], section: Dictionary, banking_config: Dictionary, skip_first: bool) -> void:
+	var length: float = section.get("length", 75.0) * FEET_TO_METERS
+	var from_banking: float = section.get("fromBanking", 0.0)
+	var to_banking: float = section.get("toBanking", 0.0)
+	var curvature_type: String = section.get("curvature", "linear")
+
+	var transition_steps := 15
+	var start_idx := 1 if skip_first else 0
+
+	# Get start position from previous point
+	var prev_point: TrackPoint = points[-1] if not points.is_empty() else null
+	if prev_point == null:
+		push_error("Cannot generate transition section without previous point")
+		return
+
+	var start_pos := prev_point.pos
+
+	# Calculate direction from previous tangent
+	# For now, use simplified direction calculation
+	var direction: Vector3
+	if abs(start_pos.x) > abs(start_pos.z):
+		# On sides: move along Z axis
+		direction = Vector3(0, 0, 1) if start_pos.x > 0 else Vector3(0, 0, -1)
+	else:
+		# On top/bottom: move along X axis
+		direction = Vector3(-1, 0, 0) if start_pos.z > 0 else Vector3(1, 0, 0)
+
+	for i in range(start_idx, transition_steps + 1):
+		var t := float(i) / transition_steps
+
+		var point := TrackPoint.new()
+
+		# Position along transition (linear for now)
+		point.pos = start_pos + direction * (t * length)
+
+		# Banking interpolation
+		# Use ease-in-out for smoother transitions (S-curve)
+		var ease_t := t * t * (3.0 - 2.0 * t)  # smoothstep
+		point.banking = from_banking + (to_banking - from_banking) * ease_t
+
+		point.section_type = "transition"
 		points.append(point)
 
 

@@ -24,8 +24,8 @@
     {
       "type": "turn",
       "name": "Turn 1",
-      "length": 157,
-      "radius": 100,
+      "length": 294,
+      "radius": 187.5,
       "arcAngle": 180,
       "centerPoint": {"x": 0, "y": 0},
       "startAngle": 0,
@@ -35,20 +35,36 @@
       "surfaceGrip": 0.88
     },
     {
+      "type": "transition",
+      "name": "Turn 1 Exit",
+      "length": 50,
+      "fromBanking": 12.0,
+      "toBanking": 0.0,
+      "curvature": "linear"
+    },
+    {
       "type": "straight",
       "name": "Backstretch",
-      "length": 1075,
+      "length": 700,
       "banking": 0.0,
       "idealLine": 120,
       "surfaceGrip": 0.90
     },
     {
+      "type": "transition",
+      "name": "Turn 2 Entry",
+      "length": 50,
+      "fromBanking": 0.0,
+      "toBanking": 12.0,
+      "curvature": "linear"
+    },
+    {
       "type": "turn",
       "name": "Turn 2",
-      "length": 157,
-      "radius": 100,
+      "length": 294,
+      "radius": 187.5,
       "arcAngle": 180,
-      "centerPoint": {"x": 0, "y": 1075},
+      "centerPoint": {"x": 0, "y": 800},
       "startAngle": 180,
       "endAngle": 0,
       "banking": 12.0,
@@ -56,12 +72,28 @@
       "surfaceGrip": 0.88
     },
     {
+      "type": "transition",
+      "name": "Turn 2 Exit",
+      "length": 50,
+      "fromBanking": 12.0,
+      "toBanking": 0.0,
+      "curvature": "linear"
+    },
+    {
       "type": "straight",
       "name": "Frontstretch",
-      "length": 1075,
+      "length": 700,
       "banking": 0.0,
       "idealLine": 120,
       "surfaceGrip": 0.90
+    },
+    {
+      "type": "transition",
+      "name": "Turn 1 Entry",
+      "length": 50,
+      "fromBanking": 0.0,
+      "toBanking": 12.0,
+      "curvature": "linear"
     }
   ],
 

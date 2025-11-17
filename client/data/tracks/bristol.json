@@ -38,11 +38,27 @@
 	  "surfaceGrip": 0.95
 	},
 	{
+	  "type": "transition",
+	  "name": "Turn 2 Exit",
+	  "length": 75,
+	  "fromBanking": 27.0,
+	  "toBanking": 8.0,
+	  "curvature": "linear"
+	},
+	{
 	  "type": "straight",
 	  "name": "Backstretch",
-	  "length": 700,
+	  "length": 550,
 	  "idealLine": 140,
 	  "surfaceGrip": 0.95
+	},
+	{
+	  "type": "transition",
+	  "name": "Turn 3 Entry",
+	  "length": 75,
+	  "fromBanking": 8.0,
+	  "toBanking": 27.0,
+	  "curvature": "linear"
 	},
 	{
 	  "type": "turn",
@@ -57,11 +73,27 @@
 	  "surfaceGrip": 0.95
 	},
 	{
+	  "type": "transition",
+	  "name": "Turn 4 Exit",
+	  "length": 75,
+	  "fromBanking": 27.0,
+	  "toBanking": 8.0,
+	  "curvature": "linear"
+	},
+	{
 	  "type": "straight",
 	  "name": "Frontstretch",
-	  "length": 700,
+	  "length": 550,
 	  "idealLine": 140,
 	  "surfaceGrip": 0.95
+	},
+	{
+	  "type": "transition",
+	  "name": "Turn 1 Entry",
+	  "length": 75,
+	  "fromBanking": 8.0,
+	  "toBanking": 27.0,
+	  "curvature": "linear"
 	}
   ],
 
