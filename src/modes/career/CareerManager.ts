@@ -102,6 +102,9 @@ export class CareerManager {
     // Add to race history
     this.careerState.raceHistory.push(results);
 
+    // Check for track unlocks based on finish position
+    this.checkForUnlocks(results.finishPosition);
+
     // Increment race number
     this.careerState.race += 1;
   }
@@ -309,6 +312,45 @@ export class CareerManager {
 
       // Apply increase, cap at 100
       skills[skillKey] = Math.min(100, skills[skillKey] + skillIncrease);
+    }
+  }
+
+  /**
+   * Check for and unlock new tracks based on race performance
+   *
+   * Unlock tiers:
+   * - Tier 1 (default): bristol, charlotte, daytona
+   * - Tier 2 (top 10): richmond, atlanta
+   * - Tier 3 (top 5): martinsville, texas
+   * - Tier 4 (win): watkins-glen
+   *
+   * @param finishPosition - Final race position
+   */
+  private checkForUnlocks(finishPosition: number): void {
+    if (!this.careerState) return;
+
+    const tracksToUnlock: string[] = [];
+
+    // Tier 2: Top 10 finish unlocks Richmond and Atlanta
+    if (finishPosition <= 10) {
+      tracksToUnlock.push('richmond', 'atlanta');
+    }
+
+    // Tier 3: Top 5 finish unlocks Martinsville and Texas
+    if (finishPosition <= 5) {
+      tracksToUnlock.push('martinsville', 'texas');
+    }
+
+    // Tier 4: Win unlocks Watkins Glen (road course!)
+    if (finishPosition === 1) {
+      tracksToUnlock.push('watkins-glen');
+    }
+
+    // Add only tracks that aren't already unlocked (no duplicates)
+    for (const track of tracksToUnlock) {
+      if (!this.careerState.unlockedTracks.includes(track)) {
+        this.careerState.unlockedTracks.push(track);
+      }
     }
   }
 }

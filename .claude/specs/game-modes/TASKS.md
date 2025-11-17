@@ -8,7 +8,17 @@
 
 ## Current Work
 
-None - ready for next phase.
+### Track Unlocking System (IN PROGRESS)
+
+**Goal:** Implement progressive track unlocking based on race performance
+
+**Approach:**
+1. Add unlock checking logic to CareerManager
+2. Create 5 new track definitions (Richmond, Atlanta, Watkins Glen, Martinsville, Texas)
+3. Update UI to show locked/unlocked status
+4. Display unlock notifications
+
+**Current Step:** Writing tests for unlock logic (TDD Phase 1)
 
 ---
 

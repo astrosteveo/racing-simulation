@@ -701,4 +701,316 @@ describe('CareerManager', () => {
       expect(loadedHistory).toHaveLength(3);
     });
   });
+
+  describe('Track Unlocking System', () => {
+    const testSaveId = 'test-unlock-save';
+    const testSavesDir = path.join(process.cwd(), 'saves');
+    const testSavePath = path.join(testSavesDir, `${testSaveId}.json`);
+    const testBackupPath = path.join(testSavesDir, `${testSaveId}-backup.json`);
+
+    beforeEach(() => {
+      manager.startNewCareer('Test Driver', '1');
+    });
+
+    afterEach(() => {
+      // Clean up test save files
+      if (fs.existsSync(testSavePath)) {
+        fs.unlinkSync(testSavePath);
+      }
+      if (fs.existsSync(testBackupPath)) {
+        fs.unlinkSync(testBackupPath);
+      }
+    });
+
+    it('starts with 3 tracks unlocked (bristol, charlotte, daytona)', () => {
+      const state = manager.getCurrentState();
+
+      expect(state.unlockedTracks).toContain('bristol');
+      expect(state.unlockedTracks).toContain('charlotte');
+      expect(state.unlockedTracks).toContain('daytona');
+      expect(state.unlockedTracks).toHaveLength(3);
+    });
+
+    it('unlocks richmond and atlanta after top 10 finish', () => {
+      const mockXP: XPGain = { skill: 'racecraft', amount: 30 };
+
+      // Finish 10th (top 10)
+      manager.completeRace(
+        {
+          finishPosition: 10,
+          startPosition: 20,
+          positionsGained: 10,
+          lapsLed: 5,
+          lapsCompleted: 500,
+          fastestLap: 15.5,
+          averageLap: 15.8,
+          cleanLaps: 490,
+          decisionsTotal: 3,
+          decisionsCorrect: 2,
+          xpGained: [mockXP],
+        },
+        false
+      );
+
+      const state = manager.getCurrentState();
+      expect(state.unlockedTracks).toContain('richmond');
+      expect(state.unlockedTracks).toContain('atlanta');
+      expect(state.unlockedTracks).toHaveLength(5); // 3 initial + 2 unlocked
+    });
+
+    it('unlocks martinsville and texas after top 5 finish', () => {
+      const mockXP: XPGain = { skill: 'racecraft', amount: 30 };
+
+      // Finish 5th (top 5)
+      manager.completeRace(
+        {
+          finishPosition: 5,
+          startPosition: 15,
+          positionsGained: 10,
+          lapsLed: 10,
+          lapsCompleted: 500,
+          fastestLap: 15.3,
+          averageLap: 15.6,
+          cleanLaps: 495,
+          decisionsTotal: 4,
+          decisionsCorrect: 3,
+          xpGained: [mockXP],
+        },
+        false
+      );
+
+      const state = manager.getCurrentState();
+
+      // Top 5 also qualifies for top 10, so should unlock all tier 2 and tier 3
+      expect(state.unlockedTracks).toContain('richmond');
+      expect(state.unlockedTracks).toContain('atlanta');
+      expect(state.unlockedTracks).toContain('martinsville');
+      expect(state.unlockedTracks).toContain('texas');
+      expect(state.unlockedTracks).toHaveLength(7); // 3 initial + 4 unlocked
+    });
+
+    it('unlocks watkins-glen after race win', () => {
+      const mockXP: XPGain = { skill: 'racecraft', amount: 50 };
+
+      // Win the race
+      manager.completeRace(
+        {
+          finishPosition: 1,
+          startPosition: 10,
+          positionsGained: 9,
+          lapsLed: 350,
+          lapsCompleted: 500,
+          fastestLap: 15.1,
+          averageLap: 15.4,
+          cleanLaps: 500,
+          decisionsTotal: 6,
+          decisionsCorrect: 6,
+          xpGained: [mockXP],
+        },
+        true
+      );
+
+      const state = manager.getCurrentState();
+
+      // Win unlocks everything (top 10 + top 5 + win)
+      expect(state.unlockedTracks).toContain('richmond');
+      expect(state.unlockedTracks).toContain('atlanta');
+      expect(state.unlockedTracks).toContain('martinsville');
+      expect(state.unlockedTracks).toContain('texas');
+      expect(state.unlockedTracks).toContain('watkins-glen');
+      expect(state.unlockedTracks).toHaveLength(8); // 3 initial + 5 unlocked
+    });
+
+    it('does not unlock tracks if finish outside top 10', () => {
+      const mockXP: XPGain = { skill: 'racecraft', amount: 20 };
+
+      // Finish 15th (outside top 10)
+      manager.completeRace(
+        {
+          finishPosition: 15,
+          startPosition: 20,
+          positionsGained: 5,
+          lapsLed: 0,
+          lapsCompleted: 500,
+          fastestLap: 16.0,
+          averageLap: 16.2,
+          cleanLaps: 480,
+          decisionsTotal: 2,
+          decisionsCorrect: 1,
+          xpGained: [mockXP],
+        },
+        false
+      );
+
+      const state = manager.getCurrentState();
+
+      // Should still have only the initial 3 tracks
+      expect(state.unlockedTracks).toHaveLength(3);
+      expect(state.unlockedTracks).toContain('bristol');
+      expect(state.unlockedTracks).toContain('charlotte');
+      expect(state.unlockedTracks).toContain('daytona');
+    });
+
+    it('does not duplicate tracks already unlocked', () => {
+      const mockXP: XPGain = { skill: 'racecraft', amount: 30 };
+
+      // First top 10 finish
+      manager.completeRace(
+        {
+          finishPosition: 8,
+          startPosition: 15,
+          positionsGained: 7,
+          lapsLed: 5,
+          lapsCompleted: 500,
+          fastestLap: 15.5,
+          averageLap: 15.8,
+          cleanLaps: 490,
+          decisionsTotal: 3,
+          decisionsCorrect: 2,
+          xpGained: [mockXP],
+        },
+        false
+      );
+
+      const firstState = manager.getCurrentState();
+      expect(firstState.unlockedTracks).toHaveLength(5); // 3 + 2
+
+      // Second top 10 finish (should not add duplicates)
+      manager.completeRace(
+        {
+          finishPosition: 9,
+          startPosition: 12,
+          positionsGained: 3,
+          lapsLed: 8,
+          lapsCompleted: 500,
+          fastestLap: 15.6,
+          averageLap: 15.9,
+          cleanLaps: 485,
+          decisionsTotal: 3,
+          decisionsCorrect: 2,
+          xpGained: [mockXP],
+        },
+        false
+      );
+
+      const secondState = manager.getCurrentState();
+      expect(secondState.unlockedTracks).toHaveLength(5); // Still 5, no duplicates
+    });
+
+    it('unlocked tracks persist in save/load', () => {
+      const mockXP: XPGain = { skill: 'racecraft', amount: 30 };
+
+      // Unlock some tracks
+      manager.completeRace(
+        {
+          finishPosition: 5,
+          startPosition: 15,
+          positionsGained: 10,
+          lapsLed: 10,
+          lapsCompleted: 500,
+          fastestLap: 15.3,
+          averageLap: 15.6,
+          cleanLaps: 495,
+          decisionsTotal: 4,
+          decisionsCorrect: 3,
+          xpGained: [mockXP],
+        },
+        false
+      );
+
+      const originalUnlocked = manager.getCurrentState().unlockedTracks;
+      manager.save(testSaveId);
+
+      // Load into new manager
+      const newManager = new CareerManager();
+      newManager.load(testSaveId);
+      const loadedUnlocked = newManager.getCurrentState().unlockedTracks;
+
+      expect(loadedUnlocked).toEqual(originalUnlocked);
+      expect(loadedUnlocked).toHaveLength(7);
+    });
+
+    it('progressive unlocks work across multiple races', () => {
+      const mockXP: XPGain = { skill: 'racecraft', amount: 30 };
+
+      // Race 1: 15th place (no unlock)
+      manager.completeRace(
+        {
+          finishPosition: 15,
+          startPosition: 20,
+          positionsGained: 5,
+          lapsLed: 0,
+          lapsCompleted: 500,
+          fastestLap: 16.0,
+          averageLap: 16.2,
+          cleanLaps: 480,
+          decisionsTotal: 2,
+          decisionsCorrect: 1,
+          xpGained: [mockXP],
+        },
+        false
+      );
+      expect(manager.getCurrentState().unlockedTracks).toHaveLength(3);
+
+      // Race 2: 10th place (unlock tier 2)
+      manager.completeRace(
+        {
+          finishPosition: 10,
+          startPosition: 18,
+          positionsGained: 8,
+          lapsLed: 5,
+          lapsCompleted: 500,
+          fastestLap: 15.7,
+          averageLap: 15.9,
+          cleanLaps: 490,
+          decisionsTotal: 3,
+          decisionsCorrect: 2,
+          xpGained: [mockXP],
+        },
+        false
+      );
+      expect(manager.getCurrentState().unlockedTracks).toHaveLength(5);
+
+      // Race 3: 3rd place (unlock tier 3)
+      manager.completeRace(
+        {
+          finishPosition: 3,
+          startPosition: 12,
+          positionsGained: 9,
+          lapsLed: 50,
+          lapsCompleted: 500,
+          fastestLap: 15.2,
+          averageLap: 15.5,
+          cleanLaps: 498,
+          decisionsTotal: 5,
+          decisionsCorrect: 4,
+          xpGained: [mockXP],
+        },
+        false
+      );
+      expect(manager.getCurrentState().unlockedTracks).toHaveLength(7);
+
+      // Race 4: Win (unlock tier 4 - watkins glen)
+      manager.completeRace(
+        {
+          finishPosition: 1,
+          startPosition: 5,
+          positionsGained: 4,
+          lapsLed: 400,
+          lapsCompleted: 500,
+          fastestLap: 15.0,
+          averageLap: 15.3,
+          cleanLaps: 500,
+          decisionsTotal: 6,
+          decisionsCorrect: 6,
+          xpGained: [mockXP],
+        },
+        true
+      );
+
+      const finalState = manager.getCurrentState();
+      expect(finalState.unlockedTracks).toHaveLength(8);
+      expect(finalState.unlockedTracks).toContain('watkins-glen');
+    });
+  });
 });
