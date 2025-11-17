@@ -56,38 +56,7 @@ static func generate_bristol_centerline(track_data: Dictionary) -> Array[TrackPo
 		elif section.type == "transition":
 			generate_transition_section(points, section, banking_config, skip_first)
 		elif section.type == "straight":
-			# For straights, we need better logic than the default
-			# Bristol straights connect turns tangentially
-			if points.is_empty():
-				push_error("Cannot start with a straight section")
-				continue
-
-			var length: float = section.get("length", 700.0) * FEET_TO_METERS
-			var banking := get_section_banking(section, banking_config, "straight")
-			var straight_steps := 15
-			var start_idx := 1 if skip_first else 0
-
-			# Get direction from last point's tangent (will be calculated later)
-			# For now, use simplified straight generation
-			var prev_point: TrackPoint = points[-1]
-			var start_pos := prev_point.pos
-
-			# Direction for Bristol: alternates +Z/-Z based on position
-			var direction: Vector3
-			if abs(start_pos.x) > abs(start_pos.z):
-				# On sides: move along Z axis
-				direction = Vector3(0, 0, 1) if start_pos.x > 0 else Vector3(0, 0, -1)
-			else:
-				# On top/bottom: move along X axis
-				direction = Vector3(-1, 0, 0) if start_pos.z > 0 else Vector3(1, 0, 0)
-
-			for j in range(start_idx, straight_steps + 1):
-				var t := float(j) / straight_steps
-				var point := TrackPoint.new()
-				point.pos = start_pos + direction * (t * length)
-				point.banking = banking
-				point.section_type = "straight"
-				points.append(point)
+			generate_straight_section(points, section, banking_config, skip_first)
 
 	return points
 
@@ -107,32 +76,7 @@ static func generate_martinsville_centerline(track_data: Dictionary) -> Array[Tr
 		elif section.type == "transition":
 			generate_transition_section(points, section, banking_config, skip_first)
 		elif section.type == "straight":
-			if points.is_empty():
-				push_error("Cannot start with a straight section")
-				continue
-
-			var length: float = section.get("length", 1075.0) * FEET_TO_METERS
-			var banking := get_section_banking(section, banking_config, "straight")
-			var straight_steps := 15
-			var start_idx := 1 if skip_first else 0
-
-			var prev_point: TrackPoint = points[-1]
-			var start_pos := prev_point.pos
-
-			# Direction for Martinsville (same logic as Bristol)
-			var direction: Vector3
-			if abs(start_pos.x) > abs(start_pos.z):
-				direction = Vector3(0, 0, 1) if start_pos.x > 0 else Vector3(0, 0, -1)
-			else:
-				direction = Vector3(-1, 0, 0) if start_pos.z > 0 else Vector3(1, 0, 0)
-
-			for j in range(start_idx, straight_steps + 1):
-				var t := float(j) / straight_steps
-				var point := TrackPoint.new()
-				point.pos = start_pos + direction * (t * length)
-				point.banking = banking
-				point.section_type = "straight"
-				points.append(point)
+			generate_straight_section(points, section, banking_config, skip_first)
 
 	return points
 
@@ -182,15 +126,15 @@ static func generate_transition_section(points: Array[TrackPoint], section: Dict
 
 	var start_pos := prev_point.pos
 
-	# Calculate direction from previous tangent
-	# For now, use simplified direction calculation
+	# Calculate direction from the last few points (tangent estimation)
 	var direction: Vector3
-	if abs(start_pos.x) > abs(start_pos.z):
-		# On sides: move along Z axis
-		direction = Vector3(0, 0, 1) if start_pos.x > 0 else Vector3(0, 0, -1)
+	if points.size() >= 2:
+		# Use the direction from the previous two points for better continuity
+		var point_before := points[points.size() - 2]
+		direction = (prev_point.pos - point_before.pos).normalized()
 	else:
-		# On top/bottom: move along X axis
-		direction = Vector3(-1, 0, 0) if start_pos.z > 0 else Vector3(1, 0, 0)
+		# Fallback if we don't have enough points
+		direction = Vector3(1, 0, 0)
 
 	for i in range(start_idx, transition_steps + 1):
 		var t := float(i) / transition_steps
@@ -223,22 +167,16 @@ static func generate_straight_section(points: Array[TrackPoint], section: Dictio
 		return
 	
 	var start_pos := prev_point.pos
-	
-	# Calculate direction: straights connect tangentially from previous point
-	# Use the tangent direction from the last point (perpendicular to radius at turn exit)
-	# For simplicity, calculate direction as normalized vector in XZ plane
-	
-	# Simple heuristic: direction is perpendicular to line from track center to current position
-	# For Bristol: alternates between +X and -X movement with +Z or -Z component
-	var to_prev := start_pos - Vector3.ZERO  # Vector from origin to previous point
-	var direction := Vector3(to_prev.z, 0, -to_prev.x).normalized()  # Perpendicular in XZ plane
-	
-	# If direction is near zero, use fallback based on position
-	if direction.length_squared() < 0.01:
-		if abs(start_pos.x) > abs(start_pos.z):
-			direction = Vector3(0, 0, 1) if start_pos.x > 0 else Vector3(0, 0, -1)
-		else:
-			direction = Vector3(-1, 0, 0) if start_pos.z > 0 else Vector3(1, 0, 0)
+
+	# Calculate direction from the last few points (tangent estimation)
+	var direction: Vector3
+	if points.size() >= 2:
+		# Use the direction from the previous two points for better continuity
+		var point_before := points[points.size() - 2]
+		direction = (prev_point.pos - point_before.pos).normalized()
+	else:
+		# Fallback if we don't have enough points
+		direction = Vector3(1, 0, 0)
 	
 	for i in range(start_idx, straight_steps + 1):
 		var t := float(i) / straight_steps
