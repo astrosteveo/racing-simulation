@@ -69,9 +69,9 @@
 
 ## Recent Changes (Last 5 Commits)
 
-1. `4629b71` - Fix: Update doc verification scripts for spec-centric architecture
-2. `25205aa` - Docs: Update STATUS.md timestamp and recent changes
-3. `45db755` - Docs: Update STATUS.md and TASKS.md for track unlocking completion
+1. `71bb686` - Docs: Sync README.md test status with STATUS.md (414/417)
+2. `a38abb2` - Docs: Update STATUS.md recent changes
+3. `4629b71` - Fix: Update doc verification scripts for spec-centric architecture
 4. `3ec3d38` - Add: 5 new NASCAR tracks with road course support
 5. `e394ea4` - Add: Track unlocking system with progressive tiers
 
