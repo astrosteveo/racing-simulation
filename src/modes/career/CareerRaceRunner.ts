@@ -118,9 +118,9 @@ export class CareerRaceRunner {
     engine.initialize(raceConfig);
     engine.start();
 
-    // Run race to completion (simplified, no real-time)
+    // Run race to completion using lap-based simulation (fast, still uses real physics)
     while (!engine.isComplete()) {
-      engine.simulateTick(100); // 100ms ticks
+      engine.simulateLap(); // One calculation per lap (uses calculateLapTime physics)
 
       // Handle decisions automatically (simple AI for career mode)
       const state = engine.getCurrentState();
