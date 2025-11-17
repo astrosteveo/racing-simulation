@@ -1,8 +1,8 @@
 # Specifications Index
 
 **Last Updated:** 2025-11-16
-**Total Specs:** 5
-**Status:** Phase 6 Complete - All Core Specs Migrated (5/5 specs complete)
+**Total Specs:** 6
+**Status:** Phase 7 - Core Specs Complete + Client Spec Added (6/6 specs defined)
 
 ---
 
@@ -443,3 +443,27 @@ npm run test:spec:character
 
 **Last Reviewed:** 2025-11-16
 **Next Review:** After Phase 6 migration (Game Modes)
+
+---
+
+### 6. 3D Racing Client (`client/`)
+**Status:** 🔴 Planning (Spec Complete, Not Implemented)
+**Owner:** Client Team
+**Dependencies:** ALL specs (consumes game engine)
+
+**Scope:** Visual game interface and user experience
+- 3D race visualization (Three.js → Unity)
+- Skill-based decision prompts with UI
+- 4 camera angles (cockpit, roof, chase, TV)
+- Real-time HUD (position, laps, tire/fuel, mental state)
+- Menu system and results screens
+
+**Key Interfaces:** `RaceStateUpdate`, `DecisionPrompt`, `PlayerDecision`
+
+**Quick Start:**
+```bash
+cd .claude/specs/client/
+cat SPEC.md          # Complete vision and architecture
+cat TASKS.md         # 16-week development roadmap
+```
+
