@@ -8,21 +8,41 @@
 
 ## Current Work
 
-### Track Unlocking System (IN PROGRESS)
-
-**Goal:** Implement progressive track unlocking based on race performance
-
-**Approach:**
-1. Add unlock checking logic to CareerManager
-2. Create 5 new track definitions (Richmond, Atlanta, Watkins Glen, Martinsville, Texas)
-3. Update UI to show locked/unlocked status
-4. Display unlock notifications
-
-**Current Step:** Writing tests for unlock logic (TDD Phase 1)
+None - Track unlocking feature complete!
 
 ---
 
 ## Recently Completed
+
+✅ **Track Unlocking System** (2025-11-16)
+- **Implementation:** Progressive tiered unlocking based on race performance
+- **Tiers:**
+  - Tier 1 (default): Bristol, Charlotte, Daytona
+  - Tier 2 (top 10): Richmond, Atlanta
+  - Tier 3 (top 5): Martinsville, Texas
+  - Tier 4 (win): Watkins Glen (first road course!)
+- **New Tracks:** 5 track JSON files created with realistic NASCAR specifications
+  - Richmond Raceway (short, 0.75mi, D-shaped, 14° banking)
+  - Atlanta Motor Speedway (intermediate, 1.54mi, quad-oval, 28° banking)
+  - Martinsville Speedway (short, 0.526mi, paperclip, 12° banking)
+  - Texas Motor Speedway (intermediate, 1.5mi, quad-oval, 24° banking)
+  - Watkins Glen International (road, 2.45mi, 7 turns, 2-10° banking)
+- **Features:**
+  - checkForUnlocks() method in CareerManager
+  - Automatic unlock checking after each race
+  - Duplicate prevention (tracks only unlock once)
+  - Save/load persistence
+  - Post-race unlock notifications with track names
+  - Season schedule shows locked status with unlock requirements
+- **Tests:** 8 comprehensive tests covering all unlock scenarios
+  - Tests verify unlock criteria, no duplicates, persistence, progressive unlocking
+  - All 44 CareerManager tests passing
+- **UI Integration:**
+  - Unlock notifications in post-race screen
+  - Locked/unlocked status in season schedule (🔒 icon)
+  - Unlock requirements displayed for locked tracks
+  - Special callout for road course unlock
+- **Result:** Career mode now has meaningful progression system with 8 total tracks!
 
 ✅ **Driver Skill Impact Calibration** (2025-11-16)
 - **Root Cause:** Skill modifier in `calculateCornerSpeed` was too weak (/1000 divisor)
@@ -90,95 +110,7 @@ None currently.
 
 ## Next Up (Priority Order)
 
-### 1. Build multi-race season loop (HIGH PRIORITY)
-
-**Problem:** Need full season orchestration, not just 5-race demo
-**Impact:** Can't complete full 10-race season with proper flow
-**Files:**
-- `src/modes/career/CareerManager.ts` (extend processRaceCompletion)
-- `demo-career.ts` (refactor into proper career mode runner)
-
-**Action:**
-1. Extend CareerManager with season loop logic
-   - Method: `runSeason()` - orchestrate full season
-   - Check if season complete (10 races done)
-   - Handle season end → new season transition
-2. Create pre-race flow
-   - Show next race info (track, opponents)
-   - Display current standings
-   - Optional: Set strategy (future)
-   - Prompt to start race or return to menu
-3. Create post-race flow
-   - Show race results
-   - Award XP and update driver
-   - Award championship points
-   - Update standings
-   - Check for unlocks
-   - Save career state
-   - Prompt to continue or exit
-4. Handle season completion
-   - Display final championship standings
-   - Show season summary (wins, top-5s, etc.)
-   - Award season-end rewards (future)
-   - Option to start next season
-5. Integrate with menu system from Task #2
-6. Write tests for season loop
-   - Test full season completion
-   - Test multi-season progression
-   - Test standings calculation
-
-**Success Criteria:**
-- Can complete full 10-race season
-- Season transitions to next season
-- Championship standings update correctly
-- Career state persists properly
-- Tests pass (10+ new tests)
-
----
-
-### 2. Add track unlocking system (MEDIUM PRIORITY)
-
-**Problem:** All tracks currently available, need progression
-**Impact:** Less sense of achievement and progression
-**Files:**
-- `src/modes/career/CareerManager.ts` (add unlock logic)
-- `src/data/tracks/` (add more track JSON files)
-
-**Action:**
-1. Define unlock criteria in CareerManager
-   - Initial tracks: Bristol, Charlotte, Daytona (unlocked by default)
-   - Unlock rule: Top 10 finish → unlock next track
-   - Alternative: Complete season → unlock all
-2. Implement unlock checking in `processRaceCompletion()`
-   - Check finish position
-   - If top 10, unlock next track in sequence
-   - Update unlockedTracks array in career state
-3. Update SeasonSchedule to respect unlocks
-   - Filter available tracks by unlocked status
-   - Generate schedule from unlocked tracks only
-4. Add 3-5 more NASCAR tracks
-   - Create JSON files in `src/data/tracks/`
-   - Example: Richmond, Atlanta, Talladega, Martinsville, Texas
-   - Use existing track template, adjust specs
-5. Update career menu to show unlock progress
-   - Display locked tracks with unlock criteria
-   - Celebrate unlocks with message
-6. Write tests for unlock system
-   - Test unlock conditions
-   - Test track filtering
-   - Test unlock persistence
-
-**Success Criteria:**
-- Start with 3 tracks unlocked
-- Top 10 finish unlocks new track
-- Unlocked tracks persist in save file
-- Career menu shows locked/unlocked status
-- 5+ additional tracks added
-- Tests pass (6+ new tests)
-
----
-
-### 3. AI difficulty progression (LOW PRIORITY)
+### 1. AI difficulty progression (MEDIUM PRIORITY)
 
 **Problem:** AI skill distribution static across season
 **Impact:** Early races too hard for rookie, late races too easy for developed driver
