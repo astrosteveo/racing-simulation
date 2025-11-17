@@ -1,14 +1,14 @@
 # Game Modes Tasks
 
 **Last Updated:** 2025-11-16
-**Test Status:** 151/151 passing (100%)
+**Test Status:** 384/389 passing (98.7%)
 **Phase:** Career Mode MVP Implementation
 
 ---
 
 ## Current Work
 
-None - Ready to begin Career Mode MVP!
+None
 
 **Foundation Complete:**
 - ✅ ChampionshipPoints calculator (+21 tests)
@@ -28,42 +28,7 @@ None currently.
 
 ## Next Up (Priority Order)
 
-### 1. Implement save/load system (HIGH PRIORITY)
-
-**Problem:** CareerManager.save/load methods stubbed, need persistence
-**Impact:** Career progression not persistent across sessions
-**Files:**
-- `src/modes/career/CareerManager.ts:89-120` (save/load methods)
-- `tests/unit/modes/career-manager.test.ts` (add persistence tests)
-
-**Action:**
-1. Create `saves/` directory structure in project root
-2. Implement JSON serialization in `CareerManager.save()` method
-   - Serialize complete CareerState to JSON
-   - Include driver state, season, race, points, unlocks, history
-3. Implement deserialization in `CareerManager.load()` method
-   - Load JSON and reconstruct CareerState
-   - Validate loaded data integrity
-4. Add backup mechanism (career-{id}-backup.json)
-   - Write backup before overwriting existing save
-5. Write tests for save/load roundtrip
-   - Test: save → load → state matches exactly
-   - Test: corrupted save file handling
-   - Test: backup restoration
-6. Test with demo-career.ts
-   - Add save points after each race
-   - Test career continuity across runs
-
-**Success Criteria:**
-- Save career state to JSON file
-- Load restores exact state (all properties match)
-- Backup created before save operations
-- All tests pass (6+ new tests)
-- demo-career.ts can save and resume mid-season
-
----
-
-### 2. Create career menu flow (HIGH PRIORITY)
+### 1. Create career menu flow (HIGH PRIORITY)
 
 **Problem:** Need menu system to navigate career mode
 **Impact:** Users can't interact with career mode beyond demo script
@@ -229,6 +194,19 @@ None currently.
 
 ## Completed This Session
 
+- ✅ **Save/Load System** (2025-11-16)
+  - File persistence for CareerManager (+9 tests)
+    - JSON serialization/deserialization to `saves/` directory
+    - Automatic backup creation before overwrite
+    - Graceful error handling for corrupted/missing saves
+    - Roundtrip validation (save → load → exact state match)
+  - Updated demo-career.ts with save/load
+    - Auto-save after each race
+    - Load existing career on startup
+    - Save ID based on driver name
+  - Added saves/ to .gitignore
+  - **Result:** 36/36 CareerManager tests passing, save/load fully functional
+
 - ✅ **Career Mode Foundation** (2025-11-16)
   - ChampionshipPoints calculator (+21 tests)
     - NASCAR-style points (1st: 40, 2nd: 35, decreasing)
@@ -238,9 +216,9 @@ None currently.
     - 10-race season structure (Bristol, Charlotte, Daytona rotation)
     - Helper functions: getNextRace, getRaceByNumber, isSeasonComplete
     - Pure data structure
-  - CareerManager orchestrator (+26 tests)
+  - CareerManager orchestrator (+26 tests initially, +9 for save/load = 35 total)
     - Create new careers (rookie driver, skills 30-40)
-    - Load/save career state (in-memory, persistence stubbed)
+    - Load/save career state (file persistence implemented)
     - Process race completions (points, XP, stats, history)
     - Multi-season progression support
     - Driver stat tracking (races, wins, top5, top10, avg finish, laps led)
@@ -250,7 +228,8 @@ None currently.
     - Driver skill growth visualization
     - Season standings after each race
     - Milestone celebrations
-  - **Result:** 72 new tests, all passing (100% coverage)
+    - Save/load integration
+  - **Result:** 81 total game modes tests, all passing
 
 ---
 

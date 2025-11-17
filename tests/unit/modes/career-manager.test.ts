@@ -4,9 +4,11 @@
  * Tests career state orchestration and progression
  */
 
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { CareerManager } from '../../../src/modes/career/CareerManager';
 import type { RaceResults, XPGain, CareerSave } from '../../../src/types';
+import fs from 'fs';
+import path from 'path';
 
 describe('CareerManager', () => {
   let manager: CareerManager;
@@ -495,6 +497,208 @@ describe('CareerManager', () => {
       // Skills should be preserved
       expect(skillsAfter.racecraft).toBe(skillsBefore.racecraft);
       expect(skillsAfter.consistency).toBe(skillsBefore.consistency);
+    });
+  });
+
+  describe('save/load file persistence', () => {
+    const testSavesDir = path.join(process.cwd(), 'saves');
+    const testSaveId = 'test-career';
+    const testSavePath = path.join(testSavesDir, `${testSaveId}.json`);
+    const testBackupPath = path.join(testSavesDir, `${testSaveId}-backup.json`);
+
+    beforeEach(() => {
+      // Clean up any existing test files
+      if (fs.existsSync(testSavePath)) fs.unlinkSync(testSavePath);
+      if (fs.existsSync(testBackupPath)) fs.unlinkSync(testBackupPath);
+
+      manager = new CareerManager();
+    });
+
+    afterEach(() => {
+      // Clean up test files
+      if (fs.existsSync(testSavePath)) fs.unlinkSync(testSavePath);
+      if (fs.existsSync(testBackupPath)) fs.unlinkSync(testBackupPath);
+    });
+
+    it('creates saves directory if it does not exist', () => {
+      manager.startNewCareer('Test Driver', '1');
+      manager.save(testSaveId);
+
+      expect(fs.existsSync(testSavesDir)).toBe(true);
+    });
+
+    it('saves career state to JSON file', () => {
+      manager.startNewCareer('Test Driver', '1');
+      manager.save(testSaveId);
+
+      expect(fs.existsSync(testSavePath)).toBe(true);
+    });
+
+    it('save file contains valid JSON', () => {
+      manager.startNewCareer('Test Driver', '1');
+      manager.save(testSaveId);
+
+      const fileContent = fs.readFileSync(testSavePath, 'utf-8');
+      const parsed = JSON.parse(fileContent);
+
+      expect(parsed).toHaveProperty('driverId');
+      expect(parsed).toHaveProperty('driver');
+      expect(parsed).toHaveProperty('season');
+      expect(parsed).toHaveProperty('race');
+      expect(parsed).toHaveProperty('points');
+    });
+
+    it('loads career state from JSON file', () => {
+      // Create and save a career
+      const originalCareer = manager.startNewCareer('Lightning McQueen', '95');
+      manager.save(testSaveId);
+
+      // Create new manager and load
+      const newManager = new CareerManager();
+      newManager.load(testSaveId);
+      const loadedCareer = newManager.getCurrentState();
+
+      expect(loadedCareer.driver.name).toBe(originalCareer.driver.name);
+      expect(loadedCareer.driver.number).toBe(originalCareer.driver.number);
+      expect(loadedCareer.season).toBe(originalCareer.season);
+      expect(loadedCareer.race).toBe(originalCareer.race);
+      expect(loadedCareer.points).toBe(originalCareer.points);
+    });
+
+    it('save → load → state matches exactly (roundtrip test)', () => {
+      // Create career with some progression
+      manager.startNewCareer('Test Driver', '42');
+
+      const mockXP: XPGain = { skill: 'racecraft', amount: 150 };
+      manager.completeRace(
+        {
+          finishPosition: 1,
+          startPosition: 10,
+          positionsGained: 9,
+          lapsLed: 350,
+          lapsCompleted: 500,
+          fastestLap: 15.1,
+          averageLap: 15.4,
+          cleanLaps: 500,
+          decisionsTotal: 6,
+          decisionsCorrect: 6,
+          xpGained: [mockXP],
+        },
+        true
+      );
+
+      const originalState = manager.getCurrentState();
+      manager.save(testSaveId);
+
+      // Load into new manager
+      const newManager = new CareerManager();
+      newManager.load(testSaveId);
+      const loadedState = newManager.getCurrentState();
+
+      // Deep equality check
+      expect(loadedState).toEqual(originalState);
+    });
+
+    it('creates backup before overwriting existing save', () => {
+      // Create and save initial career
+      manager.startNewCareer('Test Driver', '1');
+      manager.save(testSaveId);
+
+      const initialFileContent = fs.readFileSync(testSavePath, 'utf-8');
+
+      // Complete a race and save again
+      const mockXP: XPGain = { skill: 'racecraft', amount: 50 };
+      manager.completeRace(
+        {
+          finishPosition: 5,
+          startPosition: 15,
+          positionsGained: 10,
+          lapsLed: 10,
+          lapsCompleted: 500,
+          fastestLap: 15.5,
+          averageLap: 15.8,
+          cleanLaps: 495,
+          decisionsTotal: 4,
+          decisionsCorrect: 3,
+          xpGained: [mockXP],
+        },
+        false
+      );
+
+      manager.save(testSaveId);
+
+      // Backup should exist and contain the initial state
+      expect(fs.existsSync(testBackupPath)).toBe(true);
+      const backupContent = fs.readFileSync(testBackupPath, 'utf-8');
+      expect(backupContent).toBe(initialFileContent);
+    });
+
+    it('handles corrupted save file gracefully', () => {
+      // Write corrupted JSON to save file
+      fs.mkdirSync(testSavesDir, { recursive: true });
+      fs.writeFileSync(testSavePath, '{ invalid json }', 'utf-8');
+
+      const newManager = new CareerManager();
+
+      expect(() => {
+        newManager.load(testSaveId);
+      }).toThrow();
+    });
+
+    it('handles missing save file gracefully', () => {
+      const newManager = new CareerManager();
+
+      expect(() => {
+        newManager.load('non-existent-save');
+      }).toThrow(/not found|does not exist/i);
+    });
+
+    it('preserves all driver skills in save/load', () => {
+      manager.startNewCareer('Test Driver', '1');
+      const originalSkills = { ...manager.getCurrentState().driver.skills };
+
+      manager.save(testSaveId);
+
+      const newManager = new CareerManager();
+      newManager.load(testSaveId);
+      const loadedSkills = newManager.getCurrentState().driver.skills;
+
+      expect(loadedSkills).toEqual(originalSkills);
+    });
+
+    it('preserves race history in save/load', () => {
+      manager.startNewCareer('Test Driver', '1');
+
+      // Complete a few races
+      const mockXP: XPGain = { skill: 'racecraft', amount: 30 };
+      for (let i = 0; i < 3; i++) {
+        manager.completeRace(
+          {
+            finishPosition: 5 + i,
+            startPosition: 15,
+            positionsGained: 10 - i,
+            lapsLed: i * 10,
+            lapsCompleted: 500,
+            fastestLap: 15.5,
+            averageLap: 15.8,
+            cleanLaps: 490,
+            decisionsTotal: 3,
+            decisionsCorrect: 2,
+            xpGained: [mockXP],
+          },
+          false
+        );
+      }
+
+      const originalHistory = manager.getCurrentState().raceHistory;
+      manager.save(testSaveId);
+
+      const newManager = new CareerManager();
+      newManager.load(testSaveId);
+      const loadedHistory = newManager.getCurrentState().raceHistory;
+
+      expect(loadedHistory).toEqual(originalHistory);
+      expect(loadedHistory).toHaveLength(3);
     });
   });
 });

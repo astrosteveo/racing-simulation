@@ -12,6 +12,8 @@
 import type { CareerSave, Driver, RaceResults, DriverSkills, XPGain } from '../../types';
 import { calculateRacePoints } from './ChampionshipPoints';
 import { isSeasonComplete as checkSeasonComplete } from './SeasonSchedule';
+import fs from 'fs';
+import path from 'path';
 
 /**
  * Career Manager
@@ -130,6 +132,61 @@ export class CareerManager {
     this.careerState.race = 1;
     this.careerState.points = 0;
     // Note: race history and driver progression are preserved
+  }
+
+  /**
+   * Save career state to disk
+   *
+   * @param saveId - Unique identifier for this save
+   */
+  save(saveId: string): void {
+    if (!this.careerState) {
+      throw new Error('No career loaded. Cannot save.');
+    }
+
+    const savesDir = path.join(process.cwd(), 'saves');
+    const savePath = path.join(savesDir, `${saveId}.json`);
+    const backupPath = path.join(savesDir, `${saveId}-backup.json`);
+
+    // Create saves directory if it doesn't exist
+    if (!fs.existsSync(savesDir)) {
+      fs.mkdirSync(savesDir, { recursive: true });
+    }
+
+    // Create backup if save file already exists
+    if (fs.existsSync(savePath)) {
+      const existingContent = fs.readFileSync(savePath, 'utf-8');
+      fs.writeFileSync(backupPath, existingContent, 'utf-8');
+    }
+
+    // Write career state to file
+    const serialized = JSON.stringify(this.careerState, null, 2);
+    fs.writeFileSync(savePath, serialized, 'utf-8');
+  }
+
+  /**
+   * Load career state from disk
+   *
+   * @param saveId - Unique identifier for the save to load
+   */
+  load(saveId: string): void {
+    const savesDir = path.join(process.cwd(), 'saves');
+    const savePath = path.join(savesDir, `${saveId}.json`);
+
+    // Check if save file exists
+    if (!fs.existsSync(savePath)) {
+      throw new Error(`Save file not found: ${saveId}`);
+    }
+
+    // Read and parse save file
+    const fileContent = fs.readFileSync(savePath, 'utf-8');
+
+    try {
+      const loadedState = JSON.parse(fileContent) as CareerSave;
+      this.careerState = loadedState;
+    } catch (error) {
+      throw new Error(`Failed to parse save file: ${saveId}. File may be corrupted.`);
+    }
   }
 
   // ============================================================================

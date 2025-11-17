@@ -120,19 +120,44 @@ async function main() {
     output: process.stdout,
   });
 
-  // Get driver info
-  const driverName = await rl.question('Enter your driver name: ');
-  const driverNumber = await rl.question('Enter your car number: ');
-
-  // Create new career
   const manager = new CareerManager();
-  const career = manager.startNewCareer(driverName, driverNumber);
+  let career;
+  let saveId = 'demo-career';
 
-  console.log(`\n✅ Career created for ${driverName} #${driverNumber}!`);
-  console.log(`   Starting skills (rookie): ${career.driver.skills.racecraft.toFixed(0)} racecraft, ${career.driver.skills.consistency.toFixed(0)} consistency`);
-  console.log(`   Unlocked tracks: ${career.unlockedTracks.join(', ')}`);
+  // Ask if user wants to load existing career or start new
+  const loadChoice = await rl.question('Load existing career? (y/n): ');
 
-  await rl.question('\nPress Enter to start your rookie season...');
+  if (loadChoice.toLowerCase() === 'y') {
+    try {
+      manager.load(saveId);
+      career = manager.getCurrentState();
+      console.log(`\n✅ Loaded career for ${career.driver.name} #${career.driver.number}!`);
+      console.log(`   Season ${career.season}, Race ${career.race}`);
+      console.log(`   Championship Points: ${career.points}`);
+      console.log(`   Current skills: ${career.driver.skills.racecraft.toFixed(1)} racecraft, ${career.driver.skills.consistency.toFixed(1)} consistency`);
+    } catch (error) {
+      console.log('\n❌ No saved career found. Starting new career...\n');
+      const driverName = await rl.question('Enter your driver name: ');
+      const driverNumber = await rl.question('Enter your car number: ');
+      career = manager.startNewCareer(driverName, driverNumber);
+      saveId = `career-${driverName.toLowerCase().replace(/\s+/g, '-')}`;
+      console.log(`\n✅ Career created for ${driverName} #${driverNumber}!`);
+      console.log(`   Starting skills (rookie): ${career.driver.skills.racecraft.toFixed(0)} racecraft, ${career.driver.skills.consistency.toFixed(0)} consistency`);
+      console.log(`   Unlocked tracks: ${career.unlockedTracks.join(', ')}`);
+    }
+  } else {
+    // Get driver info
+    const driverName = await rl.question('Enter your driver name: ');
+    const driverNumber = await rl.question('Enter your car number: ');
+    career = manager.startNewCareer(driverName, driverNumber);
+    saveId = `career-${driverName.toLowerCase().replace(/\s+/g, '-')}`;
+
+    console.log(`\n✅ Career created for ${driverName} #${driverNumber}!`);
+    console.log(`   Starting skills (rookie): ${career.driver.skills.racecraft.toFixed(0)} racecraft, ${career.driver.skills.consistency.toFixed(0)} consistency`);
+    console.log(`   Unlocked tracks: ${career.unlockedTracks.join(', ')}`);
+  }
+
+  await rl.question('\nPress Enter to continue...');
 
   // Get season schedule
   const schedule = getDefaultSchedule();
@@ -174,7 +199,7 @@ async function main() {
 
     // Display results
     displayRaceResults(currentRace, raceInfo.trackId.toUpperCase(), results, pointsThisRace);
-    displayDriverProgress(driverName, beforeSkills, afterSkills);
+    displayDriverProgress(state.driver.name, beforeSkills, afterSkills);
     displayStandings(state.season, state.race, state.points, state.driver.stats);
 
     // Check for milestones
@@ -187,6 +212,10 @@ async function main() {
     if (results.finishPosition <= 10 && state.driver.stats.top10 === 1) {
       console.log('   ✨ MILESTONE: First top-10 finish!');
     }
+
+    // Auto-save after each race
+    manager.save(saveId);
+    console.log(`   💾 Career saved!`);
   }
 
   // Final summary

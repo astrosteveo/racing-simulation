@@ -1,52 +1,38 @@
 {
   "hooks": {
-    "Bash": [
+    "PostToolUse": [
       {
-        "matcher": "npm run test:run",
+        "matcher": "Bash",
         "hooks": [
           {
             "type": "command",
-            "command": "echo '\n💡 TIP: Update test status automatically:\n   npm run test:status (updates STATUS.md + README.md)\n   npm run verify-docs (checks all documentation sync)'"
+            "command": "if echo \"$ARGUMENTS\" | grep -q 'npm run test:run'; then echo '\n💡 TIP: Update test status automatically:\n   npm run test:status (updates STATUS.md + README.md)\n   npm run verify-docs (checks all documentation sync)'; fi"
+          },
+          {
+            "type": "command",
+            "command": "if echo \"$ARGUMENTS\" | grep -q 'git commit.*-m'; then echo '\n💡 TIP: After commits, update STATUS.md Recent Changes and run:\n   npm run verify-docs (ensures documentation sync)'; fi"
+          },
+          {
+            "type": "command",
+            "command": "if echo \"$ARGUMENTS\" | grep -q 'npm run verify-docs'; then echo '\n📋 Remember: Spec-centric workflow\n   - Update relevant specs/*/TASKS.md during work\n   - Update STATUS.md after milestones\n   - Each spec owns its own tasks!'; fi"
           }
         ]
       },
       {
-        "matcher": "git commit.*-m",
+        "matcher": "Write",
         "hooks": [
           {
             "type": "command",
-            "command": "echo '\n💡 TIP: After commits, update STATUS.md Recent Changes and run:\n   npm run verify-docs (ensures documentation sync)'"
+            "command": "if echo \"$ARGUMENTS\" | grep -q 'src/.*\\.ts'; then echo '\n⚠️  PROCESS GATE REMINDER:\n   1. Does an approved task exist in specs/*/TASKS.md?\n   2. Are you following TDD (test → code → refactor)?\n   3. Will you update the spec TASKS.md after this change?\n   \n   Sustainable development = No code without planning!'; fi"
           }
         ]
       },
       {
-        "matcher": "npm run verify-docs",
+        "matcher": "Edit",
         "hooks": [
           {
             "type": "command",
-            "command": "echo '\n📋 Remember: Spec-centric workflow\n   - Update relevant specs/*/TASKS.md during work\n   - Update STATUS.md after milestones\n   - Each spec owns its own tasks!'"
-          }
-        ]
-      }
-    ],
-    "Write": [
-      {
-        "matcher": "src/.*\\.ts",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "echo '\n⚠️  PROCESS GATE REMINDER:\n   1. Does an approved task exist in specs/*/TASKS.md?\n   2. Are you following TDD (test → code → refactor)?\n   3. Will you update the spec TASKS.md after this change?\n   \n   Sustainable development = No code without planning!'"
-          }
-        ]
-      }
-    ],
-    "Edit": [
-      {
-        "matcher": "src/types\\.ts",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "echo '\n📝 CONTRACT CHANGE DETECTED:\n   - Update relevant specs/*/CONTRACTS.md\n   - Update all implementations using this interface\n   - Run: npm run sync-contracts (to verify sync)'"
+            "command": "if echo \"$ARGUMENTS\" | grep -q 'src/types\\.ts'; then echo '\n📝 CONTRACT CHANGE DETECTED:\n   - Update relevant specs/*/CONTRACTS.md\n   - Update all implementations using this interface\n   - Run: npm run sync-contracts (to verify sync)'; fi"
           }
         ]
       }
