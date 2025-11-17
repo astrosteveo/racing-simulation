@@ -248,7 +248,7 @@ export interface RaceResults {
   cleanLaps: number;        // Laps without incidents
   decisionsTotal: number;   // Total decisions made
   decisionsCorrect: number; // Good decisions made
-  xpGained: XPGain;         // XP earned from race
+  xpGained: XPGain[];       // XP earned from race
   issues?: string[];        // Problems encountered (if any)
 }
 
