@@ -44,144 +44,92 @@ static func generate_centerline(track_data: Dictionary) -> Array[TrackPoint]:
 static func generate_bristol_centerline(track_data: Dictionary) -> Array[TrackPoint]:
 	var points: Array[TrackPoint] = []
 	var sections: Array = track_data.sections
-	
-	# Bristol geometry: radius and straight_length from JSON
-	var radius: float = sections[0].radius * FEET_TO_METERS
-	var straight_length: float = sections[1].length * FEET_TO_METERS
-	
-	var turn_steps := 20
-	var straight_steps := 15
-	
-	# Section 0: Bottom turn (0 to PI)
-	for i in range(turn_steps + 1):
-		var t := float(i) / turn_steps
-		var angle := t * PI
-		
-		var point := TrackPoint.new()
-		point.pos = Vector3(
-			radius * cos(angle),
-			0,
-			radius * sin(angle)
-		)
-		point.banking = sections[0].get("banking", 26.0)
-		point.section_type = "turn"
-		points.append(point)
-	
-	# Section 1: Right straight (x=radius, z: 0→straight_length)
-	for i in range(1, straight_steps + 1):
-		var t := float(i) / straight_steps
-		
-		var point := TrackPoint.new()
-		point.pos = Vector3(
-			radius,
-			0,
-			t * straight_length
-		)
-		point.banking = sections[1].get("banking", 0.0)
-		point.section_type = "straight"
-		points.append(point)
-	
-	# Section 2: Top turn (PI to 0) centered at z=straight_length
-	for i in range(1, turn_steps + 1):
-		var t := float(i) / turn_steps
-		var angle := PI * (1.0 - t)
-		
-		var point := TrackPoint.new()
-		point.pos = Vector3(
-			radius * cos(angle),
-			0,
-			straight_length + radius * sin(angle)
-		)
-		point.banking = sections[2].get("banking", 26.0)
-		point.section_type = "turn"
-		points.append(point)
-	
-	# Section 3: Left straight (x=-radius, z: straight_length→0)
-	for i in range(1, straight_steps + 1):
-		var t := float(i) / straight_steps
-		
-		var point := TrackPoint.new()
-		point.pos = Vector3(
-			-radius,
-			0,
-			straight_length - t * straight_length
-		)
-		point.banking = sections[3].get("banking", 0.0)
-		point.section_type = "straight"
-		points.append(point)
-	
+	var banking_config: Dictionary = track_data.get("banking", {})
+
+	# Use parametric generation for each section
+	for i in range(sections.size()):
+		var section: Dictionary = sections[i]
+		var skip_first := i > 0  # Skip first point after initial section to avoid duplicates
+
+		if section.type == "turn":
+			generate_turn_section(points, section, banking_config, skip_first)
+		elif section.type == "straight":
+			# For straights, we need better logic than the default
+			# Bristol straights connect turns tangentially
+			if points.is_empty():
+				push_error("Cannot start with a straight section")
+				continue
+
+			var length: float = section.get("length", 700.0) * FEET_TO_METERS
+			var banking := get_section_banking(section, banking_config, "straight")
+			var straight_steps := 15
+			var start_idx := 1 if skip_first else 0
+
+			# Get direction from last point's tangent (will be calculated later)
+			# For now, use simplified straight generation
+			var prev_point: TrackPoint = points[-1]
+			var start_pos := prev_point.pos
+
+			# Direction for Bristol: alternates +Z/-Z based on position
+			var direction: Vector3
+			if abs(start_pos.x) > abs(start_pos.z):
+				# On sides: move along Z axis
+				direction = Vector3(0, 0, 1) if start_pos.x > 0 else Vector3(0, 0, -1)
+			else:
+				# On top/bottom: move along X axis
+				direction = Vector3(-1, 0, 0) if start_pos.z > 0 else Vector3(1, 0, 0)
+
+			for j in range(start_idx, straight_steps + 1):
+				var t := float(j) / straight_steps
+				var point := TrackPoint.new()
+				point.pos = start_pos + direction * (t * length)
+				point.banking = banking
+				point.section_type = "straight"
+				points.append(point)
+
 	return points
 
 
 static func generate_martinsville_centerline(track_data: Dictionary) -> Array[TrackPoint]:
 	var points: Array[TrackPoint] = []
 	var sections: Array = track_data.sections
-	
-	# Martinsville geometry: tight 100ft radius hairpins, long straights
-	var radius: float = sections[0].radius * FEET_TO_METERS
-	var straight_length: float = sections[1].length * FEET_TO_METERS
-	
-	var turn_steps := 20
-	var straight_steps := 15
-	
-	# Section 0: Turn 1 (0 to PI) - bottom hairpin
-	for i in range(turn_steps + 1):
-		var t := float(i) / turn_steps
-		var angle := t * PI
-		
-		var point := TrackPoint.new()
-		point.pos = Vector3(
-			radius * cos(angle),
-			0,
-			radius * sin(angle)
-		)
-		point.banking = sections[0].get("banking", 12.0)
-		point.section_type = "turn"
-		points.append(point)
-	
-	# Section 1: Backstretch (x=radius, z: 0→straight_length)
-	for i in range(1, straight_steps + 1):
-		var t := float(i) / straight_steps
-		
-		var point := TrackPoint.new()
-		point.pos = Vector3(
-			radius,
-			0,
-			t * straight_length
-		)
-		point.banking = sections[1].get("banking", 0.0)
-		point.section_type = "straight"
-		points.append(point)
-	
-	# Section 2: Turn 2 (PI to 0) - top hairpin, centered at z=straight_length
-	for i in range(1, turn_steps + 1):
-		var t := float(i) / turn_steps
-		var angle := PI * (1.0 - t)
-		
-		var point := TrackPoint.new()
-		point.pos = Vector3(
-			radius * cos(angle),
-			0,
-			straight_length + radius * sin(angle)
-		)
-		point.banking = sections[2].get("banking", 12.0)
-		point.section_type = "turn"
-		points.append(point)
-	
-	# Section 3: Frontstretch (x=-radius, z: straight_length→0)
-	for i in range(1, straight_steps + 1):
-		var t := float(i) / straight_steps
-		
-		var point := TrackPoint.new()
-		point.pos = Vector3(
-			-radius,
-			0,
-			straight_length - t * straight_length
-		)
-		point.banking = sections[3].get("banking", 0.0)
-		point.section_type = "straight"
-		points.append(point)
-	
+	var banking_config: Dictionary = track_data.get("banking", {})
+
+	# Use same parametric generation as Bristol
+	for i in range(sections.size()):
+		var section: Dictionary = sections[i]
+		var skip_first := i > 0
+
+		if section.type == "turn":
+			generate_turn_section(points, section, banking_config, skip_first)
+		elif section.type == "straight":
+			if points.is_empty():
+				push_error("Cannot start with a straight section")
+				continue
+
+			var length: float = section.get("length", 1075.0) * FEET_TO_METERS
+			var banking := get_section_banking(section, banking_config, "straight")
+			var straight_steps := 15
+			var start_idx := 1 if skip_first else 0
+
+			var prev_point: TrackPoint = points[-1]
+			var start_pos := prev_point.pos
+
+			# Direction for Martinsville (same logic as Bristol)
+			var direction: Vector3
+			if abs(start_pos.x) > abs(start_pos.z):
+				direction = Vector3(0, 0, 1) if start_pos.x > 0 else Vector3(0, 0, -1)
+			else:
+				direction = Vector3(-1, 0, 0) if start_pos.z > 0 else Vector3(1, 0, 0)
+
+			for j in range(start_idx, straight_steps + 1):
+				var t := float(j) / straight_steps
+				var point := TrackPoint.new()
+				point.pos = start_pos + direction * (t * length)
+				point.banking = banking
+				point.section_type = "straight"
+				points.append(point)
+
 	return points
 
 
