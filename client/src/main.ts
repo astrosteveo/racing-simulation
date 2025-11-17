@@ -5,6 +5,9 @@
 
 import * as THREE from 'three';
 import { EngineBridge, type RaceStateUpdate } from './engine-bridge';
+import { TrackLoader } from './track/track-loader';
+import { TrackRenderer } from './track/track-renderer';
+import bristolData from '../../src/data/tracks/bristol.json';
 
 // Hide loading screen once initialized
 function hideLoading() {
@@ -46,20 +49,15 @@ function initScene(): { scene: THREE.Scene; camera: THREE.PerspectiveCamera; ren
   scene.add(ambientLight);
 
   const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-  directionalLight.position.set(100, 100, 50);
+  directionalLight.position.set(1000, 1000, 500);
   scene.add(directionalLight);
 
-  // Add a test cube (will replace with track later)
-  const geometry = new THREE.BoxGeometry(10, 10, 10);
-  const material = new THREE.MeshPhongMaterial({ color: 0xff6600 });
-  const cube = new THREE.Mesh(geometry, material);
-  scene.add(cube);
-
-  // Add ground plane
-  const groundGeometry = new THREE.PlaneGeometry(1000, 1000);
+  // Add ground plane (infield grass)
+  const groundGeometry = new THREE.PlaneGeometry(3000, 3000);
   const groundMaterial = new THREE.MeshPhongMaterial({ color: 0x228822 });
   const ground = new THREE.Mesh(groundGeometry, groundMaterial);
   ground.rotation.x = -Math.PI / 2;
+  ground.position.y = -1;
   scene.add(ground);
 
   // Handle window resize
@@ -79,16 +77,6 @@ function animate(
   renderer: THREE.WebGLRenderer
 ) {
   requestAnimationFrame(() => animate(scene, camera, renderer));
-
-  // Rotate the test cube
-  const cube = scene.children.find(
-    (child) => child instanceof THREE.Mesh && child.geometry instanceof THREE.BoxGeometry
-  );
-  if (cube) {
-    cube.rotation.x += 0.01;
-    cube.rotation.y += 0.01;
-  }
-
   renderer.render(scene, camera);
 }
 
@@ -123,12 +111,25 @@ function updateHUD(state: RaceStateUpdate) {
 }
 
 // Main initialization
-function main() {
+async function main() {
   console.log('🏁 NASCAR RPG Racing Simulation - 3D Client Starting...');
 
   try {
     const { scene, camera, renderer } = initScene();
     console.log('✅ Three.js scene initialized');
+
+    // Load and render Bristol Motor Speedway
+    console.log('Loading Bristol Motor Speedway...');
+    const trackLoader = new TrackLoader();
+    const trackRenderer = new TrackRenderer(scene);
+
+    const trackGeometry = await trackLoader.load(bristolData as any);
+    trackRenderer.render(trackGeometry);
+    console.log(`✅ ${trackGeometry.name} loaded and rendered`);
+
+    // Position camera to view the track
+    camera.position.set(0, 400, 600);
+    camera.lookAt(0, 0, 0);
 
     // Connect to game engine
     const ENGINE_URL = 'ws://localhost:8080'; // TODO: Make configurable
