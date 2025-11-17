@@ -3,7 +3,9 @@ extends Control
 
 @onready var track_selector: OptionButton = %TrackSelector
 @onready var status_label: Label = %StatusLabel
-@onready var track_preview: Node3D = $"../HSplitContainer/PreviewContainer/SubViewportContainer/SubViewport/TrackPreview3D"
+@onready var viewport_container: SubViewportContainer = $MarginContainer/HSplitContainer/PreviewContainer/SubViewportContainer
+
+var track_preview: Node3D
 
 var available_tracks := [
 	{"id": "bristol", "name": "Bristol Motor Speedway"},
@@ -14,18 +16,28 @@ var current_track_id := ""
 
 
 func _ready() -> void:
-	# Wait for the scene tree to be fully loaded
-	await get_tree().process_frame
+	# Connect to preview after everything is ready
+	call_deferred("_connect_preview")
+	populate_track_selector()
 
-	# Get reference to preview (more reliable path)
-	var viewport_container := get_node_or_null("../HSplitContainer/PreviewContainer/SubViewportContainer")
-	if viewport_container:
+
+func _connect_preview() -> void:
+	# Get the SubViewport from the container
+	if viewport_container and viewport_container.get_child_count() > 0:
 		var viewport := viewport_container.get_child(0) as SubViewport
-		if viewport:
+		if viewport and viewport.get_child_count() > 0:
 			track_preview = viewport.get_child(0) as Node3D
 
-	populate_track_selector()
-	update_status("Ready - Select a track to edit")
+			if track_preview:
+				print("Track Editor: Preview connected successfully")
+				update_status("Ready - Select a track to edit")
+				# Load the initially selected track
+				if current_track_id:
+					track_preview.load_track(current_track_id)
+				return
+
+	push_error("Track Editor: Failed to connect preview")
+	update_status("Error: Preview not available")
 
 
 func populate_track_selector() -> void:
