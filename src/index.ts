@@ -243,14 +243,76 @@ async function runNextRace(manager: CareerManager, saveId: string): Promise<void
 
   // Check if season is complete
   if (manager.isSeasonComplete()) {
-    console.log('');
-    console.log('   🏁 SEASON COMPLETE!');
-    console.log(`   Final Points: ${updatedState.points}`);
-    console.log('');
-    console.log('   Season summary and next season advancement coming soon!');
+    await showSeasonComplete(manager, saveId);
   }
 
   console.log('');
+  await pressEnterToContinue();
+}
+
+/**
+ * Show season completion screen and handle advancement
+ */
+async function showSeasonComplete(manager: CareerManager, saveId: string): Promise<void> {
+  const state = manager.getCurrentState();
+
+  clearScreen();
+  console.log('╔════════════════════════════════════════════════════════════════╗');
+  console.log('║   🏁 SEASON COMPLETE!                                          ║');
+  console.log('╚════════════════════════════════════════════════════════════════╝');
+  console.log('');
+  console.log(`Season ${state.season} - Final Results`);
+  console.log('─'.repeat(64));
+  console.log('');
+
+  // Championship result
+  console.log('🏆 CHAMPIONSHIP RESULTS');
+  console.log(`   Final Points: ${state.points}`);
+  console.log(`   Position: Champion (AI standings coming in future update)`);
+  console.log('');
+
+  // Season statistics
+  console.log('📊 SEASON SUMMARY');
+  console.log(`   Races: ${state.driver.stats.races}`);
+  console.log(`   Wins: ${state.driver.stats.wins}`);
+  console.log(`   Top 5: ${state.driver.stats.top5}`);
+  console.log(`   Top 10: ${state.driver.stats.top10}`);
+  console.log(`   Avg Finish: ${state.driver.stats.avgFinish.toFixed(1)}`);
+  console.log(`   Laps Led: ${state.driver.stats.lapsLed}`);
+  console.log('');
+
+  // Driver progression
+  console.log('📈 DRIVER DEVELOPMENT');
+  const avgSkill =
+    Object.values(state.driver.skills).reduce((sum, val) => sum + val, 0) / 10;
+  console.log(`   Overall Rating: ${avgSkill.toFixed(1)}/100`);
+  console.log(`   Total Experience Gained: Check career history for details`);
+  console.log('');
+
+  // Next season prompt
+  console.log('─'.repeat(64));
+  console.log('');
+
+  const advance = await confirm(
+    `Start Season ${state.season + 1}?`,
+    true
+  );
+
+  if (advance) {
+    manager.advanceToNextSeason();
+    manager.save(saveId);
+
+    console.log('');
+    console.log(`✅ Welcome to Season ${state.season + 1}!`);
+    console.log('   Points reset, championship begins anew.');
+    console.log('   Your skills and experience carry forward.');
+    console.log('');
+  } else {
+    console.log('');
+    console.log('   You can start the next season from the career menu.');
+    console.log('');
+  }
+
   await pressEnterToContinue();
 }
 
