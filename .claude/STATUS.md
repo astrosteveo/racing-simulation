@@ -1,20 +1,20 @@
 # Project Status
 
-**Last Updated:** 2025-11-16 23:32 UTC
-**Current Phase:** Phase 7A - Career Mode Content Expansion
+**Last Updated:** 2025-11-16 23:45 UTC
+**Current Phase:** Phase 8 - 3D Client Development (MVP)
 **Overall Tests:** 414/417 passing (99.3%)
 
 ---
 
 ## Active Work
 
-**Current Focus:** Track Unlocking System Complete ✅
-- Spec: `specs/game-modes/`
-- Status: Progressive track unlocking fully implemented and tested
-- Features: 5 new tracks added (including first road course!)
-- Next: AI difficulty progression or content expansion (see specs/game-modes/TASKS.md)
+**Current Focus:** 3D Racing Client - Phase 1 Foundation
+- Spec: `specs/client/`
+- Status: Specification complete, beginning implementation
+- Goal: Basic 3D visualization with track, cars, and chase camera
+- Next: Project setup and Three.js foundation (see specs/client/TASKS.md)
 
-**Session Status:** Track unlocking feature complete and committed
+**Session Status:** Client specification created, ready to begin Phase 1.1
 
 ---
 
@@ -27,6 +27,7 @@
 | Decisions | 14/15 (93%) | 🟡 Stable | 1 flaky | [tasks](specs/decisions/TASKS.md) |
 | UI | 47/47 (100%) | 🟢 Complete | 0 | [tasks](specs/ui/TASKS.md) |
 | Game Modes | 183/182 (100%) | 🟢 Functional | 3 | [tasks](specs/game-modes/TASKS.md) |
+| **Client** | **0/0 (N/A)** | **🔴 Planning** | **Phase 1.1** | **[tasks](specs/client/TASKS.md)** |
 
 **Overall:** 407/409 tests passing (99.5%)
 
@@ -69,28 +70,30 @@
 
 ## Recent Changes (Last 5 Commits)
 
-1. `71bb686` - Docs: Sync README.md test status with STATUS.md (414/417)
-2. `a38abb2` - Docs: Update STATUS.md recent changes
-3. `4629b71` - Fix: Update doc verification scripts for spec-centric architecture
-4. `3ec3d38` - Add: 5 new NASCAR tracks with road course support
-5. `e394ea4` - Add: Track unlocking system with progressive tiers
+1. `f4487e1` - Add: 3D Racing Client specification
+2. `71bb686` - Docs: Sync README.md test status with STATUS.md (414/417)
+3. `a38abb2` - Docs: Update STATUS.md recent changes
+4. `4629b71` - Fix: Update doc verification scripts for spec-centric architecture
+5. `3ec3d38` - Add: 5 new NASCAR tracks with road course support
 
 ---
 
 ## Next Session Priorities
 
-1. **Career Mode MVP** - See `specs/game-modes/TASKS.md`
+1. **3D Client Phase 1 Foundation** - See `specs/client/TASKS.md`
+   - 1.1: Project Setup & Architecture (Week 1)
+   - 1.2: Track Geometry System (Week 1-2)
+   - 1.3: Car Rendering & Position Sync (Week 2)
+   - Goal: Watch a simulated race in 3D
+
+2. **Career Mode MVP** (Deferred) - See `specs/game-modes/TASKS.md`
    - Implement save/load system
    - Create career menu flow
    - Build multi-race season loop
 
-2. **Physics Polish** - See `specs/physics/TASKS.md`
-   - Fix decision evaluator test flakiness (low priority)
+3. **Physics Polish** (Low Priority) - See `specs/physics/TASKS.md`
+   - Fix decision evaluator test flakiness
    - Address edge case test failures (optional)
-
-3. **Content Expansion** - See `specs/game-modes/TASKS.md`
-   - Add 2-3 more NASCAR tracks
-   - Enhance AI difficulty progression
 
 ---
 
@@ -191,12 +194,13 @@ npm run lint:fix          # Auto-fix linting issues
 - ✅ Phase 7: Career Mode Foundation
 
 **Current Phase:**
-- 🟡 Phase 7A: Career Mode MVP (in progress)
+- 🟡 Phase 8: 3D Client Development (in progress)
 
 **Next Phases:**
-- 🔴 Phase 8: Content Expansion (tracks, AI difficulty)
-- 🔴 Phase 9: Advanced Features (qualifying, weather, etc.)
-- 🔴 Phase 10: Polish & Release Preparation
+- 🔴 Phase 9: Career Mode MVP (console or 3D)
+- 🔴 Phase 10: Content Expansion (tracks, AI difficulty)
+- 🔴 Phase 11: Advanced Features (qualifying, weather, etc.)
+- 🔴 Phase 12: Polish & Release Preparation
 
 ---
 
