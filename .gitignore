@@ -46,3 +46,6 @@ pids/
 *.seed
 *.pid.lock
 saves/
+
+# Godot MCP Plugin
+client/addons/gdai-mcp-plugin-godot
