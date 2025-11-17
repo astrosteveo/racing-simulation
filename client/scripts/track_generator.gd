@@ -26,7 +26,7 @@ class TrackPoint:
 static func generate_centerline(track_data: Dictionary) -> Array[TrackPoint]:
 	var points: Array[TrackPoint] = []
 	var track_id: String = track_data.get("id", "bristol")
-	
+
 	# Dispatch to track-specific generators
 	match track_id:
 		"bristol":
@@ -36,7 +36,8 @@ static func generate_centerline(track_data: Dictionary) -> Array[TrackPoint]:
 		_:
 			push_error("Unknown track ID: " + track_id)
 			return []
-	
+
+	close_track_loop(points)  # Ensure track forms perfect closed loop
 	calculate_tangents(points)
 	return points
 
@@ -215,14 +216,39 @@ static func get_section_banking(section: Dictionary, banking_config: Dictionary,
 			return 0.0
 
 
+static func close_track_loop(points: Array[TrackPoint]) -> void:
+	if points.is_empty():
+		return
+
+	# Check if loop is already closed (within tolerance)
+	var first_pos := points[0].pos
+	var last_pos := points[points.size() - 1].pos
+	var gap := (last_pos - first_pos).length()
+
+	if gap < 0.1:  # Already closed (within 10cm)
+		return
+
+	print("Track loop gap: ", gap, " meters - applying closure correction")
+
+	# Distribute the gap across the last 20% of points for smooth closure
+	var correction_start := int(points.size() * 0.8)
+	var correction_count := points.size() - correction_start
+	var gap_vector := first_pos - last_pos
+
+	for i in range(correction_start, points.size()):
+		var t := float(i - correction_start) / correction_count
+		var ease_t := t * t * (3.0 - 2.0 * t)  # smoothstep
+		points[i].pos += gap_vector * ease_t
+
+
 static func calculate_tangents(points: Array[TrackPoint]) -> void:
 	for i in range(points.size()):
 		var prev_idx := (i - 1 + points.size()) % points.size()
 		var next_idx := (i + 1) % points.size()
-		
+
 		var prev: TrackPoint = points[prev_idx]
 		var next: TrackPoint = points[next_idx]
-		
+
 		points[i].tangent = (next.pos - prev.pos).normalized()
 		points[i].calculate_basis()
 
