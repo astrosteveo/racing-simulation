@@ -50,7 +50,7 @@
 	  "length": 440,
 	  "radius": 250,
 	  "arcAngle": 180,
-	  "centerPoint": {"x": 0, "y": -500},
+	  "centerPoint": {"x": 0, "y": 700},
 	  "startAngle": 180,
 	  "endAngle": 360,
 	  "idealLine": 120,
