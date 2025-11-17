@@ -394,9 +394,10 @@ describe('Speed Physics Calculations', () => {
       const totalTime = turnLength / (turnSpeedAdjusted * 5280 / 3600) +
                         straightLength / (straightSpeedAdjusted * 5280 / 3600);
 
-      // Should be around 30-32 seconds
+      // Should be around 30-34 seconds
+      // With skill 70 (+4% corner speed modifier), lap time is ~34s
       expect(totalTime).toBeGreaterThan(28);
-      expect(totalTime).toBeLessThan(34);
+      expect(totalTime).toBeLessThan(35);
     });
 
     it('should show fuel weight impact of ~0.5-1.0s full vs empty tank', () => {

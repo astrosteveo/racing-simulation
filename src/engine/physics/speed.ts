@@ -139,9 +139,11 @@ export function calculateCornerSpeed(
 
   // Apply driver skill modifier
   // Skill 50 = baseline (0%)
-  // Skill 100 = +5% speed
-  // Skill 0 = -5% speed
-  const skillModifier = 1.0 + ((driverSkill - 50) / 1000);
+  // Skill 100 = +10% corner speed
+  // Skill 0 = -10% corner speed
+  // Note: This affects corner speeds only. Since corners are ~50% of lap time,
+  // the overall lap time impact is ~5% for a 50-point skill difference
+  const skillModifier = 1.0 + ((driverSkill - 50) / 500);
   speedMph *= skillModifier;
 
   return speedMph;

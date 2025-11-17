@@ -90,41 +90,52 @@ describe('CareerRaceRunner', () => {
     it('better driver skills correlate with better results (statistical)', () => {
       const runner = new CareerRaceRunner();
 
-      // Rookie driver
-      const rookieCareer = { ...mockCareer };
-      rookieCareer.driver.skills = {
-        racecraft: 35,
-        consistency: 35,
-        aggression: 35,
-        focus: 35,
-        stamina: 35,
-        composure: 35,
-        draftSense: 35,
-        tireManagement: 35,
-        fuelManagement: 35,
-        pitStrategy: 35,
+      // Rookie driver - well below AI field (40-80)
+      const rookieCareer: CareerSave = {
+        ...mockCareer,
+        driver: {
+          ...mockCareer.driver,
+          skills: {
+            racecraft: 25,
+            consistency: 25,
+            aggression: 25,
+            focus: 25,
+            stamina: 25,
+            composure: 25,
+            draftSense: 25,
+            tireManagement: 25,
+            fuelManagement: 25,
+            pitStrategy: 25,
+          },
+        },
       };
 
-      // Veteran driver
-      const veteranCareer = { ...mockCareer };
-      veteranCareer.driver.skills = {
-        racecraft: 85,
-        consistency: 85,
-        aggression: 85,
-        focus: 85,
-        stamina: 85,
-        composure: 85,
-        draftSense: 85,
-        tireManagement: 85,
-        fuelManagement: 85,
-        pitStrategy: 85,
+      // Veteran driver - well above AI field (40-80)
+      const veteranCareer: CareerSave = {
+        ...mockCareer,
+        driver: {
+          ...mockCareer.driver,
+          skills: {
+            racecraft: 95,
+            consistency: 95,
+            aggression: 95,
+            focus: 95,
+            stamina: 95,
+            composure: 95,
+            draftSense: 95,
+            tireManagement: 95,
+            fuelManagement: 95,
+            pitStrategy: 95,
+          },
+        },
       };
 
       // Run multiple races and average results
+      // Use 20 races for better statistical significance (random AI field + starting position each race)
       const rookiePositions: number[] = [];
       const veteranPositions: number[] = [];
 
-      for (let i = 0; i < 3; i++) {
+      for (let i = 0; i < 20; i++) {
         rookiePositions.push(runner.runRace(rookieCareer, 1).finishPosition);
         veteranPositions.push(runner.runRace(veteranCareer, 1).finishPosition);
       }
@@ -132,7 +143,8 @@ describe('CareerRaceRunner', () => {
       const rookieAvg = rookiePositions.reduce((a, b) => a + b, 0) / rookiePositions.length;
       const veteranAvg = veteranPositions.reduce((a, b) => a + b, 0) / veteranPositions.length;
 
-      // Veteran should finish better on average
+      // Veteran should finish better (lower position number) on average
+      // With 70-point skill difference (25 vs 95), veteran should dominate
       expect(veteranAvg).toBeLessThan(rookieAvg);
     });
 
