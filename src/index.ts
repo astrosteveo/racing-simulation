@@ -7,9 +7,11 @@
 
 import { MainMenu } from './ui/console/components/MainMenu';
 import { CareerMenu } from './ui/console/components/CareerMenu';
-import { showMenu, clearScreen, getTextInput, confirm } from './ui/console/input/MenuHandler';
+import { showMenu, clearScreen, getTextInput, confirm, pressEnterToContinue } from './ui/console/input/MenuHandler';
 import { CareerManager } from './modes/career/CareerManager';
+import { CareerRaceRunner } from './modes/career/CareerRaceRunner';
 import { getDefaultSchedule, getRaceByNumber } from './modes/career/SeasonSchedule';
+import { calculateRacePoints } from './modes/career/ChampionshipPoints';
 import fs from 'fs';
 import path from 'path';
 
@@ -135,6 +137,124 @@ async function createNewCareer(manager: CareerManager): Promise<string> {
 }
 
 /**
+ * Run the next race in career mode
+ */
+async function runNextRace(manager: CareerManager, saveId: string): Promise<void> {
+  const state = manager.getCurrentState();
+  const schedule = getDefaultSchedule();
+  const raceInfo = getRaceByNumber(state.race, schedule);
+
+  if (!raceInfo) {
+    console.log('\n❌ No more races in schedule!');
+    await pressEnterToContinue();
+    return;
+  }
+
+  // Pre-race screen
+  clearScreen();
+  console.log('╔════════════════════════════════════════════════════════════════╗');
+  console.log('║   RACE START                                                   ║');
+  console.log('╚════════════════════════════════════════════════════════════════╝');
+  console.log('');
+  console.log(`Season ${state.season} - Race ${state.race} of 10`);
+  console.log(`Track: ${raceInfo.trackId.toUpperCase()}`);
+  console.log(`Laps: ${raceInfo.laps}`);
+  console.log('');
+  console.log(`Driver: ${state.driver.name} #${state.driver.number}`);
+  console.log(`Current Points: ${state.points}`);
+  console.log('');
+
+  const ready = await confirm('Ready to race?', true);
+  if (!ready) {
+    return;
+  }
+
+  // Run the race
+  console.log('\n🏁 Racing...\n');
+  console.log('Simulating race (this may take a moment)...\n');
+
+  const raceRunner = new CareerRaceRunner();
+  const results = raceRunner.runRace(state, state.race);
+
+  // Calculate points
+  const mostLapsLed = results.lapsLed > (results.lapsCompleted / 2);
+  const pointsBreakdown = calculateRacePoints(results.finishPosition, results.lapsLed, mostLapsLed);
+
+  // Post-race screen
+  clearScreen();
+  console.log('╔════════════════════════════════════════════════════════════════╗');
+  console.log('║   RACE RESULTS                                                 ║');
+  console.log('╚════════════════════════════════════════════════════════════════╝');
+  console.log('');
+  console.log(`${raceInfo.trackId.toUpperCase()} - Race ${state.race}`);
+  console.log('');
+  console.log(`   Finish Position: P${results.finishPosition}`);
+  console.log(`   Start Position:  P${results.startPosition}`);
+  console.log(`   Positions Gained: ${results.positionsGained >= 0 ? '+' : ''}${results.positionsGained}`);
+  console.log('');
+  console.log(`   Laps Led: ${results.lapsLed}${mostLapsLed ? ' (MOST LAPS LED! 🏆)' : ''}`);
+  console.log(`   Fastest Lap: ${results.fastestLap.toFixed(3)}s`);
+  console.log(`   Average Lap: ${results.averageLap.toFixed(3)}s`);
+  console.log(`   Clean Laps: ${results.cleanLaps}/${results.lapsCompleted}`);
+  console.log('');
+  console.log('   CHAMPIONSHIP POINTS:');
+  console.log(`   • Finish Position: +${pointsBreakdown.finishPoints} pts`);
+  if (pointsBreakdown.lapsLedBonus > 0) {
+    console.log(`   • Led a Lap: +${pointsBreakdown.lapsLedBonus} pts`);
+  }
+  if (pointsBreakdown.mostLapsLedBonus > 0) {
+    console.log(`   • Most Laps Led: +${pointsBreakdown.mostLapsLedBonus} pts`);
+  }
+  console.log(`   • TOTAL: +${pointsBreakdown.totalPoints} pts`);
+  console.log('');
+
+  // Show XP gains
+  if (results.xpGained.length > 0) {
+    console.log('   SKILL IMPROVEMENTS:');
+    const significantXP = results.xpGained.filter(xp => xp.amount > 20).sort((a, b) => b.amount - a.amount);
+    significantXP.forEach((xp) => {
+      const skillPoints = (xp.amount / 100).toFixed(2);
+      console.log(`   • ${xp.skill}: +${skillPoints} skill points (${xp.amount.toFixed(0)} XP)`);
+    });
+    console.log('');
+  }
+
+  // Complete the race in career manager
+  manager.completeRace(results, mostLapsLed);
+
+  // Save progress
+  manager.save(saveId);
+  console.log('   💾 Progress saved!');
+  console.log('');
+
+  // Check for milestones
+  const updatedState = manager.getCurrentState();
+  if (results.finishPosition === 1) {
+    if (updatedState.driver.stats.wins === 1) {
+      console.log('   🏆 MILESTONE: FIRST WIN! Incredible performance!');
+    } else {
+      console.log('   🏆 RACE WIN! Another victory for your career!');
+    }
+  } else if (results.finishPosition <= 5 && updatedState.driver.stats.top5 === 1) {
+    console.log('   🎯 MILESTONE: First top-5 finish!');
+  } else if (results.finishPosition <= 10 && updatedState.driver.stats.top10 === 1) {
+    console.log('   ✨ MILESTONE: First top-10 finish!');
+  }
+
+  // Check if season is complete
+  if (manager.isSeasonComplete()) {
+    console.log('');
+    console.log('   🏁 SEASON COMPLETE!');
+    console.log(`   Final Points: ${updatedState.points}`);
+    console.log('');
+    console.log('   Season summary and next season advancement coming soon!');
+  }
+
+  console.log('');
+  await pressEnterToContinue();
+}
+
+/**
  * Career menu loop
  */
 async function careerMenuLoop(manager: CareerManager, saveId: string): Promise<void> {
@@ -156,9 +276,7 @@ async function careerMenuLoop(manager: CareerManager, saveId: string): Promise<v
 
     switch (selection) {
       case 'next-race':
-        console.log('\n🏁 Race functionality coming soon!');
-        console.log('This will integrate with the race engine to simulate the next race.');
-        await confirm('Press Enter to continue', true);
+        await runNextRace(manager, saveId);
         break;
 
       case 'standings':
@@ -261,7 +379,7 @@ function displaySeasonSchedule(manager: CareerManager): void {
   console.log(`Season ${state.season} - 10 Race Schedule\n`);
   console.log('─'.repeat(60));
 
-  schedule.races.forEach((race, idx) => {
+  schedule.forEach((race, idx) => {
     const raceNum = idx + 1;
     const status = raceNum < state.race ? '✅' : raceNum === state.race ? '▶' : '⏸';
     const trackName = race.trackId.charAt(0).toUpperCase() + race.trackId.slice(1);
