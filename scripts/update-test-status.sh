@@ -1,5 +1,5 @@
 #!/bin/bash
-# Update test status in TASKS.md and README.md automatically
+# Update test status in STATUS.md and README.md automatically
 # Run this after test suite to keep documentation in sync
 
 set -e
@@ -27,14 +27,14 @@ echo "   Total: $TOTAL"
 echo "   Pass Rate: $PASS_RATE%"
 echo ""
 
-# Update TASKS.md
-echo "📝 Updating .claude/TASKS.md..."
-TASKS_FILE=".claude/TASKS.md"
+# Update STATUS.md
+echo "📝 Updating .claude/STATUS.md..."
+STATUS_FILE=".claude/STATUS.md"
 
 # Update overall test status line
-sed -i "s/\*\*Overall:\*\* [0-9]\+\/[0-9]\+ passing ([0-9.]\+%)/\*\*Overall:\*\* $TOTAL_TESTS\/$TOTAL passing ($PASS_RATE%)/" "$TASKS_FILE"
+sed -i "s/\*\*Overall Tests:\*\* [0-9]\+\/[0-9]\+ passing ([0-9.]\+%)/\*\*Overall Tests:\*\* $TOTAL_TESTS\/$TOTAL passing ($PASS_RATE%)/" "$STATUS_FILE"
 
-echo "   ✅ Updated test status in TASKS.md"
+echo "   ✅ Updated test status in STATUS.md"
 
 # Update README.md
 echo "📝 Updating README.md..."
@@ -48,6 +48,6 @@ echo ""
 echo "✅ Test status synchronized!"
 echo ""
 echo "💡 Next steps:"
-echo "   1. Review failing tests in TASKS.md"
-echo "   2. Update 'Failing Tests' section in TASKS.md if needed"
-echo "   3. Commit changes: git add .claude/TASKS.md README.md && git commit -m 'Update test status: $TOTAL_TESTS/$TOTAL passing ($PASS_RATE%)'"
+echo "   1. Review failing tests in STATUS.md"
+echo "   2. Update 'Failing/Skipped Tests' section in STATUS.md if needed"
+echo "   3. Commit changes: git add .claude/STATUS.md README.md && git commit -m 'Update test status: $TOTAL_TESTS/$TOTAL passing ($PASS_RATE%)'"
