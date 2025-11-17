@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://cn1x3y4r5jk8l"]
+[gd_scene load_steps=3 format=3 uid="uid://cn1x3y4r5jk8l"]
 
 [ext_resource type="Script" path="res://addons/track_editor/track_editor_panel.gd" id="1_track_editor_panel"]
+[ext_resource type="Script" path="res://addons/track_editor/track_preview_3d.gd" id="2_track_preview_3d"]
 
 [node name="TrackEditorPanel" type="PanelContainer"]
 anchors_preset = 15
@@ -17,38 +18,93 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+[node name="HSplitContainer" type="HSplitContainer" parent="MarginContainer"]
 layout_mode = 2
+split_offset = 300
+
+[node name="ControlPanel" type="VBoxContainer" parent="MarginContainer/HSplitContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
 theme_override_constants/separation = 10
 
-[node name="Header" type="Label" parent="MarginContainer/VBoxContainer"]
+[node name="Header" type="Label" parent="MarginContainer/HSplitContainer/ControlPanel"]
 layout_mode = 2
 text = "NASCAR Track Editor"
 horizontal_alignment = 1
 
-[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer"]
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/HSplitContainer/ControlPanel"]
 layout_mode = 2
 
-[node name="TrackSelectorContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+[node name="TrackSelectorContainer" type="VBoxContainer" parent="MarginContainer/HSplitContainer/ControlPanel"]
 layout_mode = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 5
 
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/TrackSelectorContainer"]
+[node name="Label" type="Label" parent="MarginContainer/HSplitContainer/ControlPanel/TrackSelectorContainer"]
 layout_mode = 2
-text = "Track:"
+text = "Select Track:"
 
-[node name="TrackSelector" type="OptionButton" parent="MarginContainer/VBoxContainer/TrackSelectorContainer"]
+[node name="TrackSelector" type="OptionButton" parent="MarginContainer/HSplitContainer/ControlPanel/TrackSelectorContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 3
 
-[node name="HSeparator2" type="HSeparator" parent="MarginContainer/VBoxContainer"]
+[node name="HSeparator2" type="HSeparator" parent="MarginContainer/HSplitContainer/ControlPanel"]
 layout_mode = 2
 
-[node name="StatusLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+[node name="CameraControlsLabel" type="Label" parent="MarginContainer/HSplitContainer/ControlPanel"]
+layout_mode = 2
+text = "Camera Controls:"
+
+[node name="CameraHelp" type="RichTextLabel" parent="MarginContainer/HSplitContainer/ControlPanel"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+size_flags_vertical = 3
+bbcode_enabled = true
+text = "[b]Mouse Controls:[/b]
+• Right Click + Drag: Orbit
+• Middle Click + Drag: Pan
+• Scroll Wheel: Zoom
+
+[b]Keyboard:[/b]
+• F: Focus on track"
+fit_content = true
+scroll_active = false
+
+[node name="Spacer" type="Control" parent="MarginContainer/HSplitContainer/ControlPanel"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="HSeparator3" type="HSeparator" parent="MarginContainer/HSplitContainer/ControlPanel"]
+layout_mode = 2
+
+[node name="StatusLabel" type="Label" parent="MarginContainer/HSplitContainer/ControlPanel"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Ready"
 horizontal_alignment = 1
 
-[connection signal="item_selected" from="MarginContainer/VBoxContainer/TrackSelectorContainer/TrackSelector" to="." method="_on_track_selected"]
+[node name="PreviewContainer" type="PanelContainer" parent="MarginContainer/HSplitContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="MarginContainer/HSplitContainer/PreviewContainer"]
+layout_mode = 2
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="MarginContainer/HSplitContainer/PreviewContainer/SubViewportContainer"]
+handle_input_locally = false
+size = Vector2i(800, 400)
+render_target_update_mode = 4
+
+[node name="TrackPreview3D" type="Node3D" parent="MarginContainer/HSplitContainer/PreviewContainer/SubViewportContainer/SubViewport"]
+script = ExtResource("2_track_preview_3d")
+
+[node name="Camera3D" type="Camera3D" parent="MarginContainer/HSplitContainer/PreviewContainer/SubViewportContainer/SubViewport/TrackPreview3D"]
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 200, 200)
+fov = 60.0
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="MarginContainer/HSplitContainer/PreviewContainer/SubViewportContainer/SubViewport/TrackPreview3D"]
+transform = Transform3D(0.707107, -0.5, 0.5, 0, 0.707107, 0.707107, -0.707107, -0.5, 0.5, 0, 100, 0)
+shadow_enabled = true
+
+[connection signal="item_selected" from="MarginContainer/HSplitContainer/ControlPanel/TrackSelectorContainer/TrackSelector" to="." method="_on_track_selected"]
