@@ -174,6 +174,51 @@ None currently.
 
 ---
 
+### 4. Simulation Speed Toggle (FUTURE - v1.1)
+
+**Problem:** Players need control over race simulation speed
+**Impact:** QoL feature for different play styles and situations
+**Files:**
+- `src/engine/simulation/race.ts` (add speed control)
+- `src/ui/` (add speed toggle UI)
+- All race execution flows (single race, career)
+
+**Action:**
+1. Add simulation speed options to RaceEngine
+   - Realtime (1x): Current `simulateTick()` behavior
+   - 2x Speed: Double tick rate or skip frames
+   - 4x Speed: Quadruple tick rate
+   - Instant: Switch to `simulateLap()` for batch calculation
+2. Create mid-race pause menu
+   - Speed selector (1x / 2x / 4x / Instant)
+   - "Sim to End" option (after wreck/incident)
+   - Resume race at selected speed
+3. Maintain physics accuracy across all speeds
+   - Same formulas regardless of speed
+   - Just different iteration methods
+4. Update all race flows to support speed toggle
+   - Single race mode
+   - Career mode
+   - Time trial (future)
+5. Save speed preference per mode
+   - Career default: 1x (full immersion)
+   - Quick race default: User's last selection
+6. Write tests
+   - Test all speeds produce same results
+   - Test mid-race speed changes
+   - Test sim-to-end from any point
+
+**Success Criteria:**
+- All 4 speed modes functional
+- Mid-race speed changes work seamlessly
+- Physics accuracy maintained across speeds
+- User preference saved/restored
+- Tests pass (8+ new tests)
+
+**Design Note:** See SPEC.md "Design Principle #4: Simulation Speed as User Preference" for full architectural details.
+
+---
+
 ## Completed This Session
 
 - ✅ **Multi-Race Season Loop** (2025-11-16)
