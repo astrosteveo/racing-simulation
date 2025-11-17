@@ -8,17 +8,18 @@
 
 ## Active Work
 
-**Primary Focus:** Track Builder Phase 1 COMPLETE ✅
+**Primary Focus:** Track Builder Phase 2 IN PROGRESS 🟡
 - Spec: `specs/track-builder/`
-- Status: Foundation complete - multi-track support functional!
-- Achievements:
-  - ✅ Removed hardcoded Bristol geometry
-  - ✅ Generalized track generation system (dispatch by track ID)
-  - ✅ Progressive banking implementation (Bristol 24-30°)
-  - ✅ Martinsville track created (0.526 miles, flat 12° banking)
-  - ✅ Multi-track loading functional (Bristol + Martinsville)
-  - ✅ All 20 Phase 1 validation checkpoints passing
-- Next: Phase 2 - Track Editor Plugin (visual track editing in Godot Editor)
+- Status: 3D preview system working! Editor plugin functional!
+- Recent Achievements:
+  - ✅ Phase 1 Complete: Multi-track parametric generation
+  - ✅ Task 7: Track Editor plugin structure (bottom panel, UI)
+  - ✅ Task 8: Real-time 3D preview (camera controls, track rendering)
+  - 🟡 3D preview shows Bristol/Martinsville with banking
+  - 🟡 Camera orbit/pan/zoom working
+  - 🟡 Track selector switches tracks in real-time
+- Current: Refining track geometry (curves need smoothing)
+- Next: Task 9 - Parameter Controls (edit track properties in UI)
 
 **Secondary Focus:** 3D Racing Client - Phase 1.2 Complete ✅
 - Spec: `specs/client/`
@@ -40,9 +41,9 @@
 | UI | 47/47 (100%) | 🟢 Complete | 0 | [tasks](specs/ui/TASKS.md) |
 | Game Modes | 183/182 (100%) | 🟢 Functional | 3 | [tasks](specs/game-modes/TASKS.md) |
 | **Client** | **20/20 (100%)** | **🟢 Active** | **Phase 1.3 (Next)** | **[tasks](specs/client/TASKS.md)** |
-| **Track Builder** | **20/61 (33%)** | **🟢 Phase 1 Complete** | **9 (Phase 2-3)** | **[tasks](specs/track-builder/TASKS.md)** |
+| **Track Builder** | **33/61 (54%)** | **🟡 Phase 2 Active** | **Task 9 (Next)** | **[tasks](specs/track-builder/TASKS.md)** |
 
-**Overall:** 407/409 TypeScript tests + 20/61 Track Builder validation checkpoints (99.0% overall)
+**Overall:** 407/409 TypeScript tests + 33/61 Track Builder validation checkpoints (98.9% overall)
 
 ---
 
@@ -83,11 +84,11 @@
 
 ## Recent Changes (Last 5 Commits)
 
-1. `9a41fc0` - Add: Track Builder Phase 1 - Foundation Complete
-2. `88695aa` - Add: 3D Client Phase 1.2 - Track Geometry System
-3. `01c59f2` - Docs: Update STATUS.md for Phase 1.1 completion
-4. `b919b77` - Add: 3D Client Phase 1.1 - Project Setup & Architecture
-5. `fa3805d` - Docs: Update STATUS.md for Phase 8 - 3D Client Development
+1. `2c5fb68` - Fix: Track editor preview node connection using deferred call
+2. `6042138` - Add: Track Editor 3D Preview - Phase 2 Task 8 Complete
+3. `bfe3918` - Add: Track Editor Plugin - Phase 2 Task 7 Complete
+4. `0acf24b` - Docs: Update STATUS.md for Track Builder Phase 1 completion
+5. `9a41fc0` - Add: Track Builder Phase 1 - Foundation Complete
 
 ---
 
