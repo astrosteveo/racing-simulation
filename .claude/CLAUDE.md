@@ -53,6 +53,40 @@ Phase 5: REVIEW
 
 ---
 
+## Template System
+
+**All specification documents follow standard templates** to ensure consistency.
+
+**Available Templates:** (See `.claude/templates/README.md` for details)
+- `SPEC-TEMPLATE.md` - Main specification structure
+- `TASKS-TEMPLATE.md` - Task tracking format
+- `CONTRACTS-TEMPLATE.md` - Interface documentation
+- `PLANS-TEMPLATE.md` - Roadmap and milestones
+- `EXAMPLES-TEMPLATE.md` - Test scenarios and validation
+- `REFERENCE-TEMPLATE.md` - Domain knowledge
+
+**Creating New Specs:**
+1. Check if template exists in `.claude/templates/`
+2. Copy template to new spec directory
+3. Fill in TODO sections
+4. Remove N/A sections or mark as "Not Applicable"
+
+**Creating New Document Types:**
+1. Create template first in `.claude/templates/`
+2. Update `.claude/templates/README.md`
+3. Update `.claude/CONSTITUTION.md` if workflow changes
+4. Then create actual document from template
+
+**Why Templates:**
+- Ensures consistency across all specs
+- Makes navigation predictable
+- Enables automated validation
+- Reduces cognitive load (same structure everywhere)
+
+**See:** `.claude/CONSTITUTION.md` for development checklists and edge case handling.
+
+---
+
 ## Core Principles
 
 ### 1. Contract-First Development
