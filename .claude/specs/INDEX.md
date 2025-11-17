@@ -1,8 +1,8 @@
 # Specifications Index
 
-**Last Updated:** 2025-11-16
-**Total Specs:** 6
-**Status:** Phase 7 - Core Specs Complete + Client Spec Added (6/6 specs defined)
+**Last Updated:** 2025-11-17
+**Total Specs:** 7
+**Status:** Phase 8 - Core Specs Complete + Client + Track Builder (7/7 specs defined)
 
 ---
 
@@ -280,8 +280,10 @@ cat .claude/specs/INDEX.md
 | Decisions | 15/15 (100%) | 0 (complete) | 🟢 Complete |
 | UI | 47/47 (100%) | 0 (complete) | 🟢 Complete |
 | Game Modes | 151/151 (100%) | 4 (Career MVP) | 🟡 In Progress |
+| Client | 0/0 (N/A) | Planning phase | 🔴 Planned |
+| Track Builder | 0/61 (0%) | 15 (Phase 1-3) | 🟡 In Progress |
 
-**Overall:** 374/379 tests passing (98.7%)
+**Overall:** 374/379 tests passing (98.7%) - Track Builder tests pending
 
 **See `.claude/STATUS.md` for current project status**
 
@@ -466,4 +468,49 @@ cd .claude/specs/client/
 cat SPEC.md          # Complete vision and architecture
 cat TASKS.md         # 16-week development roadmap
 ```
+
+---
+
+### 7. Track Builder System (`track-builder/`)
+**Status:** 🟡 In Progress (Phase 1 - Foundation)
+**Owner:** Client Team
+**Dependencies:** Client spec (provides track geometry for racing)
+
+**Scope:** NASCAR track creation and editing tools
+- Procedural track geometry generation (centerline, banking, surfaces)
+- Parametric track definitions (JSON-based data format)
+- Visual track editor (Godot Editor plugin)
+- Track validation and testing tools
+- NASCAR-specific features (progressive banking, pit roads, surface zones)
+- Multi-track support (oval, tri-oval, asymmetric layouts)
+
+**Key Components:**
+- Track data schema (JSON format with validation)
+- TrackResource (GDScript Resource for type safety)
+- TrackGenerator (parametric geometry generation)
+- TrackMeshBuilder (mesh creation with banking)
+- Track Editor Plugin (visual editing in Godot)
+- Track Validator (geometry and data validation)
+
+**Supported Track Types:**
+- Simple oval (Bristol, Martinsville)
+- Tri-oval (Daytona, Charlotte)
+- Asymmetric/quad-oval (Dover, Phoenix)
+- Road courses (future)
+
+**Key Interfaces:** `TrackData`, `TrackResource`, `SectionData`, `BankingConfig`, `PitRoadData`
+
+**Quick Start:**
+```bash
+cd .claude/specs/track-builder/
+cat SPEC.md          # Complete specification and architecture
+cat CONTRACTS.md     # Track data schemas and interfaces
+cat TASKS.md         # Phase 1-3 implementation tasks
+cat EXAMPLES.md      # Validation scenarios and test tracks
+```
+
+**Current Status:**
+- Phase 1: Foundation (Week 1) - Remove hardcoding, generalize track generation
+- Phase 2: Track Editor (Weeks 2-3) - Visual editing plugin
+- Phase 3: Advanced Features (Week 4) - Pit roads, validation, performance
 

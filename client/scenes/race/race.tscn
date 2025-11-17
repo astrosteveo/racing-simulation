@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://br6tstuvd0p21"]
+
+[ext_resource type="Script" uid="uid://c24tia3yfak5v" path="res://scenes/race/race.gd" id="1_dor3q"]
+[ext_resource type="Script" uid="uid://dqbx8mmdcud2h" path="res://scenes/race/track.gd" id="1_xb1t8"]
+
+[node name="Race" type="Node3D"]
+script = ExtResource("1_dor3q")
+
+[node name="Camera" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.8660254, 0.5, 0, -0.5, 0.8660254, 0, 400, 600)
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.8660254, -0.35355338, 0.35355338, 0, 0.70710677, 0.70710677, -0.5, -0.6123724, 0.6123724, 0, 0, 0)
+
+[node name="Track" type="Node3D" parent="."]
+script = ExtResource("1_xb1t8")

@@ -1,0 +1,74 @@
+{
+  "id": "bristol",
+  "name": "Bristol Motor Speedway",
+  "nickname": "The Last Great Colosseum",
+  "length": 0.533,
+  "type": "short_oval",
+  "trackWidth": 40.0,
+  "surface": "concrete",
+  "baseGrip": 0.95,
+  "difficulty": 8,
+  "raceLaps": 500,
+
+  "banking": {
+	"type": "progressive",
+	"turns": {
+	  "inner": 24.0,
+	  "outer": 30.0,
+	  "transitionType": "linear"
+	},
+	"straights": {
+	  "inner": 6.0,
+	  "outer": 10.0,
+	  "transitionType": "linear"
+	}
+  },
+
+  "sections": [
+	{
+	  "type": "turn",
+	  "name": "Turn 1-2",
+	  "length": 440,
+	  "radius": 250,
+	  "arcAngle": 180,
+	  "centerPoint": {"x": 0, "y": 0},
+	  "startAngle": 0,
+	  "endAngle": 180,
+	  "idealLine": 120,
+	  "surfaceGrip": 0.95
+	},
+	{
+	  "type": "straight",
+	  "name": "Backstretch",
+	  "length": 700,
+	  "idealLine": 140,
+	  "surfaceGrip": 0.95
+	},
+	{
+	  "type": "turn",
+	  "name": "Turn 3-4",
+	  "length": 440,
+	  "radius": 250,
+	  "arcAngle": 180,
+	  "centerPoint": {"x": 0, "y": -500},
+	  "startAngle": 180,
+	  "endAngle": 360,
+	  "idealLine": 120,
+	  "surfaceGrip": 0.95
+	},
+	{
+	  "type": "straight",
+	  "name": "Frontstretch",
+	  "length": 700,
+	  "idealLine": 140,
+	  "surfaceGrip": 0.95
+	}
+  ],
+
+  "safetyFeatures": {
+	"walls": {
+	  "height": 15.0,
+	  "type": "safer_barrier"
+	}
+  }
+}

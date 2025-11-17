@@ -1,0 +1,74 @@
+{
+  "id": "martinsville",
+  "name": "Martinsville Speedway",
+  "nickname": "The Paperclip",
+  "length": 0.526,
+  "type": "short_oval",
+  "trackWidth": 40.0,
+  "surface": "asphalt",
+  "baseGrip": 0.90,
+  "difficulty": 5,
+  "raceLaps": 500,
+
+  "banking": {
+    "type": "constant",
+    "turns": {
+      "angle": 12.0
+    },
+    "straights": {
+      "angle": 0.0
+    }
+  },
+
+  "sections": [
+    {
+      "type": "turn",
+      "name": "Turn 1",
+      "length": 157,
+      "radius": 100,
+      "arcAngle": 180,
+      "centerPoint": {"x": 0, "y": 0},
+      "startAngle": 0,
+      "endAngle": 180,
+      "banking": 12.0,
+      "idealLine": 90,
+      "surfaceGrip": 0.88
+    },
+    {
+      "type": "straight",
+      "name": "Backstretch",
+      "length": 1075,
+      "banking": 0.0,
+      "idealLine": 120,
+      "surfaceGrip": 0.90
+    },
+    {
+      "type": "turn",
+      "name": "Turn 2",
+      "length": 157,
+      "radius": 100,
+      "arcAngle": 180,
+      "centerPoint": {"x": 0, "y": 1075},
+      "startAngle": 180,
+      "endAngle": 0,
+      "banking": 12.0,
+      "idealLine": 90,
+      "surfaceGrip": 0.88
+    },
+    {
+      "type": "straight",
+      "name": "Frontstretch",
+      "length": 1075,
+      "banking": 0.0,
+      "idealLine": 120,
+      "surfaceGrip": 0.90
+    }
+  ],
+
+  "safetyFeatures": {
+    "walls": {
+      "height": 14.0,
+      "type": "concrete"
+    }
+  }
+}
