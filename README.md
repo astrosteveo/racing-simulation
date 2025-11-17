@@ -54,6 +54,36 @@ This project is being built following a strict methodology to ensure sustainable
 
 **Next:** Polish, additional tracks, and career mode features!
 
+## 🏗️ 3D Track Builder (NEW!)
+
+We've built a **visual track editor** in Godot for creating NASCAR tracks with real-world geometry!
+
+### Phase 1 Complete: Parametric Track Generation ✅
+
+**Bristol Motor Speedway** - The Last Great Colosseum
+![Bristol Motor Speedway - Perfect oval with banking visualization](docs/screenshots/bristol-oval.png)
+
+**Martinsville Speedway** - The Paperclip
+![Martinsville Speedway - Classic paperclip short track](docs/screenshots/martinsville-paperclip.png)
+
+**Features:**
+- ✅ **Parametric track generation** - Real circular arcs, not approximations
+- ✅ **Multi-track support** - Bristol (0.533 mi oval) and Martinsville (0.526 mi paperclip)
+- ✅ **Spiral transitions** - Smooth banking changes between turns and straights
+- ✅ **Research-validated dimensions** - Matches real NASCAR track specifications
+- ✅ **3D preview** - Real-time rendering with camera controls
+- ✅ **Low-poly optimization** - 131 points per track (performant!)
+- ✅ **Closed loop geometry** - Tracks form perfect circuits
+
+**Technical Achievements:**
+- JSON-driven track data (easily add new tracks)
+- Proper tangent continuation between sections
+- Progressive banking (24-30° in turns, 6-10° on straights for Bristol)
+- Godot EditorPlugin integration
+- Parametric approach validated against NASCAR industry standards
+
+**Next Phase:** Visual spline editor, smoothing refinements, additional tracks!
+
 See [.claude/specs/INDEX.md](.claude/specs/INDEX.md) for the spec-centric documentation architecture, or [docs/SPEC.md](docs/SPEC.md) for the legacy monolithic design document. For development workflow, see [.claude/CLAUDE.md](.claude/CLAUDE.md).
 
 ## Quick Demo
