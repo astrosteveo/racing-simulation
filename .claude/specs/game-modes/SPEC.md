@@ -51,6 +51,28 @@ All game state is serializable and reproducible:
 - No hidden state in closures/globals
 - Load game = exact same state restored
 
+### 4. Simulation Speed as User Preference
+
+Simulation speed is a **presentation layer toggle**, not hardcoded per mode:
+- **Realtime (1x)**: Full interactive racing experience with real-time physics
+- **2x Speed**: Accelerated but still watchable (mid-stint cruising)
+- **4x Speed**: Fast-forward through uneventful periods
+- **Instant Sim**: Batch calculate entire race/remainder (`simulateLap()`)
+
+**Use Cases:**
+- Player wrecks on lap 50/200 → "Sim to End" → instant finish
+- Mid-stint at Michigan, nothing happening → 4x until action picks up
+- Testing setup changes → instant sim to see results
+- Full immersion race → realtime throughout
+
+**Architecture:**
+- Same physics engine for all speeds (just different iteration methods)
+- User can change speed mid-race (pause menu toggle)
+- Career mode races default to realtime, but user can accelerate
+- All modes support all speeds (decoupled from game mode)
+
+**Implementation Status:** 🔴 Not yet implemented (planned for v1.1)
+
 ---
 
 ## Game Modes
