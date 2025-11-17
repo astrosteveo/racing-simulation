@@ -32,7 +32,7 @@
 	  "radius": 250,
 	  "arcAngle": 180,
 	  "centerPoint": {"x": 0, "y": 0},
-	  "startAngle": 0,
+	  "startAngle": 360,
 	  "endAngle": 180,
 	  "idealLine": 120,
 	  "surfaceGrip": 0.95
@@ -68,7 +68,7 @@
 	  "arcAngle": 180,
 	  "centerPoint": {"x": 0, "y": 700},
 	  "startAngle": 180,
-	  "endAngle": 360,
+	  "endAngle": 0,
 	  "idealLine": 120,
 	  "surfaceGrip": 0.95
 	},
