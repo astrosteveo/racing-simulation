@@ -91,11 +91,11 @@
 
 ## Recent Changes (Last 5 Commits)
 
-1. `cbe358f` - Docs: Sync test status and update timestamps
-2. `1bf3edf` - Docs: Add latest commit to STATUS.md Recent Changes
-3. `879db44` - Docs: Update STATUS.md - Track Builder Phase 1 COMPLETE! 🎉
-4. `2f24792` - Fix: Invert turn directions for both tracks ⭐ BREAKTHROUGH
-5. `4e61f45` - Fix: Complete track loop closure and Turn 2 direction
+1. `c6fb14f` - Docs: Add Track Builder showcase with screenshots to README 📸
+2. `1cac745` - Docs: Update Recent Changes with latest commits
+3. `cbe358f` - Docs: Sync test status and update timestamps
+4. `879db44` - Docs: Update STATUS.md - Track Builder Phase 1 COMPLETE! 🎉
+5. `2f24792` - Fix: Invert turn directions for both tracks ⭐ BREAKTHROUGH
 
 ---
 
