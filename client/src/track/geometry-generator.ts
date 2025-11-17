@@ -132,34 +132,44 @@ export class GeometryGenerator {
       const bankingRad = (section.banking * Math.PI) / 180;
 
       // Center of turn (perpendicular LEFT of current heading direction)
-      // For a right turn, center is to the left; for left turn, to the right
-      const centerX = startPos.x - Math.sin(startAngle) * radius;
-      const centerZ = startPos.z + Math.cos(startAngle) * radius;
+      // Heading is (sin(angle), cos(angle)) in (X, Z)
+      // Left perpendicular is (-cos(angle), sin(angle))
+      const centerX = startPos.x - Math.cos(startAngle) * radius;
+      const centerZ = startPos.z + Math.sin(startAngle) * radius;
+
+      // Calculate initial angle from center to start position
+      const initialAngleFromCenter = Math.atan2(
+        startPos.z - centerZ,
+        startPos.x - centerX
+      );
 
       for (let i = 0; i < numPoints; i++) {
         const t = i / numPoints;
-        const angle = startAngle + t * arcAngle;
         const distance = t * section.length;
 
-        // Position on arc (centerline stays flat, banking affects surface)
+        // Angle from turn center (sweeps through the arc)
+        const angleFromCenter = initialAngleFromCenter + t * arcAngle;
+
+        // Position on arc (center + radius * direction)
         const position: Vector3 = {
-          x: centerX - Math.cos(angle) * radius,
+          x: centerX + Math.cos(angleFromCenter) * radius,
           y: startPos.y,
-          z: centerZ + Math.sin(angle) * radius,
+          z: centerZ + Math.sin(angleFromCenter) * radius,
         };
 
-        // Tangent (direction of travel)
+        // Tangent (perpendicular to radius, direction of travel)
+        // For counter-clockwise motion, tangent is 90° ahead of radius
         const tangent: Vector3 = {
-          x: Math.sin(angle),
+          x: -Math.sin(angleFromCenter),
           y: 0,
-          z: Math.cos(angle),
+          z: Math.cos(angleFromCenter),
         };
 
         // Normal (tilted by banking)
         const normal: Vector3 = {
-          x: -Math.cos(angle) * Math.sin(bankingRad),
+          x: Math.sin(angleFromCenter) * Math.sin(bankingRad),
           y: Math.cos(bankingRad),
-          z: Math.sin(angle) * Math.sin(bankingRad),
+          z: -Math.cos(angleFromCenter) * Math.sin(bankingRad),
         };
 
         points.push({
