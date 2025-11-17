@@ -51,10 +51,27 @@ TODO: List anything blocking progress
    - Test scenario B
 4. TODO: Validation criteria
 
+**TDD Breakdown:**
+*(Break down implementation into test-first cycles)*
+1. [ ] Write test for [feature A] (expect RED)
+2. [ ] Run test - verify fails (RED output)
+3. [ ] Implement [feature A] - minimal code
+4. [ ] Run test - verify passes (GREEN output)
+5. [ ] Commit: "Add: [feature A]"
+6. [ ] Write test for [feature B] (expect RED)
+7. [ ] Run test - verify fails (RED output)
+8. [ ] Implement [feature B] - minimal code
+9. [ ] Run test - verify passes (GREEN output)
+10. [ ] Commit: "Add: [feature B]"
+11. [ ] Refactor if needed (tests stay GREEN)
+12. [ ] Commit: "Refactor: [what was refactored]"
+
 **Success Criteria:**
 - TODO: Measurable outcome 1
 - TODO: Measurable outcome 2
 - Tests pass (N+ new tests)
+- Each feature has test written BEFORE implementation
+- All commits have passing tests
 
 **Dependencies:**
 - TODO: Must complete X first

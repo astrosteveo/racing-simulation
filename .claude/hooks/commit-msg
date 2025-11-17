@@ -1,0 +1,57 @@
+#!/bin/bash
+#
+# Commit message format enforcement hook
+# Ensures commit messages follow project conventions
+#
+# Location: .git/hooks/commit-msg (installed from .claude/hooks/commit-msg)
+# Install: Run `npm run prepare` or `bash scripts/install-hooks.sh`
+# Bypass: Use `git commit --no-verify` (only for emergencies!)
+#
+# Expected format: "Action: description"
+# Valid actions: Add, Fix, Update, Remove, Refactor, Test, Docs
+#
+
+COMMIT_MSG_FILE=$1
+COMMIT_MSG=$(cat "$COMMIT_MSG_FILE")
+
+# Skip merge commits and revert commits (auto-generated messages)
+if echo "$COMMIT_MSG" | grep -qE "^Merge |^Revert "; then
+  exit 0
+fi
+
+# Check commit message format
+if ! echo "$COMMIT_MSG" | grep -qE "^(Add|Fix|Update|Remove|Refactor|Test|Docs):"; then
+  echo ""
+  echo "❌ COMMIT BLOCKED: Invalid commit message format"
+  echo ""
+  echo "   Your commit message:"
+  echo "   \"$COMMIT_MSG\""
+  echo ""
+  echo "   Expected format:"
+  echo "   Action: description"
+  echo ""
+  echo "   Valid actions:"
+  echo "   - Add: New feature or functionality"
+  echo "   - Fix: Bug fix or correction"
+  echo "   - Update: Enhancement to existing feature"
+  echo "   - Remove: Delete code or feature"
+  echo "   - Refactor: Code restructuring without behavior change"
+  echo "   - Test: Add or update tests"
+  echo "   - Docs: Documentation changes"
+  echo ""
+  echo "   Examples:"
+  echo "   ✅ Add: tire temperature tracking to physics engine"
+  echo "   ✅ Fix: Bristol lap time calibration off by 0.5s"
+  echo "   ✅ Update: career mode to support multi-season progression"
+  echo "   ✅ Refactor: extract pit strategy logic to separate module"
+  echo ""
+  echo "   Bypass (emergency only): git commit --no-verify"
+  echo ""
+  exit 1
+fi
+
+echo ""
+echo "✅ Commit message format valid"
+echo ""
+
+exit 0

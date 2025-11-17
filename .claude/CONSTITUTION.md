@@ -41,8 +41,48 @@ When you make a design choice (simulation speed, data structure, algorithm):
 - [ ] **Update TASKS.md continuously** - Mark tasks as in_progress/completed in real-time
 - [ ] **No batching** - Complete task → mark complete immediately
 - [ ] **Document discoveries** - Edge cases go to spec's SPEC.md or new task in TASKS.md
-- [ ] **TDD always** - Write test first, see it fail, implement, see it pass
-- [ ] **Commit frequently** - Small, focused commits after each working piece
+- [ ] **Follow TDD micro-cycles** - For each unit of work:
+  1. Write test first (define success criteria)
+  2. Run test (verify RED - test fails)
+  3. Implement minimal code (make test pass)
+  4. Run test (verify GREEN - test passes)
+  5. Refactor if needed (keep tests green)
+  6. **Commit checkpoint** (see "Before Each Commit" below)
+
+---
+
+## Before Each Commit
+
+**Mandatory checklist for every commit** (enforced by git hooks):
+
+### TDD Discipline
+- [ ] **Tests written FIRST** - Test-driven, not test-after
+- [ ] **Saw RED** - Tests failed initially (proves test works)
+- [ ] **Saw GREEN** - Tests pass now (proves implementation works)
+- [ ] **Tests validate change** - Not just code coverage, but meaningful validation
+
+### Quality Gates (Automated)
+- [ ] **Tests pass** - `npm run test:run` (git hook enforces)
+- [ ] **No TypeScript errors** - `npm run type-check` (git hook enforces)
+- [ ] **No lint errors** - `npm run lint` (git hook enforces)
+
+### Commit Hygiene
+- [ ] **Atomic change** - One logical unit, easily reversible
+- [ ] **Clear message** - Format: `Action: description`
+- [ ] **Valid action** - Add|Fix|Update|Remove|Refactor|Test|Docs (git hook enforces)
+
+### Documentation (If Applicable)
+- [ ] **Updated TASKS.md** - If task status changed
+- [ ] **Updated STATUS.md** - If milestone reached
+- [ ] **Updated CONTRACTS.md** - If types.ts changed
+
+**Bypass (emergency only):** `git commit --no-verify`
+
+**Why this matters:**
+- Small commits = easy rollback
+- Atomic changes = clear history
+- Test-first proof = RED→GREEN evidence
+- Frequent commits = continuous safety net
 
 ---
 
@@ -115,10 +155,13 @@ When you need to create a new document type:
 ## Enforcement
 
 This constitution is enforced through:
-1. **Manual adherence** - Read before starting work
-2. **Hooks** - Automated reminders (future)
+1. **Git hooks** - Automated blocking (pre-commit, commit-msg, pre-push)
+2. **Claude hooks** - Context-aware reminders (`.claude/settings.json`)
 3. **Scripts** - `npm run verify-docs` checks compliance
-4. **Code review** - Self-review against checklist
+4. **Manual adherence** - Read before starting work
+5. **Code review** - Self-review against checklist
+
+**Git hooks are installed automatically** via `npm run prepare` (runs on `npm install`)
 
 ---
 

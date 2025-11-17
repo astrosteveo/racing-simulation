@@ -6,15 +6,27 @@
         "hooks": [
           {
             "type": "command",
-            "command": "if echo \"$ARGUMENTS\" | grep -q 'npm run test:run'; then echo '\n💡 TIP: Update test status automatically:\n   npm run test:status (updates STATUS.md + README.md)\n   npm run verify-docs (checks all documentation sync)'; fi"
+            "command": "if echo \"$ARGUMENTS\" | grep -qE 'npm run test:run|vitest run'; then echo '\\n🧪 Tests completed!'; npm run test:status 2>/dev/null && echo '✅ Test status auto-updated in STATUS.md and README.md' || echo '⚠️  Run: npm run test:status (to update docs)'; fi"
           },
           {
             "type": "command",
-            "command": "if echo \"$ARGUMENTS\" | grep -q 'git commit.*-m'; then echo '\n💡 TIP: After commits, update STATUS.md Recent Changes and run:\n   npm run verify-docs (ensures documentation sync)'; fi"
+            "command": "if echo \"$ARGUMENTS\" | grep -q 'git commit.*-m'; then COMMIT_MSG=$(echo \"$ARGUMENTS\" | sed -n \"s/.*-m ['\\\"]\\([^'\\\"]*\\)['\\\"].*/\\1/p\"); echo \"\\n✅ Committed: $COMMIT_MSG\"; echo '\\n📋 Post-commit checklist:'; echo '   1. Update STATUS.md Recent Changes (latest commit)'; echo '   2. Run: npm run verify-docs (ensure sync)'; echo '   3. Update relevant specs/*/TASKS.md if needed'; fi"
           },
           {
             "type": "command",
-            "command": "if echo \"$ARGUMENTS\" | grep -q 'npm run verify-docs'; then echo '\n📋 Remember: Spec-centric workflow\n   - Update relevant specs/*/TASKS.md during work\n   - Update STATUS.md after milestones\n   - Each spec owns its own tasks!'; fi"
+            "command": "if echo \"$ARGUMENTS\" | grep -qE 'vitest.*\\.test\\.ts'; then TEST_FILE=$(echo \"$ARGUMENTS\" | grep -oP '[a-z-]+\\.test\\.ts' | head -1); echo \"\\n🔬 Running $TEST_FILE\"; echo '\\n💡 TDD Workflow:'; echo '   ✅ Write test → See it fail (RED)'; echo '   ✅ Write minimal code → See it pass (GREEN)'; echo '   ✅ Refactor → Tests still pass'; echo '   ✅ Commit → Small, focused commit'; fi"
+          },
+          {
+            "type": "command",
+            "command": "if echo \"$ARGUMENTS\" | grep -qE 'sync-readme|test:status|sync-contracts'; then echo '\\n📚 Documentation updated!'; echo '\\n💡 Next: Run npm run verify-docs to check all sync'; fi"
+          },
+          {
+            "type": "command",
+            "command": "if echo \"$ARGUMENTS\" | grep -qE 'git (add|stage)'; then echo '\\n📦 Files staged for commit'; echo '\\n💡 Before committing:'; echo '   - Tests passing? npm run test:run'; echo '   - Docs updated? npm run verify-docs'; echo '   - Small commit? Review git diff --cached'; fi"
+          },
+          {
+            "type": "command",
+            "command": "if echo \"$ARGUMENTS\" | grep -q 'git push'; then echo '\\n🚀 Pushed to remote!'; echo '\\n📋 Post-push checklist:'; echo '   - Update STATUS.md Recent Changes with pushed commits'; echo '   - Clear specs/*/TASKS.md Current Work sections'; echo '   - Update session notes if ending work'; fi"
           }
         ]
       },
@@ -23,7 +35,19 @@
         "hooks": [
           {
             "type": "command",
-            "command": "if echo \"$ARGUMENTS\" | grep -q 'src/.*\\.ts'; then echo '\n⚠️  PROCESS GATE REMINDER:\n   1. Does an approved task exist in specs/*/TASKS.md?\n   2. Are you following TDD (test → code → refactor)?\n   3. Will you update the spec TASKS.md after this change?\n   \n   Sustainable development = No code without planning!'; fi"
+            "command": "FILE_PATH=$(echo \"$ARGUMENTS\" | grep -oP 'src/[^\"]+\\.ts' | head -1); if [ -n \"$FILE_PATH\" ] && ! echo \"$FILE_PATH\" | grep -q 'test\\.ts'; then echo \"\\n⚠️  WRITING: $FILE_PATH\"; echo '\\n🚦 PROCESS GATE CHECKLIST:'; echo '   □ Approved task exists in specs/*/TASKS.md?'; echo '   □ Following TDD (test written first)?'; echo '   □ Will update the spec TASKS.md after this?'; echo '\\n💡 Sustainable development = No code without planning!'; fi"
+          },
+          {
+            "type": "command",
+            "command": "if echo \"$ARGUMENTS\" | grep -qP 'src/.*\\.ts' && ! echo \"$ARGUMENTS\" | grep -q 'test\\.ts'; then FILE=$(echo \"$ARGUMENTS\" | grep -oP 'src/[^/]+/[^/]+\\.ts' | head -1 | xargs basename 2>/dev/null); if [ -n \"$FILE\" ]; then echo \"\\n🧪 New source file detected\"; echo '\\n💡 TDD Reminder: Have you written the test first?'; TEST_NAME=\"${FILE%.ts}.test.ts\"; echo \"   Expected test file: tests/unit/**/$TEST_NAME\"; fi; fi"
+          },
+          {
+            "type": "command",
+            "command": "if echo \"$ARGUMENTS\" | grep -q '\\.test\\.ts'; then TEST_FILE=$(echo \"$ARGUMENTS\" | grep -oP '[a-z-]+\\.test\\.ts' | head -1); echo \"\\n✅ Test file created: $TEST_FILE\"; echo '\\n💡 TDD Next steps:'; echo \"   1. Run test: npx vitest $TEST_FILE\"; echo '   2. See it fail (RED - no implementation yet)'; echo '   3. Implement minimal code to pass'; echo '   4. See it pass (GREEN)'; echo '   5. Refactor if needed'; echo '   6. Commit atomic change'; fi"
+          },
+          {
+            "type": "command",
+            "command": "if echo \"$ARGUMENTS\" | grep -q 'src/types\\.ts'; then echo '\\n📝 WRITING CONTRACT DEFINITIONS (types.ts)'; echo '\\n⚠️  Contract-First Development:'; echo '   1. Define interface first'; echo '   2. Update relevant specs/*/CONTRACTS.md'; echo '   3. Implement in code'; echo '   4. Run: npm run sync-contracts (verify sync)'; echo '\\n💡 Changed interfaces break implementations!'; fi"
           }
         ]
       },
@@ -32,7 +56,28 @@
         "hooks": [
           {
             "type": "command",
-            "command": "if echo \"$ARGUMENTS\" | grep -q 'src/types\\.ts'; then echo '\n📝 CONTRACT CHANGE DETECTED:\n   - Update relevant specs/*/CONTRACTS.md\n   - Update all implementations using this interface\n   - Run: npm run sync-contracts (to verify sync)'; fi"
+            "command": "if echo \"$ARGUMENTS\" | grep -q 'src/types\\.ts'; then echo '\\n📝 EDITED: src/types.ts (CONTRACT CHANGE)'; echo '\\n⚠️  Interface changes impact:'; echo '   - All implementations using this interface'; echo '   - Relevant specs/*/CONTRACTS.md documentation'; echo '   - Test files validating the contract'; echo '\\n🔧 Running contract sync check...'; npm run sync-contracts 2>/dev/null && echo '✅ Contracts in sync!' || echo '❌ Contract sync issues detected - review output above'; fi"
+          },
+          {
+            "type": "command",
+            "command": "if echo \"$ARGUMENTS\" | grep -qP 'src/.*\\.ts' && ! echo \"$ARGUMENTS\" | grep -q 'types\\.ts'; then FILE=$(echo \"$ARGUMENTS\" | grep -oP 'src/[^\"]+\\.ts' | head -1); if [ -n \"$FILE\" ]; then echo \"\\n✏️  EDITED: $FILE\"; echo '\\n💡 TDD Reminder:'; echo '   - Did you update the test first?'; echo '   - Run affected tests to verify change'; echo '   - Commit if tests pass'; fi; fi"
+          },
+          {
+            "type": "command",
+            "command": "if echo \"$ARGUMENTS\" | grep -qP 'specs/[^/]+/TASKS\\.md'; then SPEC=$(echo \"$ARGUMENTS\" | grep -oP 'specs/\\K[^/]+' | head -1); if [ -n \"$SPEC\" ]; then echo \"\\n📋 EDITED: specs/$SPEC/TASKS.md\"; echo '\\n💡 Task Management Reminder:'; echo '   - Mark tasks as in_progress when starting'; echo '   - Mark complete immediately when done'; echo '   - Update STATUS.md after milestones'; echo '   - Keep only 1 task in_progress at a time'; fi; fi"
+          },
+          {
+            "type": "command",
+            "command": "if echo \"$ARGUMENTS\" | grep -q 'TASKS\\.md'; then echo '\\n📊 After updating TASKS.md:'; echo '   - Is this a milestone? Update STATUS.md'; echo '   - Tests changed? Run npm run test:status'; echo '   - Session ending? Clear Current Work section'; fi"
+          }
+        ]
+      },
+      {
+        "matcher": "Read",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if echo \"$ARGUMENTS\" | grep -q '\\.test\\.ts'; then TEST=$(echo \"$ARGUMENTS\" | grep -oP '[a-z-]+(?=\\.test\\.ts)' | head -1); if [ -n \"$TEST\" ]; then echo \"\\n📖 Reading test: $TEST.test.ts\"; echo '\\n💡 Relevant files:'; echo \"   - Implementation: src/**/$TEST.ts\"; echo \"   - Spec: specs/*/SPEC.md (search for $TEST)\"; fi; fi"
           }
         ]
       }

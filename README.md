@@ -92,6 +92,7 @@ The project uses a **spec-centric architecture** where each major system has its
 - **[QUICKSTART.md](.claude/QUICKSTART.md)** - Start here after /new sessions (cold start optimization)
 - **[TASKS.md](.claude/TASKS.md)** - Current work, test status, next steps (living document)
 - **[CLAUDE.md](.claude/CLAUDE.md)** - Development workflow and principles
+- **Automated Quality:** Git hooks enforce TDD discipline (tests pass, proper commits, docs synced)
 
 ## Prerequisites
 

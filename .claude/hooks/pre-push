@@ -1,0 +1,48 @@
+#!/bin/bash
+#
+# Pre-push hook for documentation sync verification
+# Ensures documentation is synced before pushing to remote
+#
+# Location: .git/hooks/pre-push (installed from .claude/hooks/pre-push)
+# Install: Run `npm run prepare` or `bash scripts/install-hooks.sh`
+# Bypass: Use `git push --no-verify` (only for emergencies!)
+#
+
+echo ""
+echo "🚦 Pre-push Documentation Gate"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+echo "📋 Verifying documentation sync..."
+echo ""
+
+# Run verify-docs script
+if ! npm run verify-docs --silent 2>&1; then
+  echo ""
+  echo "❌ PUSH BLOCKED: Documentation sync issues detected"
+  echo ""
+  echo "   Documentation must be synced before pushing to remote."
+  echo ""
+  echo "   Common issues:"
+  echo "   - STATUS.md Recent Changes not updated with latest commits"
+  echo "   - Test status in STATUS.md/README.md is stale"
+  echo "   - Uncommitted changes to living documents"
+  echo "   - TASKS.md has Current Work items (should be cleared)"
+  echo ""
+  echo "   Fix with:"
+  echo "   1. Update STATUS.md Recent Changes manually"
+  echo "   2. Run: npm run test:status (updates test counts)"
+  echo "   3. Run: npm run verify-docs (check what's wrong)"
+  echo "   4. Commit documentation updates"
+  echo "   5. Try push again"
+  echo ""
+  echo "   Bypass (emergency only): git push --no-verify"
+  echo ""
+  exit 1
+fi
+
+echo ""
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "✅ Documentation sync verified! Proceeding with push..."
+echo ""
+
+exit 0

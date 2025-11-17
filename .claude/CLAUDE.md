@@ -30,11 +30,16 @@ Phase 3: TASK
 ├── Specify files, functions, success criteria
 └── ⚠️  CHECKPOINT: Approve tasks before coding
 
-Phase 4: EXECUTE
-├── Implement following TDD (test → code → refactor)
-├── Update specs/*/TASKS.md as you work (mark in_progress/completed)
-├── Commit frequently (small, working pieces)
-└── Update STATUS.md after significant milestones
+Phase 4: EXECUTE (TDD Micro-Cycles)
+└── FOR EACH unit of work, run TDD cycles:
+    ├── 1. Write failing test (defines success criteria)
+    ├── 2. Run test (verify RED - test fails as expected)
+    ├── 3. Implement minimal code (make test pass)
+    ├── 4. Run test (verify GREEN - test now passes)
+    ├── 5. Refactor if needed (while keeping tests green)
+    ├── 6. ⚠️ COMMIT CHECKPOINT (mandatory - tests pass, atomic change)
+    ├── Update specs/*/TASKS.md as you complete units
+    └── Update STATUS.md after significant milestones
 
 Phase 5: REVIEW
 ├── Validate all tests pass
@@ -50,6 +55,48 @@ Phase 5: REVIEW
 4. **Update docs continuously** - Don't batch documentation updates
 
 **Enforcement:** This gate prevents premature implementation and ensures thoughtful design.
+
+---
+
+## Before Each Commit Checklist
+
+**Every commit must pass this checklist** (enforced by git hooks):
+
+```
+⚠️  COMMIT CHECKPOINT CHECKLIST
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TDD Discipline:
+□ Tests written FIRST (test-driven, not test-after)
+□ Tests failed initially (saw RED output)
+□ Tests pass now (saw GREEN output)
+□ Tests validate the change (not just code coverage)
+
+Quality Gates:
+□ All tests passing (npm run test:run)
+□ No TypeScript errors (npm run type-check)
+□ No lint errors (npm run lint)
+
+Commit Hygiene:
+□ Atomic change (one logical unit, easily reversible)
+□ Clear commit message (format: "Action: description")
+□ Valid action: Add|Fix|Update|Remove|Refactor|Test|Docs
+
+Documentation (if applicable):
+□ Updated relevant specs/*/TASKS.md
+□ Updated STATUS.md if milestone reached
+□ Updated contracts if types.ts changed
+```
+
+**Git hooks enforce these checks automatically.** You can:
+- Run manual check: `npm run commit-checklist`
+- Bypass hooks (emergency only): `git commit --no-verify`
+
+**Why commit checkpoints matter:**
+- Small commits = easy rollback if something breaks
+- Atomic changes = clear history, bisectable bugs
+- Test-first proof = RED→GREEN cycle evidence
+- Frequent commits = continuous safety net
 
 ---
 
@@ -188,6 +235,45 @@ npm run test:coverage
 ```
 
 **Never use `npm test` in automated workflows** - it runs in watch mode and blocks indefinitely.
+
+### Git Hooks (Automated Enforcement)
+
+**Pre-commit hooks** (blocks bad commits):
+- Runs `npm run test:run` - All tests must pass
+- Runs `npm run type-check` - No TypeScript errors
+- Runs `npm run lint` - No linting errors
+- **Location:** `.git/hooks/pre-commit` (installed automatically)
+
+**Commit-msg hooks** (enforces format):
+- Validates commit message format: `Action: description`
+- Valid actions: Add, Fix, Update, Remove, Refactor, Test, Docs
+- **Location:** `.git/hooks/commit-msg`
+
+**Post-commit hooks** (reminders):
+- Displays documentation sync checklist (non-blocking)
+- Reminds about STATUS.md Recent Changes update
+- **Location:** `.git/hooks/post-commit`
+
+**Pre-push hooks** (blocks unsync'd pushes):
+- Runs `npm run verify-docs` - Documentation must be synced
+- Prevents pushing stale documentation to remote
+- **Location:** `.git/hooks/pre-push`
+
+**Hook Installation:**
+```bash
+npm run prepare           # Auto-installs hooks (runs on npm install)
+bash scripts/install-hooks.sh  # Manual installation
+```
+
+**Bypass (emergency only):**
+```bash
+git commit --no-verify    # Skip pre-commit and commit-msg hooks
+git push --no-verify      # Skip pre-push hooks
+```
+
+**Hook templates:** All hooks are version-controlled in `.claude/hooks/` and copied to `.git/hooks/` during installation.
+
+**Claude hooks** (educational, non-blocking): See `.claude/settings.json` for context-aware reminders and automated documentation updates.
 
 ### Documentation Verification
 

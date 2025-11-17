@@ -5,6 +5,7 @@
   "main": "dist/index.js",
   "type": "module",
   "scripts": {
+    "prepare": "bash scripts/install-hooks.sh",
     "dev": "tsx src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
@@ -19,11 +20,14 @@
     "type-check": "tsc --noEmit",
     "verify-docs": "bash scripts/verify-docs.sh",
     "validate-tasks": "bash scripts/validate-tasks.sh",
+    "validate-tdd": "bash scripts/validate-tdd.sh",
+    "check-coverage": "bash scripts/check-coverage-delta.sh",
     "test:status": "bash scripts/update-test-status.sh",
     "sync-readme": "bash scripts/sync-readme.sh",
     "verify-specs": "bash scripts/verify-specs.sh",
     "sync-contracts": "bash scripts/sync-contracts.sh",
-    "spec-status": "bash scripts/spec-status.sh"
+    "spec-status": "bash scripts/spec-status.sh",
+    "commit-checklist": "echo '\n⚠️  COMMIT CHECKLIST:\n□ Tests written first\n□ Tests failed initially (RED)\n□ Tests passed (GREEN)\n□ No TypeScript errors (npm run type-check)\n□ No lint errors (npm run lint)\n□ Atomic change (one logical unit)\n□ Clear commit message (Action: description)\n'"
   },
   "keywords": [
     "nascar",

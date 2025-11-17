@@ -122,6 +122,29 @@ racing-simulation/
 4. **Small Commits:** Every working piece, not massive changesets
 5. **Real Physics:** Simulation calculates outcomes, no predetermined results
 
+## Hooks System (Automated Enforcement)
+
+**Two-tier system:** Claude hooks (educational) + Git hooks (enforcement)
+
+### Git Hooks (Automated)
+- **pre-commit:** Blocks commits if tests fail, TypeScript errors, or lint errors
+- **commit-msg:** Enforces format: `Action: description`
+- **post-commit:** Displays documentation sync checklist (non-blocking)
+- **pre-push:** Blocks push if `verify-docs` fails
+
+**Install:** Runs automatically on `npm install` (via `npm run prepare`)
+**Bypass:** `git commit --no-verify` (emergency only)
+
+### Claude Hooks (Smart Reminders)
+- Auto-runs `test:status` after test commands
+- Auto-runs `sync-contracts` after editing `types.ts`
+- Context-aware TDD reminders when editing source
+- Pre-commit checklist before git operations
+
+**Config:** `.claude/settings.json`
+
+**See:** `.claude/CLAUDE.md` for complete hooks documentation
+
 ## Common Workflows
 
 ### Resume Work After /new

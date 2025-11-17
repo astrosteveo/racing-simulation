@@ -63,6 +63,14 @@ Each template has standard sections. **Do not remove sections** - mark as "N/A" 
 
 ### Template-Specific Sections
 
+**TASKS-TEMPLATE.md:**
+- **TDD Breakdown** - Each task should include test-first cycle breakdown:
+  1. Write test → Run (RED) → Implement → Run (GREEN) → Commit
+  2. Repeat for each feature unit
+  3. Refactor → Commit
+- **Success Criteria** - Must include test-first requirement
+- Ensures TDD discipline built into every task
+
 See each template for its specific required sections.
 
 ---
