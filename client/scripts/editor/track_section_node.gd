@@ -30,6 +30,10 @@ func _ready() -> void:
 	_setup_collision()
 	_setup_materials()
 
+	# Request gizmo update for editor plugin
+	if Engine.is_editor_hint():
+		call_deferred("update_gizmo")
+
 
 func _setup_collision() -> void:
 	# Create Area3D for mouse raycasting

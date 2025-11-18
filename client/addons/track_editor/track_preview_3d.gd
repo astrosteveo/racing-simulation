@@ -202,6 +202,42 @@ func _on_section_selection_changed(selected: bool, section: TrackSectionNode3D) 
 		print("Track Editor: Deselected section ", section.section_index)
 
 
+## Regenerate track mesh when sections are modified
+func regenerate_track() -> void:
+	if current_track_id.is_empty():
+		return
+
+	print("Track Editor: Regenerating track geometry...")
+
+	# Rebuild track from current section data
+	var track_path := "res://data/tracks/%s.json" % current_track_id
+	var track_resource := TrackResource.from_json(track_path)
+
+	if not track_resource:
+		push_error("Failed to reload track for regeneration")
+		return
+
+	# Update sections from section nodes (they may have been modified)
+	for i in range(min(section_nodes.size(), track_resource.sections.size())):
+		track_resource.sections[i] = section_nodes[i].section_data
+
+	# Generate new geometry
+	var track_data := resource_to_dict(track_resource)
+	var centerline := TrackGenerator.generate_centerline(track_data)
+
+	if centerline.is_empty():
+		push_error("Failed to regenerate centerline")
+		return
+
+	# Rebuild mesh
+	var banking_config := track_resource.banking_config
+	var surface_mesh := TrackMeshBuilder.build_surface_mesh(centerline, track_resource.track_width, banking_config)
+
+	if track_mesh_instance:
+		track_mesh_instance.mesh = surface_mesh
+		print("Track Editor: Geometry regenerated - ", centerline.size(), " points")
+
+
 ## Handle mouse clicks for section selection
 func _handle_section_click(mouse_pos: Vector2) -> void:
 	if not camera:
