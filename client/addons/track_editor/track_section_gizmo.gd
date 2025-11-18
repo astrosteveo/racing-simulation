@@ -38,7 +38,7 @@ func _redraw() -> void:
 
 ## Draw handles for turn section
 func _draw_turn_handles(section_node) -> void:
-	var section_data := section_node.section_data
+	var section_data: Dictionary = section_node.section_data
 	var radius: float = section_data.get("radius", 250.0) * FEET_TO_METERS
 	var start_angle: float = section_data.get("startAngle", 0.0)
 	var end_angle: float = section_data.get("endAngle", 180.0)
@@ -91,7 +91,7 @@ func _draw_turn_arc(section_node, radius: float, start_angle: float, end_angle: 
 
 ## Draw handles for straight section
 func _draw_straight_handles(section_node) -> void:
-	var section_data := section_node.section_data
+	var section_data: Dictionary = section_node.section_data
 	var length: float = section_data.get("length", 700.0) * FEET_TO_METERS
 
 	# For now, simple visualization
@@ -168,7 +168,7 @@ func _drag_turn_center(section_node, camera: Camera3D, screen_pos: Vector2) -> v
 	if intersection:
 		# Convert to global position, then to section local position
 		var global_pos: Vector3 = intersection
-		var local_pos := section_node.to_local(global_pos)
+		var local_pos: Vector3 = section_node.to_local(global_pos)
 
 		# Update section data (convert meters to feet)
 		section_node.section_data["centerPoint"] = {
@@ -195,11 +195,11 @@ func _drag_turn_radius(section_node, camera: Camera3D, screen_pos: Vector2) -> v
 	if intersection:
 		# Calculate distance from turn center to intersection point
 		var global_pos: Vector3 = intersection
-		var center_pos := section_node.global_position
-		var radius_meters := (global_pos - center_pos).length()
+		var center_pos: Vector3 = section_node.global_position
+		var radius_meters: float = (global_pos - center_pos).length()
 
 		# Clamp to reasonable values (100ft to 1000ft)
-		var radius_feet := radius_meters * METERS_TO_FEET
+		var radius_feet: float = radius_meters * METERS_TO_FEET
 		radius_feet = clamp(radius_feet, 100.0, 1000.0)
 
 		# Update section data
