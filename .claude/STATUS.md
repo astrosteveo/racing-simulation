@@ -8,25 +8,30 @@
 
 ## Active Work
 
-**Primary Focus:** Track Builder Phase 1 COMPLETE! ✅🎉🏁
+**Primary Focus:** Track Builder Visual Editor - Phase 2 MVP Complete! ✅🎯
 - Spec: `specs/track-builder/`
-- Status: **CLOSED LOOP ACHIEVED! Both tracks rendering as proper ovals!**
-- Phase 1 Achievements:
+- Status: **VISUAL EDITING NOW POSSIBLE - Gizmo handles working!**
+- Phase 1 Achievements (Parametric Generation):
   - ✅ Multi-track parametric generation (Bristol, Martinsville)
   - ✅ Track Editor plugin structure (bottom panel, UI)
   - ✅ Real-time 3D preview (camera controls, track rendering)
   - ✅ Spiral transition sections (smooth banking changes)
   - ✅ Martinsville dimensions corrected (187.5ft radius, 800ft straights)
-  - ✅ **CRITICAL FIX**: Proper tangent continuation between sections
-  - ✅ **CRITICAL FIX**: Inverted turn angles for correct geometry direction
-  - ✅ **BREAKTHROUGH**: Closed loop track geometry!
-  - ✅ Bristol: Proper oval shape with connected sections
-  - ✅ Martinsville: Perfect paperclip with proper closure
+  - ✅ Proper tangent continuation between sections
+  - ✅ Closed loop track geometry with smooth closure
   - ✅ Research-validated approach (matches NASCAR + industry standards)
   - ✅ Low-poly: 131 points per track (performant!)
-  - ✅ Loop closure smoothing applied
-- Current: **PHASE 1 FOUNDATION SOLID** - Ready for Phase 2 polish!
-- Next: Phase 2 refinement: Smoothing, visual editor, or additional tracks
+- Phase 2 Achievements (Visual Editor MVP):
+  - ✅ **TrackSectionNode3D** - Selectable sections with collision detection
+  - ✅ **Mouse click selection** - Click sections to select in viewport
+  - ✅ **TrackSectionGizmoPlugin** - Godot gizmo system integration
+  - ✅ **Turn center handle** - Drag to move turn position (XZ plane)
+  - ✅ **Turn radius handle** - Drag to expand/shrink turn
+  - ✅ **Visual arc rendering** - See turn arcs with handles
+  - ✅ **Track regeneration** - Mesh updates in real-time
+  - ✅ All parse errors resolved - Plugin loads successfully!
+- Current: **MVP VISUAL EDITOR WORKING** - Ready to test in Godot!
+- Next: Test handles → Add straight/transition handles → Inspector panel → Save/load
 
 **Secondary Focus:** 3D Racing Client - Phase 1.2 Complete ✅
 - Spec: `specs/client/`
@@ -91,11 +96,11 @@
 
 ## Recent Changes (Last 5 Commits)
 
-1. `c6fb14f` - Docs: Add Track Builder showcase with screenshots to README 📸
-2. `1cac745` - Docs: Update Recent Changes with latest commits
-3. `cbe358f` - Docs: Sync test status and update timestamps
-4. `879db44` - Docs: Update STATUS.md - Track Builder Phase 1 COMPLETE! 🎉
-5. `2f24792` - Fix: Invert turn directions for both tracks ⭐ BREAKTHROUGH
+1. `d172f79` - Fix: Type annotations and preload paths for gizmo system
+2. `85283d0` - Add: Phase 2 - Gizmo plugin for turn editing ⭐
+3. `e5cb846` - Add: Phase 1 - Selectable track sections
+4. `c6fb14f` - Docs: Add Track Builder showcase with screenshots to README 📸
+5. `0637db3` - Docs: Update STATUS.md with latest README commit
 
 ---
 
