@@ -6,6 +6,11 @@ extends Node3D
 var track_mesh_instance: MeshInstance3D
 var current_track_id := ""
 
+# Track sections for editing
+var section_nodes: Array[TrackSectionNode3D] = []
+var selected_section: TrackSectionNode3D = null
+var hovered_section: TrackSectionNode3D = null
+
 # Camera orbit controls
 var camera_distance := 200.0
 var camera_angle_h := 0.0  # Horizontal angle (yaw)
@@ -55,16 +60,26 @@ func load_track(track_id: String) -> void:
 	track_mesh_instance.material_override = create_preview_material()
 	add_child(track_mesh_instance)
 
+	# Create section nodes for selection/editing
+	create_section_nodes(track_resource.sections)
+
 	# Focus camera on track
 	focus_on_track(centerline)
 
-	print("Track Editor Preview: ", track_resource.track_name, " loaded - ", centerline.size(), " points")
+	print("Track Editor Preview: ", track_resource.track_name, " loaded - ", centerline.size(), " points, ", section_nodes.size(), " sections")
 
 
 func clear_track() -> void:
 	if track_mesh_instance:
 		track_mesh_instance.queue_free()
 		track_mesh_instance = null
+
+	# Clear section nodes
+	for section in section_nodes:
+		section.queue_free()
+	section_nodes.clear()
+	selected_section = null
+	hovered_section = null
 
 
 func resource_to_dict(resource: TrackResource) -> Dictionary:
@@ -140,13 +155,107 @@ func update_camera_position() -> void:
 	camera.look_at(camera_target, Vector3.UP)
 
 
+## Create TrackSectionNode3D instances for each section
+func create_section_nodes(sections: Array) -> void:
+	for i in range(sections.size()):
+		var section_data: Dictionary = sections[i]
+		var section_type: String = section_data.get("type", "")
+
+		# Create section node
+		var section_node := TrackSectionNode3D.new()
+		section_node.name = "Section_%d_%s" % [i, section_type]
+		section_node.set_section_data(i, section_type, section_data)
+
+		# Connect selection signal
+		section_node.selection_changed.connect(_on_section_selection_changed.bind(section_node))
+
+		add_child(section_node)
+		section_nodes.append(section_node)
+
+		# Position section node (approximate center of section)
+		# This will be refined when we calculate actual geometry
+		_position_section_node(section_node, section_data)
+
+
+## Position a section node based on its data (approximate)
+func _position_section_node(section_node: TrackSectionNode3D, section_data: Dictionary) -> void:
+	var section_type: String = section_data.get("type", "")
+
+	match section_type:
+		"turn":
+			# Position at turn center
+			var center_x: float = section_data.get("centerPoint", {}).get("x", 0.0) * 0.3048
+			var center_z: float = section_data.get("centerPoint", {}).get("y", 0.0) * 0.3048
+			section_node.global_position = Vector3(center_x, 0, center_z)
+
+		"straight", "transition":
+			# Position will be calculated from previous sections
+			# For now, keep at origin (will be refined with actual geometry)
+			section_node.global_position = Vector3.ZERO
+
+
+## Handle section selection
+func _on_section_selection_changed(selected: bool, section: TrackSectionNode3D) -> void:
+	if selected:
+		print("Track Editor: Selected section ", section.section_index, " (", section.section_type, ")")
+	else:
+		print("Track Editor: Deselected section ", section.section_index)
+
+
+## Handle mouse clicks for section selection
+func _handle_section_click(mouse_pos: Vector2) -> void:
+	if not camera:
+		return
+
+	# Raycast from camera through mouse position
+	var from := camera.project_ray_origin(mouse_pos)
+	var to := from + camera.project_ray_normal(mouse_pos) * 1000.0
+
+	# Check intersection with section areas
+	var space_state := get_world_3d().direct_space_state
+	var query := PhysicsRayQueryParameters3D.create(from, to)
+	query.collide_with_areas = true
+	query.collide_with_bodies = false
+
+	var result := space_state.intersect_ray(query)
+
+	if result:
+		# Find which section was clicked
+		var hit_area: Area3D = result.get("collider")
+		if hit_area:
+			for section in section_nodes:
+				if section.collision_area == hit_area:
+					# Select this section
+					select_section(section)
+					return
+
+	# No section hit - deselect
+	select_section(null)
+
+
+## Select a section (or null to deselect all)
+func select_section(section: TrackSectionNode3D) -> void:
+	# Deselect previous
+	if selected_section and selected_section != section:
+		selected_section.set_selected(false)
+
+	# Select new
+	selected_section = section
+	if selected_section:
+		selected_section.set_selected(true)
+
+
 func _input(event: InputEvent) -> void:
 	# Handle camera controls
 	if event is InputEventMouseButton:
 		var mouse_event := event as InputEventMouseButton
 
+		# Left click for section selection
+		if mouse_event.button_index == MOUSE_BUTTON_LEFT and not mouse_event.pressed:
+			_handle_section_click(mouse_event.position)
+
 		# Right click for orbit
-		if mouse_event.button_index == MOUSE_BUTTON_RIGHT:
+		elif mouse_event.button_index == MOUSE_BUTTON_RIGHT:
 			is_orbiting = mouse_event.pressed
 			if mouse_event.pressed:
 				last_mouse_pos = mouse_event.position
