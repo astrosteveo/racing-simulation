@@ -96,11 +96,11 @@
 
 ## Recent Changes (Last 5 Commits)
 
-1. `d172f79` - Fix: Type annotations and preload paths for gizmo system
-2. `85283d0` - Add: Phase 2 - Gizmo plugin for turn editing ⭐
-3. `e5cb846` - Add: Phase 1 - Selectable track sections
-4. `c6fb14f` - Docs: Add Track Builder showcase with screenshots to README 📸
-5. `0637db3` - Docs: Update STATUS.md with latest README commit
+1. `e5af2a3` - Fix: Add explicit type annotations to gizmo script
+2. `392fc0a` - Docs: Update STATUS.md - Visual Editor Phase 2 MVP complete
+3. `e2e2b08` - Fix: Type annotations and preload paths for gizmo system
+4. `366c34f` - Add: Phase 2 - Gizmo plugin for turn editing ⭐
+5. `02c7c95` - Add: Phase 1 - Selectable track sections
 
 ---
 
