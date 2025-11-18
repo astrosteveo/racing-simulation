@@ -22,8 +22,8 @@ func _init() -> void:
 func _redraw() -> void:
 	clear()
 
-	var section_node := get_node_3d() as TrackSectionNode3D
-	if not section_node:
+	var section_node = get_node_3d()
+	if not section_node or not section_node.has_method("get"):
 		return
 
 	# Draw appropriate handles based on section type
@@ -37,7 +37,7 @@ func _redraw() -> void:
 
 
 ## Draw handles for turn section
-func _draw_turn_handles(section_node: TrackSectionNode3D) -> void:
+func _draw_turn_handles(section_node) -> void:
 	var section_data := section_node.section_data
 	var radius: float = section_data.get("radius", 250.0) * FEET_TO_METERS
 	var start_angle: float = section_data.get("startAngle", 0.0)
@@ -69,7 +69,7 @@ func _draw_turn_handles(section_node: TrackSectionNode3D) -> void:
 
 
 ## Draw arc visualization for turn
-func _draw_turn_arc(section_node: TrackSectionNode3D, radius: float, start_angle: float, end_angle: float) -> void:
+func _draw_turn_arc(section_node, radius: float, start_angle: float, end_angle: float) -> void:
 	var points := PackedVector3Array()
 	var num_segments := 32
 
@@ -90,7 +90,7 @@ func _draw_turn_arc(section_node: TrackSectionNode3D, radius: float, start_angle
 
 
 ## Draw handles for straight section
-func _draw_straight_handles(section_node: TrackSectionNode3D) -> void:
+func _draw_straight_handles(section_node) -> void:
 	var section_data := section_node.section_data
 	var length: float = section_data.get("length", 700.0) * FEET_TO_METERS
 
@@ -100,7 +100,7 @@ func _draw_straight_handles(section_node: TrackSectionNode3D) -> void:
 
 
 ## Draw handles for transition section
-func _draw_transition_handles(section_node: TrackSectionNode3D) -> void:
+func _draw_transition_handles(section_node) -> void:
 	# TODO: Add transition handles
 	pass
 
@@ -120,11 +120,11 @@ func _get_handle_name(handle_id: int, secondary: bool) -> String:
 
 ## Get current value of handle
 func _get_handle_value(handle_id: int, secondary: bool) -> Variant:
-	var section_node := get_node_3d() as TrackSectionNode3D
+	var section_node = get_node_3d()
 	if not section_node:
 		return null
 
-	var section_data := section_node.section_data
+	var section_data = section_node.section_data
 
 	match handle_id:
 		Handle.TURN_CENTER:
@@ -142,11 +142,11 @@ func _get_handle_value(handle_id: int, secondary: bool) -> Variant:
 
 ## Handle drag operation
 func _set_handle(handle_id: int, secondary: bool, camera: Camera3D, screen_pos: Vector2) -> void:
-	var section_node := get_node_3d() as TrackSectionNode3D
+	var section_node = get_node_3d()
 	if not section_node:
 		return
 
-	var section_data := section_node.section_data
+	var section_data = section_node.section_data
 
 	match handle_id:
 		Handle.TURN_CENTER:
@@ -156,7 +156,7 @@ func _set_handle(handle_id: int, secondary: bool, camera: Camera3D, screen_pos: 
 
 
 ## Drag turn center in XZ plane
-func _drag_turn_center(section_node: TrackSectionNode3D, camera: Camera3D, screen_pos: Vector2) -> void:
+func _drag_turn_center(section_node, camera: Camera3D, screen_pos: Vector2) -> void:
 	# Project screen position to XZ plane
 	var from := camera.project_ray_origin(screen_pos)
 	var normal := camera.project_ray_normal(screen_pos)
@@ -184,7 +184,7 @@ func _drag_turn_center(section_node: TrackSectionNode3D, camera: Camera3D, scree
 
 
 ## Drag turn radius
-func _drag_turn_radius(section_node: TrackSectionNode3D, camera: Camera3D, screen_pos: Vector2) -> void:
+func _drag_turn_radius(section_node, camera: Camera3D, screen_pos: Vector2) -> void:
 	# Project screen position to XZ plane
 	var from := camera.project_ray_origin(screen_pos)
 	var normal := camera.project_ray_normal(screen_pos)
@@ -210,7 +210,7 @@ func _drag_turn_radius(section_node: TrackSectionNode3D, camera: Camera3D, scree
 
 
 ## Notify that track needs regeneration
-func _notify_track_changed(section_node: TrackSectionNode3D) -> void:
+func _notify_track_changed(section_node) -> void:
 	# Signal that section data has changed
 	# The track preview should listen for this and regenerate the mesh
 	print("Track section ", section_node.section_index, " modified - regeneration needed")

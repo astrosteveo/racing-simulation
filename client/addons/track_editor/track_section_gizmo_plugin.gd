@@ -3,7 +3,10 @@ extends EditorNode3DGizmoPlugin
 
 ## Gizmo plugin for editing track sections with 3D handles
 
-const TrackSectionGizmo = preload("res://addons/track_editor/track_section_gizmo.gd")
+const TrackSectionNode3D = preload("res://scripts/editor/track_section_node.gd")
+
+# Note: We can't preload the gizmo script here because it extends EditorNode3DGizmo
+# which causes circular dependencies. We'll use load() in _create_gizmo() instead.
 
 
 func _init() -> void:
@@ -21,12 +24,16 @@ func _get_gizmo_name() -> String:
 
 
 func _has_gizmo(node: Node3D) -> bool:
-	return node is TrackSectionNode3D
+	# Check if node is a TrackSectionNode3D by checking class name
+	return node.get_script() == TrackSectionNode3D
 
 
 func _create_gizmo(node: Node3D) -> EditorNode3DGizmo:
-	if node is TrackSectionNode3D:
-		return TrackSectionGizmo.new()
+	# Load gizmo script dynamically to avoid circular dependency
+	var gizmo_script := load("res://addons/track_editor/track_section_gizmo.gd")
+	if gizmo_script and node.get_script() == TrackSectionNode3D:
+		var gizmo = gizmo_script.new()
+		return gizmo
 	return null
 
 

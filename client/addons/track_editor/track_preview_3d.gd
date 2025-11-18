@@ -1,15 +1,17 @@
 @tool
 extends Node3D
 
+const TrackSectionNode3D = preload("res://scripts/editor/track_section_node.gd")
+
 @onready var camera: Camera3D = $Camera3D
 
 var track_mesh_instance: MeshInstance3D
 var current_track_id := ""
 
 # Track sections for editing
-var section_nodes: Array[TrackSectionNode3D] = []
-var selected_section: TrackSectionNode3D = null
-var hovered_section: TrackSectionNode3D = null
+var section_nodes: Array = []  # Array of TrackSectionNode3D
+var selected_section: Node3D = null  # TrackSectionNode3D
+var hovered_section: Node3D = null  # TrackSectionNode3D
 
 # Camera orbit controls
 var camera_distance := 200.0
@@ -178,7 +180,7 @@ func create_section_nodes(sections: Array) -> void:
 
 
 ## Position a section node based on its data (approximate)
-func _position_section_node(section_node: TrackSectionNode3D, section_data: Dictionary) -> void:
+func _position_section_node(section_node: Node3D, section_data: Dictionary) -> void:
 	var section_type: String = section_data.get("type", "")
 
 	match section_type:
@@ -195,7 +197,7 @@ func _position_section_node(section_node: TrackSectionNode3D, section_data: Dict
 
 
 ## Handle section selection
-func _on_section_selection_changed(selected: bool, section: TrackSectionNode3D) -> void:
+func _on_section_selection_changed(selected: bool, section: Node3D) -> void:
 	if selected:
 		print("Track Editor: Selected section ", section.section_index, " (", section.section_type, ")")
 	else:
@@ -270,7 +272,7 @@ func _handle_section_click(mouse_pos: Vector2) -> void:
 
 
 ## Select a section (or null to deselect all)
-func select_section(section: TrackSectionNode3D) -> void:
+func select_section(section: Node3D) -> void:
 	# Deselect previous
 	if selected_section and selected_section != section:
 		selected_section.set_selected(false)
